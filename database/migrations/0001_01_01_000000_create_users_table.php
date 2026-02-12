@@ -11,13 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::create('jurusan', function (Blueprint $table) {
+            $table->id();
+            $table->enum('nama_jurusan', ['RPL', 'TI', 'SI', 'AK', 'PM']);
+            $table->text('deskripsi')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('nama', 100);
+            $table->string('email', 100)->unique();
+            $table->string('password', 255);
+            $table->text('alamat')->nullable();
+            $table->string('no_telp', 20)->nullable();
+            $table->enum('role', ['petugas', 'siswa'])->default('siswa');
+            $table->foreignId('jurusan_id')->nullable()->constrained('jurusan');
+            $table->enum('kelas', ['10', '11', '12'])->nullable();
             $table->timestamps();
         });
 
@@ -43,6 +53,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
+        Schema::dropIfExists('jurusan');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }

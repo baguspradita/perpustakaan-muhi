@@ -18,8 +18,8 @@
     <div class="w-full max-w-md">
         <!-- Logo / Title Centered -->
         <div class="text-center mb-10">
-            <h1 class="text-4xl font-extrabold text-indigo-600 tracking-tight mb-2">Perpus Muhi</h1>
-            <p class="text-slate-500 font-medium">Sistem Informasi Perpustakaan Sekolah</p>
+            <img src="{{ asset('assets/logo-muhi.jpg') }}" alt="Logo Muhi" class="h-20 w-auto mx-auto mb-4">
+            <p class="text-slate-500 font-medium tracking-wide">Sistem Informasi Perpustakaan Sekolah</p>
         </div>
 
         <!-- FORM LOGIN CARD -->

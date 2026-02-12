@@ -20,8 +20,8 @@
         <!-- SIDEBAR: Bagian navigasi kiri -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform -translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0">
             <!-- Logo / Nama Aplikasi -->
-            <div class="p-6">
-                <h1 class="text-2xl font-bold text-indigo-600 tracking-tight">Perpustakaan SMK Muhammadiyah 1 Yogyakarta</h1>
+            <div class="px-6 py-8">
+                <img src="{{ asset('assets/logo-muhi.png') }}" alt="Logo Muhi" class="h-12 w-auto object-contain mx-auto lg:mx-0">
             </div>
 
             <!-- Menu Navigasi -->
@@ -72,9 +72,9 @@
         <main class="flex-1 overflow-y-auto focus:outline-none">
             
             <!-- TOPBAR: Navbar atas -->
-            <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-200 lg:hidden">
+            <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-200 lg:hidden font-instrument">
                 <div class="px-4 py-2 flex items-center justify-between">
-                    <h1 class="text-xl font-bold text-indigo-600">Perpus Muhi</h1>
+                    <img src="{{ asset('assets/logo-muhi.jpg') }}" alt="Logo Muhi" class="h-8 w-auto">
                     <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                     </button>

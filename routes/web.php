@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\SiswaController;
 
 // Halaman utama (Dashboard) - Harus login
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
@@ -15,3 +16,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Katalog Buku
 Route::get('/buku', [BukuController::class, 'index'])->name('buku.index')->middleware('auth');
+
+// Daftar Siswa (Hanya untuk Admin/Petugas)
+Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index')->middleware('auth');
+Route::get('/siswa/{id}', [SiswaController::class, 'show'])->name('siswa.show')->middleware('auth');

@@ -21,7 +21,13 @@
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform -translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0">
             <!-- Logo / Nama Aplikasi -->
             <div class="px-6 py-8">
-                <img src="{{ asset('assets/logo-muhi.png') }}" alt="Logo Muhi" class="h-12 w-auto object-contain mx-auto lg:mx-0">
+                <div class="flex items-center justify-center lg:justify-start gap-3">
+                    <img src="{{ asset('assets/logo-muhi.png') }}" alt="Logo Muhi" class="h-14 w-14 object-contain drop-shadow-lg">
+                    <div class="hidden lg:block">
+                        <h1 class="text-lg font-black text-indigo-600 leading-tight">Perpustakaan</h1>
+                        <p class="text-xs font-bold text-slate-500">MUHI</p>
+                    </div>
+                </div>
             </div>
 
             <!-- Menu Navigasi -->
@@ -37,6 +43,14 @@
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     Katalog Buku
                 </a>
+
+                <!-- Daftar Siswa Link (Hanya untuk Admin/Petugas) -->
+                @if(auth()->user()->role === 'petugas')
+                <a href="{{ route('siswa.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors {{ request()->routeIs('siswa.*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.856-1.487M15 10a3 3 0 11-6 0 3 3 0 016 0zM6 20a9 9 0 0118 0"></path></svg>
+                    Daftar Siswa
+                </a>
+                @endif
 
                 <!-- Contoh Link Lain (Hanya placeholder) -->
                 <a href="#" class="flex items-center px-4 py-3 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 hover:text-slate-900 transition-colors">
@@ -73,8 +87,14 @@
             
             <!-- TOPBAR: Navbar atas -->
             <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-slate-200 lg:hidden font-instrument">
-                <div class="px-4 py-2 flex items-center justify-between">
-                    <img src="{{ asset('assets/logo-muhi.jpg') }}" alt="Logo Muhi" class="h-8 w-auto">
+                <div class="px-4 py-3 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <img src="{{ asset('assets/logo-muhi.png') }}" alt="Logo Muhi" class="h-10 w-10 object-contain drop-shadow-lg">
+                        <div>
+                            <p class="text-sm font-black text-indigo-600">Perpustakaan</p>
+                            <p class="text-xs font-bold text-slate-500 -mt-1">MUHI</p>
+                        </div>
+                    </div>
                     <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-lg">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                     </button>

@@ -18,7 +18,15 @@
     <div class="w-full max-w-md">
         <!-- Logo / Title Centered -->
         <div class="text-center mb-10">
-            <img src="{{ asset('assets/logo-muhi.jpg') }}" alt="Logo Muhi" class="h-20 w-auto mx-auto mb-4">
+            <div class="flex justify-center mb-6">
+                <div class="inline-flex items-center gap-4 p-5 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100 shadow-sm">
+                    <img src="{{ asset('assets/logo-muhi.png') }}" alt="Logo Muhi" class="h-16 w-16 object-contain drop-shadow-lg">
+                    <div class="text-left">
+                        <h1 class="text-2xl font-black text-indigo-600 leading-tight">Perpustakaan</h1>
+                        <p class="text-xs font-bold text-slate-500">SEKOLAH MUHI</p>
+                    </div>
+                </div>
+            </div>
             <p class="text-slate-500 font-medium tracking-wide">Sistem Informasi Perpustakaan Sekolah</p>
         </div>
 

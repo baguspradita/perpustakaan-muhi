@@ -11,7 +11,7 @@ class BukuController extends Controller
      */
     public function index(\Illuminate\Http\Request $request)
     {
-        // Query dasar mengambil buku dan relasi kategorinya
+        // Query mengambil buku dan relasi kategorinya
         $query = \App\Models\Buku::with('kategori');
 
         // Jika ada filter kategori dari request (dropdown)

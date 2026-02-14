@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\JurusanController;
+use App\Http\Controllers\KategoriBukuController;
 
 // Halaman utama (Dashboard) - Harus login
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
@@ -14,8 +16,17 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middl
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Katalog Buku
-Route::get('/buku', [BukuController::class, 'index'])->name('buku.index')->middleware('auth');
+// Master Data Routes (CRUD untuk Jurusan, Kategori Buku, dan Katalog Buku)
+Route::middleware('auth')->group(function () {
+    // Master Data - Jurusan
+    Route::resource('jurusan', JurusanController::class);
+    
+    // Master Data - Kategori Buku
+    Route::resource('kategori-buku', KategoriBukuController::class);
+    
+    // Master Data - Katalog Buku
+    Route::resource('buku', BukuController::class);
+});
 
 // Daftar Siswa (Hanya untuk Admin/Petugas)
 Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index')->middleware('auth');

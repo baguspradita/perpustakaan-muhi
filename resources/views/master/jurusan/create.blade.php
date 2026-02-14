@@ -18,10 +18,9 @@
             <!-- Input Nama Jurusan -->
             <div class="mb-6">
                 <label for="nama_jurusan" class="block text-sm font-bold text-slate-700 mb-2">Nama Jurusan</label>
-                <input type="text" class="w-full px-4 py-3 rounded-xl border @error('nama_jurusan') border-red-300 bg-red-50 @else border-slate-200 @enderror focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" id="nama_jurusan" name="nama_jurusan" value="{{ old('nama_jurusan') }}" placeholder="Contoh: Rekayasa Perangkat Lunak">
+                <input type="text" class="w-full px-4 py-3 rounded-xl border @error('nama_jurusan') border-red-300 bg-red-50 @else border-slate-200 @enderror focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" id="nama_jurusan" name="nama_jurusan" value="{{ old('nama_jurusan') }}" placeholder="Contoh : RPL">
                 @error('nama_jurusan')
                     <p class="mt-2 text-sm text-red-600 flex items-center gap-1">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18.169 12.476l-4.604-4.604a2 2 0 00-2.828 0l-4.604 4.604a2 2 0 002.828 2.828l4.604-4.604a2 2 0 012.828 0l4.604 4.604a2 2 0 01-2.828 2.828z" clip-rule="evenodd"/></path></svg>
                         {{ $message }}
                     </p>
                 @enderror

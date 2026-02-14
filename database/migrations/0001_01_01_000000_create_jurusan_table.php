@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('jurusan', function (Blueprint $table) {
             $table->id();
-            $table->enum('nama_jurusan', ['RPL', 'TI', 'SI', 'AK', 'PM']);
+            $table->string('nama_jurusan',50);
             $table->text('deskripsi')->nullable();
             $table->timestamps();
         });

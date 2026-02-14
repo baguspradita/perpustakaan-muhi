@@ -60,12 +60,6 @@
                            placeholder="••••••••">
                 </div>
 
-                <!-- Remember Me (Opsional) -->
-                <div class="flex items-center">
-                    <input type="checkbox" id="remember" class="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 pointer-events-none">
-                    <label for="remember" class="ml-2 text-sm text-slate-500 font-medium select-none">Ingat saya untuk sesi ini</label>
-                </div>
-
                 <!-- Tombol Submit -->
                 <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-200 transition-all transform hover:-translate-y-0.5 active:scale-95">
                     Masuk Sekarang
@@ -75,7 +69,7 @@
 
         <!-- Footer / Bantuan -->
         <p class="text-center mt-10 text-slate-400 text-sm font-medium">
-            &copy; {{ date('Y') }} Perpustakaan Muhi. Dibuat dengan &hearts; untuk pendidikan.
+            &copy; {{ date('Y') }} Perpustakaan Muhammadiyah 1 Yogyakarta.
         </p>
     </div>
 

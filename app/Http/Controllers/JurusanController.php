@@ -15,7 +15,7 @@ class JurusanController extends Controller
     {
         // Ambil semua data jurusan dari database
         $jurusan = Jurusan::all();
-        
+
         // Kirim data ke view dengan variabel 'jurusan'
         return view('master.jurusan.index', compact('jurusan'));
     }
@@ -39,14 +39,22 @@ class JurusanController extends Controller
         // Validasi input dari form
         // - nama_jurusan: harus diisi, max 50 karakter, dan unik (belum ada di database)
         // - deskripsi: opsional (boleh kosong)
-        $validated = $request->validate([
-            'nama_jurusan' => 'required|max:50|unique:jurusan',
-            'deskripsi' => 'nullable'
-        ]);
+        $validated = $request->validate(
+            [
+                'nama_jurusan' => 'required|max:50|unique:jurusan',
+                'deskripsi' => 'nullable'
+            ],
+            [
+                'nama_jurusan.required' => 'Nama jurusan wajib diisi.',
+                'nama_jurusan.unique' => 'Nama jurusan sudah digunakan.',
+                'nama_jurusan.max' => 'Nama jurusan maksimal 50 karakter.'
+            ]
+        );
+
 
         // Simpan data ke database menggunakan model Jurusan
         Jurusan::create($validated);
-        
+
         // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('jurusan.index')->with('success', 'Jurusan berhasil ditambahkan');
     }
@@ -76,7 +84,7 @@ class JurusanController extends Controller
 
         // Update data jurusan dengan nilai baru
         $jurusan->update($validated);
-        
+
         // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('jurusan.index')->with('success', 'Jurusan berhasil diperbarui');
     }
@@ -89,7 +97,7 @@ class JurusanController extends Controller
     {
         // Hapus data jurusan dari database
         $jurusan->delete();
-        
+
         // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('jurusan.index')->with('success', 'Jurusan berhasil dihapus');
     }

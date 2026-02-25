@@ -7,6 +7,7 @@ use App\Http\Controllers\BukuController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KategoriBukuController;
+use App\Http\Controllers\PeminjamanController;
 
 // Halaman utama (Dashboard) - Harus login
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
@@ -26,6 +27,10 @@ Route::middleware('auth')->group(function () {
     
     // Master Data - Katalog Buku
     Route::resource('buku', BukuController::class);
+
+    // Peminjaman
+    Route::resource('peminjaman', PeminjamanController::class);
+    Route::post('peminjaman/{id}/kembali', [PeminjamanController::class, 'kembali'])->name('peminjaman.kembali');
 });
 
 // Daftar Siswa (Hanya untuk Admin/Petugas)

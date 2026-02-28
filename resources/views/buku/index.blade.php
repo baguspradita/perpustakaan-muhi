@@ -6,8 +6,8 @@
             <p class="text-slate-500 font-medium">Jelajahi dan temukan buku favoritmu di sini.</p>
         </div>
 
-        <!-- Filter Sederhana -->
-        <div class="flex items-center space-x-2">
+        <!-- Filter Kategori -->
+        <div class="flex items-center gap-2">
             <form action="{{ route('buku.index') }}" method="GET" class="flex items-center space-x-2">
                 <select name="kategori_id" onchange="this.form.submit()" class="bg-white px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
                     <option value="">Semua Kategori</option>
@@ -34,7 +34,7 @@
                 <!-- Cover Placeholder (Warna Gradasi) -->
                 <div class="h-48 bg-gradient-to-br from-indigo-500 to-purple-600 p-6 flex flex-col justify-end">
                     <span class="inline-block px-2.5 py-1 bg-white/20 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest rounded-lg mb-2">
-                        {{ $item->kategori->nama_kategori ?? 'Umum' }}
+                        {{ optional($item->kategori)->nama_kategori ?? 'Umum' }}
                     </span>
                     <h3 class="text-white font-bold text-lg leading-tight line-clamp-2">{{ $item->judul }}</h3>
                 </div>
@@ -51,9 +51,10 @@
                                 {{ $item->jumlah }} eks
                             </span>
                         </div>
-                        <button class="px-3 py-1.5 bg-indigo-50 text-indigo-600 text-xs font-bold rounded-lg hover:bg-indigo-600 hover:text-white transition-colors">
-                            Detail
-                        </button>
+                        <a href="{{ route('buku.show', $item->id) }}" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 text-xs font-bold rounded-lg hover:bg-indigo-600 hover:text-white transition-colors inline-flex items-center gap-1.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            <span>Lihat</span>
+                        </a>
                     </div>
                 </div>
             </div>

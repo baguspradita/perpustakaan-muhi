@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\MasterBukuController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KategoriBukuController;
@@ -17,7 +18,7 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middl
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Master Data Routes (CRUD untuk Jurusan, Kategori Buku, dan Katalog Buku)
+// Master Data Routes (CRUD untuk Jurusan, Kategori Buku, dan Kelola Buku)
 Route::middleware('auth')->group(function () {
     // Master Data - Jurusan
     Route::resource('jurusan', JurusanController::class);
@@ -25,8 +26,12 @@ Route::middleware('auth')->group(function () {
     // Master Data - Kategori Buku
     Route::resource('kategori-buku', KategoriBukuController::class);
     
-    // Master Data - Katalog Buku
-    Route::resource('buku', BukuController::class);
+    // Master Data - Kelola/Manajemen Buku (CRUD)
+    Route::resource('master-buku', MasterBukuController::class);
+    
+    // Katalog Buku (Hanya Index & Show - View saja)
+    Route::get('buku', [BukuController::class, 'index'])->name('buku.index');
+    Route::get('buku/{id}', [BukuController::class, 'show'])->name('buku.show');
 
     // Peminjaman
     Route::resource('peminjaman', PeminjamanController::class);

@@ -3,29 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Buku;
+use App\Models\KategoriBuku;
 
 class BukuController extends Controller
 {
     /**
-     * Menampilkan daftar katalog buku
+     * Menampilkan katalog buku (view saja)
      */
-    public function index(\Illuminate\Http\Request $request)
+    public function index(Request $request)
     {
-        // Query mengambil buku dan relasi kategorinya
-        $query = \App\Models\Buku::with('kategori');
+        $query = Buku::with('kategori');
 
-        // Jika ada filter kategori dari request (dropdown)
         if ($request->has('kategori_id') && $request->kategori_id != '') {
             $query->where('kategori_id', $request->kategori_id);
         }
 
-        // Ambil data buku terbaru (limit 20)
         $buku = $query->latest()->paginate(12);
-        
-        // Ambil semua kategori untuk dropdown filter
-        $kategori = \App\Models\KategoriBuku::all();
+        $kategori = KategoriBuku::all();
 
-        // Tampilkan view 'buku.index' dengan data buku dan kategori
         return view('buku.index', compact('buku', 'kategori'));
+    }
+
+    /**
+     * Menampilkan detail buku
+     */
+    public function show($id)
+    {
+        $buku = Buku::with('kategori')->findOrFail($id);
+        return view('buku.show', compact('buku'));
     }
 }

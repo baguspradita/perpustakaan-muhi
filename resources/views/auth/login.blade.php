@@ -67,8 +67,14 @@
             </form>
         </div>
 
+        <!-- Link ke Register -->
+        <p class="text-center mt-6 text-slate-500 text-sm font-medium">
+            Belum punya akun?
+            <a href="{{ route('register') }}" class="text-indigo-600 font-bold hover:underline">Daftar di sini</a>
+        </p>
+
         <!-- Footer / Bantuan -->
-        <p class="text-center mt-10 text-slate-400 text-sm font-medium">
+        <p class="text-center mt-4 text-slate-400 text-sm font-medium">
             &copy; {{ date('Y') }} Perpustakaan Muhammadiyah 1 Yogyakarta.
         </p>
     </div>

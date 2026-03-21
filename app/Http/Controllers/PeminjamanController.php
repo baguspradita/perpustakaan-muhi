@@ -84,6 +84,16 @@ class PeminjamanController extends Controller
     }
 
     /**
+     * Menampilkan detail peminjaman
+     */
+    public function show($id)
+    {
+        $peminjaman = Peminjaman::with(['user.jurusan', 'detailPeminjaman.buku.kategori', 'pengembalian'])->findOrFail($id);
+        
+        return view('peminjaman.show', compact('peminjaman'));
+    }
+
+    /**
      * Menangani pengembalian buku
      */
     public function kembali($id)
@@ -98,9 +108,9 @@ class PeminjamanController extends Controller
             }
 
             // Hitung denda: Rp 1.000 per hari keterlambatan
-            // tgl_jatuh_tempo sudah di-cast sebagai Carbon date melalui $casts model
+            // tgl_jatuh_tempo diparse ke Carbon untuk mencegah error unknown method di beberapa environment
             $tglKembali    = \Carbon\Carbon::today(); // Hari ini jam 00:00:00
-            $tglJatuhTempo = $peminjaman->tgl_jatuh_tempo->startOfDay();
+            $tglJatuhTempo = \Carbon\Carbon::parse($peminjaman->tgl_jatuh_tempo)->startOfDay();
             $denda         = 0;
 
             if ($tglKembali->gt($tglJatuhTempo)) {

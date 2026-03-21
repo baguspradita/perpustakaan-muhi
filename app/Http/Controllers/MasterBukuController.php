@@ -44,7 +44,7 @@ class MasterBukuController extends Controller
         $buku = $query->latest()->paginate(20);
         $kategori = KategoriBuku::all();
 
-        return view('master-buku.index', compact('buku', 'kategori'));
+        return view('master.buku.index', compact('buku', 'kategori'));
     }
 
     /**
@@ -53,7 +53,7 @@ class MasterBukuController extends Controller
     public function create()
     {
         $kategori = KategoriBuku::all();
-        return view('master-buku.create', compact('kategori'));
+        return view('master.buku.create', compact('kategori'));
     }
 
     /**
@@ -81,7 +81,7 @@ class MasterBukuController extends Controller
     public function show($id)
     {
         $buku = Buku::with('kategori')->findOrFail($id);
-        return view('master-buku.show', compact('buku'));
+        return view('master.buku.show', compact('buku'));
     }
 
     /**
@@ -91,7 +91,7 @@ class MasterBukuController extends Controller
     {
         $buku = Buku::findOrFail($id);
         $kategori = KategoriBuku::all();
-        return view('master-buku.edit', compact('buku', 'kategori'));
+        return view('master.buku.edit', compact('buku', 'kategori'));
     }
 
     /**

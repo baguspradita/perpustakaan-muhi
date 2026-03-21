@@ -4,11 +4,23 @@
         <a href="{{ route('siswa.index') }}" class="p-3 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-600 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
         </a>
-        <div>
+        <div class="flex-1">
             <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Detail Siswa</h2>
             <p class="text-slate-500 font-medium">Informasi lengkap tentang siswa</p>
         </div>
+        <a href="{{ route('siswa.edit', $siswa->id) }}" class="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl transition-all shadow-sm shadow-indigo-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            Edit Data
+        </a>
     </div>
+
+    <!-- Notifikasi Sukses -->
+    @if(session('success'))
+        <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-center gap-3">
+            <svg class="w-5 h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <p class="font-semibold text-emerald-700">{{ session('success') }}</p>
+        </div>
+    @endif
 
     <!-- Kartu Detail Siswa -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -87,6 +99,10 @@
     <div class="mt-8 flex gap-4">
         <a href="{{ route('siswa.index') }}" class="px-6 py-3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl transition-all">
             Kembali
+        </a>
+        <a href="{{ route('siswa.edit', $siswa->id) }}" class="flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            Edit Data
         </a>
     </div>
 </x-app-layout>

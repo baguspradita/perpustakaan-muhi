@@ -53,4 +53,54 @@ class SiswaController extends Controller
         $siswa = User::with('jurusan')->where('role', 'siswa')->findOrFail($id);
         return view('siswa.show', compact('siswa'));
     }
+
+    /**
+     * Menampilkan form edit data siswa
+     */
+    public function edit($id)
+    {
+        // Periksa apakah user adalah admin/petugas
+        if (auth()->user()->role !== 'petugas') {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $siswa = User::with('jurusan')->where('role', 'siswa')->findOrFail($id);
+        $jurusan = \App\Models\Jurusan::all();
+
+        return view('siswa.edit', compact('siswa', 'jurusan'));
+    }
+
+    /**
+     * Menyimpan perubahan data siswa
+     */
+    public function update(Request $request, $id)
+    {
+        // Periksa apakah user adalah admin/petugas
+        if (auth()->user()->role !== 'petugas') {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $siswa = User::where('role', 'siswa')->findOrFail($id);
+
+        // Validasi input
+        $validated = $request->validate([
+            'nama'       => 'required|string|max:255',
+            'email'      => 'required|email|max:255|unique:users,email,' . $id,
+            'no_telp'    => 'nullable|string|max:20',
+            'alamat'     => 'nullable|string|max:500',
+            'jurusan_id' => 'nullable|exists:jurusan,id',
+            'kelas'      => 'nullable|string|max:50',
+        ], [
+            'nama.required'  => 'Nama wajib diisi.',
+            'email.required' => 'Email wajib diisi.',
+            'email.unique'   => 'Email sudah digunakan oleh pengguna lain.',
+            'email.email'    => 'Format email tidak valid.',
+        ]);
+
+        // Simpan perubahan
+        $siswa->update($validated);
+
+        return redirect()->route('siswa.show', $id)
+            ->with('success', 'Data siswa berhasil diperbarui.');
+    }
 }

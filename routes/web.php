@@ -22,14 +22,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     // Master Data - Jurusan
     Route::resource('jurusan', JurusanController::class);
-    
+
     // Master Data - Kategori Buku
     Route::resource('kategori-buku', KategoriBukuController::class);
-    
+
     // Master Data - Kelola/Manajemen Buku (CRUD)
     Route::resource('master-buku', MasterBukuController::class);
-    
-    // Katalog Buku (Hanya Index & Show - View saja)
+
+    // Katalog Buku (Index & Show - View saja)
     Route::get('buku', [BukuController::class, 'index'])->name('buku.index');
     Route::get('buku/{id}', [BukuController::class, 'show'])->name('buku.show');
 
@@ -39,5 +39,9 @@ Route::middleware('auth')->group(function () {
 });
 
 // Daftar Siswa (Hanya untuk Admin/Petugas)
-Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index')->middleware('auth');
-Route::get('/siswa/{id}', [SiswaController::class, 'show'])->name('siswa.show')->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index');
+    Route::get('/siswa/{id}', [SiswaController::class, 'show'])->name('siswa.show');
+    Route::get('/siswa/{id}/edit', [SiswaController::class, 'edit'])->name('siswa.edit');
+    Route::put('/siswa/{id}', [SiswaController::class, 'update'])->name('siswa.update');
+});

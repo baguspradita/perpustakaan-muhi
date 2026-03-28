@@ -61,6 +61,7 @@
                             @error('no_telp') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                         </div>
 
+                        @if($user->role === 'siswa')
                         <!-- Jurusan -->
                         <div>
                             <label for="jurusan_id" class="block text-sm font-semibold text-slate-700 mb-2">Jurusan</label>
@@ -88,6 +89,9 @@
                             </select>
                             @error('kelas') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
                         </div>
+                        @else
+
+                        @endif
 
                         <!-- Alamat -->
                         <div class="md:col-span-2">
@@ -143,7 +147,7 @@
                     </div>
                     <h3 class="text-lg font-bold text-slate-900">{{ $user->nama }}</h3>
                     <p class="text-sm font-medium text-slate-500 mb-6">{{ $user->email }}</p>
-                    
+
                     <div class="w-full space-y-3">
                         <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
                             <span class="text-xs font-bold text-slate-400 uppercase">Peran</span>

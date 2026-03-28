@@ -32,8 +32,8 @@ class ProfileController extends Controller
             'nama'       => 'required|string|max:255',
             'no_telp'    => 'nullable|string|max:20',
             'alamat'     => 'nullable|string|max:500',
-            'jurusan_id' => 'nullable|exists:jurusan,id',
-            'kelas'      => 'nullable|string|max:50',
+            'jurusan_id' => $user->role === 'siswa' ? 'nullable|exists:jurusan,id' : 'nullable',
+            'kelas'      => $user->role === 'siswa' ? 'nullable|string|max:50' : 'nullable',
         ], [
             'nama.required'     => 'Nama wajib diisi.',
         ]);
@@ -42,8 +42,11 @@ class ProfileController extends Controller
         $user->nama = $validated['nama'];
         $user->no_telp = $validated['no_telp'];
         $user->alamat = $validated['alamat'];
-        $user->jurusan_id = $validated['jurusan_id'];
-        $user->kelas = $validated['kelas'];
+
+        if ($user->role === 'siswa') {
+            $user->jurusan_id = $validated['jurusan_id'];
+            $user->kelas = $validated['kelas'];
+        }
 
         $user->save();
 

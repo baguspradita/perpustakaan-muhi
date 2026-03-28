@@ -20,7 +20,7 @@
     <div class="flex h-screen overflow-hidden">
 
         <!-- SIDEBAR: Bagian navigasi kiri -->
-        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform -translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0">
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-slate-200 transform -translate-x-full transition-transform duration-300 lg:relative lg:translate-x-0 flex flex-col">
             <!-- Logo / Nama Aplikasi -->
             <div class="px-6 py-8">
                 <div class="flex items-center justify-center lg:justify-start gap-3">
@@ -33,7 +33,7 @@
             </div>
 
             <!-- Menu Navigasi -->
-            <nav class="mt-4 px-4 space-y-1">
+            <nav class="flex-1 mt-4 px-4 space-y-1 overflow-y-auto pb-4 custom-scrollbar">
                 <!-- Dashboard Link -->
                 <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors {{ request()->routeIs('dashboard') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,10 +98,18 @@
                     </svg>
                     Peminjaman
                 </a>
+
+                <!-- Akun Link -->
+                <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors {{ request()->routeIs('profile.*') ? 'bg-indigo-50 text-indigo-600' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    Akun Saya
+                </a>
             </nav>
 
             <!-- Bottom Information / Profile Mini -->
-            <div class="absolute bottom-0 w-full p-4 border-t border-slate-100">
+            <div class="flex-shrink-0 p-4 border-t border-slate-100 bg-white">
                 <div class="flex items-center space-x-3 p-2 bg-slate-50 rounded-xl">
                     <div class="flex-shrink-0">
                         <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white text-xs font-bold uppercase">

@@ -88,9 +88,13 @@
                     </div>
                     <div>
                         <label for="kelas" class="block text-sm font-semibold text-slate-700 mb-2">Kelas</label>
-                        <input type="text" name="kelas" id="kelas" value="{{ old('kelas') }}"
-                            class="w-full px-4 py-3 rounded-xl border {{ $errors->has('kelas') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
-                            placeholder="Contoh: 10, 11, 12">
+                        <select name="kelas" id="kelas"
+                            class="w-full px-4 py-3 rounded-xl border {{ $errors->has('kelas') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                            <option value="">-- Pilih --</option>
+                            <option value="10" {{ old('kelas') == '10' ? 'selected' : '' }}>10</option>
+                            <option value="11" {{ old('kelas') == '11' ? 'selected' : '' }}>11</option>
+                            <option value="12" {{ old('kelas') == '12' ? 'selected' : '' }}>12</option>
+                        </select>
                     </div>
                 </div>
 
@@ -102,8 +106,13 @@
                         placeholder="08xxxxxxxxxx">
                 </div>
 
-                <!-- Divider -->
-                <div class="border-t border-slate-100 pt-1"></div>
+                <!-- Alamat -->
+                <div>
+                    <label for="alamat" class="block text-sm font-semibold text-slate-700 mb-2">Alamat Lengkap</label>
+                    <textarea name="alamat" id="alamat" rows="3"
+                        class="w-full px-4 py-3 rounded-xl border {{ $errors->has('alamat') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
+                        placeholder="Masukkan alamat lengkap">{{ old('alamat') }}</textarea>
+                </div>
 
                 <!-- Password -->
                 <div>

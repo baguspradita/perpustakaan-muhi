@@ -20,6 +20,12 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Akun/Profil (Update Biodata Mandiri)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+});
+
 // Master Data Routes (CRUD untuk Jurusan, Kategori Buku, dan Kelola Buku)
 Route::middleware('auth')->group(function () {
     // Master Data - Jurusan

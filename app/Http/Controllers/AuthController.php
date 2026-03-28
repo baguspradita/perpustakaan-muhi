@@ -41,6 +41,7 @@ class AuthController extends Controller
             'no_telp'    => 'nullable|string|max:20',
             'jurusan_id' => 'nullable|exists:jurusan,id',
             'kelas'      => 'nullable|string|max:50',
+            'alamat'     => 'nullable|string',
         ], [
             'nama.required'      => 'Nama wajib diisi.',
             'email.required'     => 'Email wajib diisi.',
@@ -58,6 +59,7 @@ class AuthController extends Controller
             'no_telp'    => $validated['no_telp'] ?? null,
             'jurusan_id' => $validated['jurusan_id'] ?? null,
             'kelas'      => $validated['kelas'] ?? null,
+            'alamat'     => $validated['alamat'] ?? null,
             'role'       => 'siswa', // Default role selalu siswa
         ]);
 

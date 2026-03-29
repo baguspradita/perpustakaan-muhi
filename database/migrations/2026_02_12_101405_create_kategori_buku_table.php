@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_kategori', 50);
             $table->text('deskripsi')->nullable();
+            $table->timestamps();
         });
     }
 

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('peminjaman_id')->constrained('peminjaman');
             $table->foreignId('buku_id')->constrained('buku');
             $table->integer('jumlah')->default(1);
+            $table->timestamps();
         });
     }
 

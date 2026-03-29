@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('peminjaman_id')->constrained('peminjaman');
             $table->date('tgl_kembali');
             $table->decimal('denda', 10, 2)->default(0);
+            $table->timestamps();
         });
     }
 

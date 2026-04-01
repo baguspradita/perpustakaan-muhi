@@ -14,12 +14,12 @@ class Jurusan extends Model
     protected $fillable = ['nama_jurusan', 'deskripsi'];
     
     /**
-     * Relasi ke model User (one to many)
-     * Satu jurusan dapat memiliki banyak user/siswa
+     * Relasi ke model Siswa (one to many)
+     * Satu jurusan dapat memiliki banyak siswa
      */
-    public function users()
+    public function siswa()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(Siswa::class);
     }
 }
 

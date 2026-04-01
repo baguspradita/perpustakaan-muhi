@@ -16,11 +16,9 @@ return new class extends Migration
             $table->string('nama', 100);
             $table->string('email', 100)->unique();
             $table->string('password', 255);
-            $table->text('alamat')->nullable();
-            $table->string('no_telp', 20)->nullable();
-            $table->enum('role', ['petugas', 'siswa'])->default('siswa');
-            $table->foreignId('jurusan_id')->nullable()->constrained('jurusan');
-            $table->enum('kelas', ['10', '11', '12'])->nullable();
+            $table->text('alamat');
+            $table->string('no_telp', 20);
+            $table->enum('role', ['petugas', 'siswa']);
             $table->timestamps();
         });
 

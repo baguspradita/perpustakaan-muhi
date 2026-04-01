@@ -71,6 +71,14 @@
                         class="w-full px-4 py-3 rounded-xl border {{ $errors->has('email') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
                         placeholder="contoh@email.com">
                 </div>
+ 
+                <!-- NISN -->
+                <div>
+                    <label for="nisn" class="block text-sm font-semibold text-slate-700 mb-2">NISN <span class="text-red-500">*</span></label>
+                    <input type="text" name="nisn" id="nisn" value="{{ old('nisn') }}" required
+                        class="w-full px-4 py-3 rounded-xl border {{ $errors->has('nisn') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
+                        placeholder="Masukkan 10 digit NISN">
+                </div>
 
                 <!-- Jurusan & Kelas -->
                 <div class="grid grid-cols-2 gap-4">

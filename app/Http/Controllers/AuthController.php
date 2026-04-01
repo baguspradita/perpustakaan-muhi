@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Jurusan;
+use App\Models\Siswa;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -38,10 +40,11 @@ class AuthController extends Controller
             'nama'       => 'required|string|max:255',
             'email'      => 'required|email|unique:users,email',
             'password'   => 'required|min:8|confirmed',
-            'no_telp'    => 'nullable|string|max:20',
-            'jurusan_id' => 'nullable|exists:jurusan,id',
-            'kelas'      => 'nullable|string|max:50',
-            'alamat'     => 'nullable|string',
+            'nisn'       => 'required|string|max:20|unique:siswa,nisn',
+            'no_telp'    => 'required|string|max:20',
+            'jurusan_id' => 'required|exists:jurusan,id',
+            'kelas'      => 'required|in:10,11,12',
+            'alamat'     => 'required|string',
         ], [
             'nama.required'      => 'Nama wajib diisi.',
             'email.required'     => 'Email wajib diisi.',
@@ -49,25 +52,49 @@ class AuthController extends Controller
             'password.required'  => 'Password wajib diisi.',
             'password.min'       => 'Password minimal 8 karakter.',
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'nisn.required'      => 'NISN wajib diisi.',
+            'nisn.unique'        => 'NISN sudah terpakai.',
+            'no_telp.required'   => 'Nomor telepon wajib diisi.',
+            'jurusan_id.required' => 'Silakan pilih jurusan.',
+            'kelas.required'     => 'Silakan pilih kelas.',
+            'alamat.required'    => 'Alamat wajib diisi.',
         ]);
 
-        // Buat akun baru dengan role default 'siswa'
-        $user = User::create([
-            'nama'       => $validated['nama'],
-            'email'      => $validated['email'],
-            'password'   => Hash::make($validated['password']),
-            'no_telp'    => $validated['no_telp'] ?? null,
-            'jurusan_id' => $validated['jurusan_id'] ?? null,
-            'kelas'      => $validated['kelas'] ?? null,
-            'alamat'     => $validated['alamat'] ?? null,
-            'role'       => 'siswa', // Default role selalu siswa
-        ]);
+        try {
+            DB::beginTransaction();
 
-        // Langsung login setelah registrasi
-        Auth::login($user);
+            // 1. Buat akun baru di tabel users
+            $user = User::create([
+                'nama'     => $validated['nama'],
+                'email'    => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'alamat'   => $validated['alamat'],
+                'no_telp'  => $validated['no_telp'],
+                'role'     => 'siswa',
+            ]);
 
-        return redirect('/')
-            ->with('success', 'Akun berhasil dibuat! Selamat datang, ' . $user->nama . '.');
+            // 2. Buat detail data di tabel siswa
+            Siswa::create([
+                'user_id'    => $user->id,
+                'nisn'       => $validated['nisn'],
+                'jurusan_id' => $validated['jurusan_id'],
+                'kelas'      => $validated['kelas'],
+            ]);
+
+            DB::commit();
+
+            // Langsung login setelah registrasi
+            Auth::login($user);
+
+            return redirect('/')
+                ->with('success', 'Akun berhasil dibuat! Selamat datang, ' . $user->nama . '.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()
+                ->withInput()
+                ->withErrors(['error' => 'Terjadi kesalahan sistem: ' . $e->getMessage()]);
+        }
     }
 
     /**

@@ -24,8 +24,6 @@ class User extends Authenticatable
         'alamat',
         'no_telp',
         'role',
-        'jurusan_id',
-        'kelas',
     ];
 
     /**
@@ -51,9 +49,14 @@ class User extends Authenticatable
         ];
     }
 
-    public function jurusan()
+    public function siswa()
     {
-        return $this->belongsTo(Jurusan::class);
+        return $this->hasOne(Siswa::class);
+    }
+
+    public function petugas()
+    {
+        return $this->hasOne(Petugas::class);
     }
 
     public function peminjaman()

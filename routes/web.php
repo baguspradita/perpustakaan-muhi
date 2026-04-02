@@ -11,6 +11,7 @@ use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KategoriBukuController;
 use App\Http\Controllers\SubjekBukuController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\RiwayatPeminjamanController;
 use App\Http\Controllers\LokasiController;
 
 // Halaman utama (Dashboard) - Harus login
@@ -60,6 +61,14 @@ Route::middleware('auth')->group(function () {
     // Peminjaman
     Route::resource('peminjaman', PeminjamanController::class);
     Route::post('peminjaman/{id}/kembali', [PeminjamanController::class, 'kembali'])->name('peminjaman.kembali');
+
+    // Riwayat Peminjaman (untuk siswa/guru melihat history mereka sendiri)
+    Route::get('/riwayat-peminjaman', [RiwayatPeminjamanController::class, 'index'])->name('riwayat-peminjaman.index');
+    Route::get('/riwayat-peminjaman/{id}', [RiwayatPeminjamanController::class, 'show'])->name('riwayat-peminjaman.show');
+
+    // Riwayat Peminjaman SEMUA ANGGOTA (hanya untuk PETUGAS)
+    Route::get('/riwayat-peminjaman-all', [RiwayatPeminjamanController::class, 'indexAll'])->name('riwayat-peminjaman.index-all');
+    Route::get('/riwayat-peminjaman-all/{id}', [RiwayatPeminjamanController::class, 'showAll'])->name('riwayat-peminjaman.show-all');
 });
 
 // Daftar Siswa (Hanya untuk Admin/Petugas)

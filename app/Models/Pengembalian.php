@@ -8,7 +8,10 @@ class Pengembalian extends Model
 {
     protected $table = 'pengembalian';
     protected $fillable = ['peminjaman_id', 'tgl_kembali', 'denda'];
-    public $timestamps = false;
+
+    protected $casts = [
+        'tgl_kembali' => 'date',
+    ];
 
     public function peminjaman()
     {

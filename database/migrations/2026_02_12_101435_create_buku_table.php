@@ -27,6 +27,7 @@ return new class extends Migration
             $table->unsignedBigInteger('subjek_id')->nullable();
             $table->foreign('subjek_id')->references('id')->on('subjek_buku')->onDelete('set null');
             $table->integer('jumlah');
+             $table->softDeletes()->after('updated_at');
             $table->timestamps();
         });
     }

@@ -63,7 +63,7 @@
                 <p class="text-sm text-slate-500 mb-3 font-medium">Data Sistem</p>
                 <div class="grid grid-cols-2 gap-4 text-sm">
                     <div class="p-3 bg-slate-50 rounded-lg">
-                        <p class="text-xs text-slate-500 mb-1">ID Buku</p>
+                        <p class="text-xs text-slate-500 mb-1">ID Eksamplar</p>
                         <p class="font-mono font-bold text-slate-700">#{{ $buku->id }}</p>
                     </div>
                     <div class="p-3 bg-slate-50 rounded-lg">

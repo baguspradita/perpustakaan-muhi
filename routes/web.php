@@ -42,7 +42,6 @@ Route::middleware('auth')->group(function () {
 
     // Master Data - Subjek Buku/DDC
     Route::resource('subjek-buku', SubjekBukuController::class);
-    Route::get('subjek-buku/statistics/view', [SubjekBukuController::class, 'statistics'])->name('subjek-buku.statistics');
 
     // Master Data - Kelola/Manajemen Buku (CRUD)
     Route::resource('master-buku', MasterBukuController::class);

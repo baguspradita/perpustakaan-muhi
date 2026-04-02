@@ -100,29 +100,6 @@ class SubjekBukuController extends Controller
     }
 
     /**
-     * Tampilkan statistik subjek buku
-     */
-    public function statistics()
-    {
-        $subjekStats = SubjekBuku::withCount('buku')
-            ->orderBy('buku_count', 'desc')
-            ->get();
-        
-        $totalSubjek = $subjekStats->count();
-        $totalBuku = $subjekStats->sum('buku_count');
-        $averageBooks = $totalSubjek > 0 ? floor($totalBuku / $totalSubjek) : 0;
-        $maxBuku = $subjekStats->max('buku_count') ?? 0;
-
-        return view('master.subjek-buku.statistics', compact(
-            'subjekStats',
-            'totalSubjek',
-            'totalBuku',
-            'averageBooks',
-            'maxBuku'
-        ));
-    }
-
-    /**
      * Hapus subjek dari database
      */
     public function destroy($id)

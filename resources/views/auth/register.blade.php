@@ -29,12 +29,12 @@
                     </div>
                 </div>
             </div>
-            <p class="text-slate-500 font-medium tracking-wide">Buat akun siswa baru untuk mengakses perpustakaan</p>
+            <p id="desc-text" class="text-slate-500 font-medium tracking-wide">Buat akun siswa baru untuk mengakses perpustakaan</p>
         </div>
 
         <!-- FORM REGISTER CARD -->
         <div class="bg-white p-8 rounded-3xl shadow-xl shadow-indigo-100 border border-slate-100">
-            <h2 class="text-xl font-bold text-slate-800 mb-6 text-center">Daftar Akun Siswa</h2>
+            <h2 id="form-title" class="text-xl font-bold text-slate-800 mb-6 text-center">Daftar Akun</h2>
 
             <!-- Pesan Error Validasi -->
             @if($errors->any())
@@ -56,6 +56,21 @@
             <form action="{{ route('register') }}" method="POST" class="space-y-5">
                 @csrf
 
+                <!-- Pilih Tipe Akun (Siswa/Guru) -->
+                <div class="p-4 bg-indigo-50 border-2 border-indigo-200 rounded-xl">
+                    <label class="block text-sm font-semibold text-indigo-900 mb-3">Jenis Akun <span class="text-red-500">*</span></label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center p-3 rounded-lg border-2 cursor-pointer transition {{ old('role', 'siswa') == 'siswa' ? 'bg-indigo-100 border-indigo-500' : 'border-slate-200 bg-white hover:bg-slate-50' }}">
+                            <input type="radio" name="role" value="siswa" {{ old('role', 'siswa') == 'siswa' ? 'checked' : '' }} class="w-4 h-4 cursor-pointer" required onchange="toggleRoleFields()">
+                            <span class="ml-2 font-medium text-slate-700">Siswa</span>
+                        </label>
+                        <label class="flex items-center p-3 rounded-lg border-2 cursor-pointer transition {{ old('role') == 'guru' ? 'bg-indigo-100 border-indigo-500' : 'border-slate-200 bg-white hover:bg-slate-50' }}">
+                            <input type="radio" name="role" value="guru" {{ old('role') == 'guru' ? 'checked' : '' }} class="w-4 h-4 cursor-pointer" required onchange="toggleRoleFields()">
+                            <span class="ml-2 font-medium text-slate-700">Guru</span>
+                        </label>
+                    </div>
+                </div>
+
                 <!-- Nama Lengkap -->
                 <div>
                     <label for="nama" class="block text-sm font-semibold text-slate-700 mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
@@ -72,37 +87,59 @@
                         placeholder="contoh@email.com">
                 </div>
  
-                <!-- NISN -->
-                <div>
-                    <label for="nisn" class="block text-sm font-semibold text-slate-700 mb-2">NISN <span class="text-red-500">*</span></label>
-                    <input type="text" name="nisn" id="nisn" value="{{ old('nisn') }}" required
-                        class="w-full px-4 py-3 rounded-xl border {{ $errors->has('nisn') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
-                        placeholder="Masukkan 10 digit NISN">
+                <!-- SISWA FIELDS -->
+                <div id="siswa-fields" class="space-y-5">
+                    <!-- NISN -->
+                    <div>
+                        <label for="nisn" class="block text-sm font-semibold text-slate-700 mb-2">NISN <span class="text-red-500">*</span></label>
+                        <input type="text" name="nisn" id="nisn" value="{{ old('nisn') }}"
+                            class="w-full px-4 py-3 rounded-xl border {{ $errors->has('nisn') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
+                            placeholder="Masukkan 10 digit NISN">
+                    </div>
+
+                    <!-- Jurusan & Kelas -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="jurusan_id" class="block text-sm font-semibold text-slate-700 mb-2">Jurusan</label>
+                            <select name="jurusan_id" id="jurusan_id"
+                                class="w-full px-4 py-3 rounded-xl border {{ $errors->has('jurusan_id') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                                <option value="">-- Pilih --</option>
+                                @foreach($jurusan as $jrs)
+                                <option value="{{ $jrs->id }}" {{ old('jurusan_id') == $jrs->id ? 'selected' : '' }}>
+                                    {{ $jrs->nama_jurusan }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="kelas" class="block text-sm font-semibold text-slate-700 mb-2">Kelas</label>
+                            <select name="kelas" id="kelas"
+                                class="w-full px-4 py-3 rounded-xl border {{ $errors->has('kelas') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                                <option value="">-- Pilih --</option>
+                                <option value="10" {{ old('kelas') == '10' ? 'selected' : '' }}>10</option>
+                                <option value="11" {{ old('kelas') == '11' ? 'selected' : '' }}>11</option>
+                                <option value="12" {{ old('kelas') == '12' ? 'selected' : '' }}>12</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Jurusan & Kelas -->
-                <div class="grid grid-cols-2 gap-4">
+                <!-- GURU FIELDS -->
+                <div id="guru-fields" class="space-y-5" style="display: none;">
+                    <!-- NIP -->
                     <div>
-                        <label for="jurusan_id" class="block text-sm font-semibold text-slate-700 mb-2">Jurusan</label>
-                        <select name="jurusan_id" id="jurusan_id"
-                            class="w-full px-4 py-3 rounded-xl border {{ $errors->has('jurusan_id') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
-                            <option value="">-- Pilih --</option>
-                            @foreach($jurusan as $jrs)
-                            <option value="{{ $jrs->id }}" {{ old('jurusan_id') == $jrs->id ? 'selected' : '' }}>
-                                {{ $jrs->nama_jurusan }}
-                            </option>
-                            @endforeach
-                        </select>
+                        <label for="nip" class="block text-sm font-semibold text-slate-700 mb-2">NIP (Nomor Induk Pegawai) <span class="text-red-500">*</span></label>
+                        <input type="text" name="nip" id="nip" value="{{ old('nip') }}"
+                            class="w-full px-4 py-3 rounded-xl border {{ $errors->has('nip') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
+                            placeholder="Masukkan NIP">
                     </div>
+
+                    <!-- Mata Pelajaran -->
                     <div>
-                        <label for="kelas" class="block text-sm font-semibold text-slate-700 mb-2">Kelas</label>
-                        <select name="kelas" id="kelas"
-                            class="w-full px-4 py-3 rounded-xl border {{ $errors->has('kelas') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
-                            <option value="">-- Pilih --</option>
-                            <option value="10" {{ old('kelas') == '10' ? 'selected' : '' }}>10</option>
-                            <option value="11" {{ old('kelas') == '11' ? 'selected' : '' }}>11</option>
-                            <option value="12" {{ old('kelas') == '12' ? 'selected' : '' }}>12</option>
-                        </select>
+                        <label for="mapel" class="block text-sm font-semibold text-slate-700 mb-2">Mata Pelajaran</label>
+                        <input type="text" name="mapel" id="mapel" value="{{ old('mapel') }}"
+                            class="w-full px-4 py-3 rounded-xl border {{ $errors->has('mapel') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-slate-50' }} focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all placeholder-slate-400"
+                            placeholder="Contoh: Matematika, Bahasa Indonesia, dll">
                     </div>
                 </div>
 
@@ -139,11 +176,11 @@
                 </div>
 
                 <!-- Info Role -->
-                <div class="flex items-center gap-2 p-3 bg-indigo-50 rounded-xl border border-indigo-100">
+                <div id="role-info" class="flex items-center gap-2 p-3 bg-indigo-50 rounded-xl border border-indigo-100">
                     <svg class="w-4 h-4 text-indigo-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <p class="text-xs text-indigo-600 font-medium">Akun yang didaftarkan akan memiliki role <strong>Siswa</strong> secara otomatis.</p>
+                    <p id="role-text" class="text-xs text-indigo-600 font-medium">Akun yang didaftarkan akan memiliki role <strong>Siswa</strong> secara otomatis.</p>
                 </div>
 
                 <!-- Tombol Submit -->
@@ -164,6 +201,34 @@
             &copy; {{ date('Y') }} Perpustakaan Muhammadiyah 1 Yogyakarta.
         </p>
     </div>
+
+    <script>
+    function toggleRoleFields() {
+        const roleValue = document.querySelector('input[name="role"]:checked').value;
+        const siswaFields = document.getElementById('siswa-fields');
+        const guruFields = document.getElementById('guru-fields');
+        const roleText = document.getElementById('role-text');
+        const formTitle = document.getElementById('form-title');
+        const descText = document.getElementById('desc-text');
+
+        if (roleValue === 'siswa') {
+            siswaFields.style.display = 'block';
+            guruFields.style.display = 'none';
+            formTitle.textContent = 'Daftar Akun Siswa';
+            descText.textContent = 'Buat akun siswa baru untuk mengakses perpustakaan';
+            roleText.innerHTML = 'Akun yang didaftarkan akan memiliki role <strong>Siswa</strong> secara otomatis.';
+        } else {
+            siswaFields.style.display = 'none';
+            guruFields.style.display = 'block';
+            formTitle.textContent = 'Daftar Akun Guru';
+            descText.textContent = 'Buat akun guru baru untuk mengakses perpustakaan';
+            roleText.innerHTML = 'Akun yang didaftarkan akan memiliki role <strong>Guru</strong> secara otomatis.';
+        }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', toggleRoleFields);
+    </script>
 
 </body>
 

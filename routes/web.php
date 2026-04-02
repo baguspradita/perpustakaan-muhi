@@ -8,6 +8,7 @@ use App\Http\Controllers\MasterBukuController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KategoriBukuController;
+use App\Http\Controllers\SubjekBukuController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\LokasiController;
 
@@ -35,8 +36,13 @@ Route::middleware('auth')->group(function () {
     // Master Data - Kategori Buku
     Route::resource('kategori-buku', KategoriBukuController::class);
 
+    // Master Data - Subjek Buku/DDC
+    Route::resource('subjek-buku', SubjekBukuController::class);
+    Route::get('subjek-buku/statistics/view', [SubjekBukuController::class, 'statistics'])->name('subjek-buku.statistics');
+
     // Master Data - Kelola/Manajemen Buku (CRUD)
     Route::resource('master-buku', MasterBukuController::class);
+    Route::get('master-buku/{id}/label', [MasterBukuController::class, 'printLabel'])->name('master-buku.printLabel');
 
     // Master Data - Lokasi Buku
     Route::resource('lokasi', LokasiController::class);

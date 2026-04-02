@@ -11,7 +11,19 @@ class Buku extends Model
     
     // Tentukan kolom yang dapat diisi massal (mass assignable)
     // Hanya kolom ini yang boleh diisi melalui create() atau update()
-    protected $fillable = ['judul', 'penulis', 'penerbit', 'tahun_terbit', 'kategori_id', 'lokasi_id', 'jumlah'];
+    protected $fillable = [
+        'judul', 
+        'nama_depan_penulis',
+        'nama_belakang_penulis',
+        'penerbit', 
+        'tahun_terbit', 
+        'kategori_id', 
+        'subjek_id',
+        'lokasi_id', 
+        'jumlah',
+        'huruf_judul_awal',
+        'nomor_salinan'
+    ];
 
     /**
      * Relasi ke model KategoriBuku (many to one)
@@ -20,6 +32,15 @@ class Buku extends Model
     public function kategori()
     {
         return $this->belongsTo(KategoriBuku::class, 'kategori_id');
+    }
+
+    /**
+     * Relasi ke model SubjekBuku (many to one)
+     * Banyak buku dapat memiliki satu subjek
+     */
+    public function subjek()
+    {
+        return $this->belongsTo(SubjekBuku::class, 'subjek_id');
     }
 
     /**

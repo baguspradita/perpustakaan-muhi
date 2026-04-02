@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('buku', function (Blueprint $table) {
-            $table->foreign('lokasi_id')->references('id')->on('lokasi');
+        Schema::create('subjek_buku', function (Blueprint $table) {
+            $table->id();
+            $table->string('kode_ddc', 10)->unique(); // e.g., "510", "810", etc
+            $table->string('nama_subjek', 150);
+            $table->text('deskripsi')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('buku', function (Blueprint $table) {
-            $table->dropForeign(['lokasi_id']);
-        });
+        Schema::dropIfExists('subjek_buku');
     }
 };

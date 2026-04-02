@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             SiswaSeeder::class,
             KategoriBukuSeeder::class,
             LokasiSeeder::class,
+            SubjekBukuSeeder::class,
             BukuSeeder::class,
         ]);
     }

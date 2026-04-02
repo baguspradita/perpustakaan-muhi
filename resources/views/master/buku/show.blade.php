@@ -12,8 +12,8 @@
             </div>
 
             <div class="border-b border-slate-200 pb-4">
-                <p class="text-sm text-slate-500 mb-1 font-medium">Penulis</p>
-                <p class="text-lg text-slate-800">{{ $buku->penulis }}</p>
+                <p class="text-sm text-slate-500 mb-1 font-medium">Nama Penulis</p>
+                <p class="text-lg text-slate-800">{{ $buku->nama_depan_penulis }} {{ $buku->nama_belakang_penulis }}</p>
             </div>
 
             <div class="border-b border-slate-200 pb-4">
@@ -27,9 +27,9 @@
                     <p class="text-lg font-semibold text-slate-800">{{ $buku->tahun_terbit }}</p>
                 </div>
                 <div>
-                    <p class="text-sm text-slate-500 mb-1 font-medium">Jumlah Stok</p>
-                    <p class="text-lg font-semibold {{ $buku->jumlah > 0 ? 'text-emerald-600' : 'text-red-600' }}">
-                        {{ $buku->jumlah }} eksemplar
+                    <p class="text-sm text-slate-500 mb-1 font-medium">Total Salinan</p>
+                    <p class="text-lg font-semibold text-emerald-600">
+                        {{ $allCopies->count() }} salinan
                     </p>
                 </div>
             </div>
@@ -41,6 +41,22 @@
                         {{ optional($buku->kategori)->nama_kategori ?? 'Tidak ada kategori' }}
                     </span>
                 </div>
+            </div>
+
+            <div class="border-b border-slate-200 pb-4">
+                <p class="text-sm text-slate-500 mb-1 font-medium">Subjek/DDC</p>
+                @if($buku->subjek)
+                    <div class="flex items-center gap-3">
+                        <span class="px-3 py-1 bg-blue-50 text-blue-700 font-bold rounded-lg text-lg">
+                            {{ $buku->subjek->kode_ddc }}
+                        </span>
+                        <span class="text-slate-800 font-medium">
+                            {{ $buku->subjek->nama_subjek }}
+                        </span>
+                    </div>
+                @else
+                    <span class="text-slate-600 italic">Belum ada subjek DDC</span>
+                @endif
             </div>
 
             <div>
@@ -56,6 +72,36 @@
                     </div>
                 </div>
             </div>
+
+            <div class="border-t border-slate-200 pt-6">
+                <p class="text-sm text-slate-500 mb-4 font-medium">Daftar Semua Salinan ({{ $allCopies->count() }})</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full border border-slate-200 rounded-lg">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200">
+                                <th class="px-4 py-3 text-left text-xs font-bold text-slate-600">No Salinan</th>
+                                <th class="px-4 py-3 text-left text-xs font-bold text-slate-600">Huruf Judul</th>
+                                <th class="px-4 py-3 text-left text-xs font-bold text-slate-600">Lokasi</th>
+                                <th class="px-4 py-3 text-left text-xs font-bold text-slate-600">ID Record</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($allCopies as $copy)
+                                <tr class="border-b border-slate-200 hover:bg-slate-50">
+                                    <td class="px-4 py-3 text-sm font-semibold text-slate-800">{{ $copy->nomor_salinan }}</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600">{{ $copy->huruf_judul_awal }}</td>
+                                    <td class="px-4 py-3 text-sm text-slate-600">{{ optional($copy->lokasi)->nama_lokasi ?? '-' }}</td>
+                                    <td class="px-4 py-3 text-sm font-mono text-slate-500">#{{ $copy->id }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="px-4 py-3 text-center text-sm text-slate-600">Tidak ada salinan</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <div class="flex gap-3 mt-8 pt-6 border-t border-slate-200">
@@ -67,12 +113,12 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                 Edit
             </a>
-            <form action="{{ route('master-buku.destroy', $buku->id) }}" method="POST" style="display:inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?')">
+            <form action="{{ route('master-buku.destroy', $buku->id) }}" method="POST" style="display:inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini dan semua ' + {{ $allCopies->count() }} + ' saliinannya?')">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="px-6 py-2.5 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors inline-flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    Hapus
+                    Hapus Semua
                 </button>
             </form>
         </div>

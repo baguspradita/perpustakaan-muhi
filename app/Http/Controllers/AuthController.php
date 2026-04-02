@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Jurusan;
 use App\Models\Siswa;
+use App\Models\Guru;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -31,21 +32,39 @@ class AuthController extends Controller
     }
 
     /**
-     * Memproses data registrasi siswa baru
+     * Memproses data registrasi siswa atau guru baru
      */
     public function register(Request $request)
     {
-        // Validasi input
-        $validated = $request->validate([
+        // Tentukan rules validasi berdasarkan role yang dipilih
+        $role = $request->input('role', 'siswa');
+        
+        $commonRules = [
             'nama'       => 'required|string|max:255',
             'email'      => 'required|email|unique:users,email',
             'password'   => 'required|min:8|confirmed',
-            'nisn'       => 'required|string|max:20|unique:siswa,nisn',
             'no_telp'    => 'required|string|max:20',
+            'alamat'     => 'required|string',
+            'role'       => 'required|in:siswa,guru',
+        ];
+
+        $siswaRules = [
+            'nisn'       => 'required|string|max:20|unique:siswa,nisn',
             'jurusan_id' => 'required|exists:jurusan,id',
             'kelas'      => 'required|in:10,11,12',
-            'alamat'     => 'required|string',
-        ], [
+        ];
+
+        $guruRules = [
+            'nip'    => 'required|string|max:50|unique:guru,nip',
+            'mapel'  => 'nullable|string|max:100',
+        ];
+
+        // Gabungkan rules sesuai role
+        $rules = $role === 'siswa' 
+            ? array_merge($commonRules, $siswaRules)
+            : array_merge($commonRules, $guruRules);
+
+        $validated = $request->validate($rules, [
             'nama.required'      => 'Nama wajib diisi.',
             'email.required'     => 'Email wajib diisi.',
             'email.unique'       => 'Email sudah terdaftar.',
@@ -54,6 +73,8 @@ class AuthController extends Controller
             'password.confirmed' => 'Konfirmasi password tidak cocok.',
             'nisn.required'      => 'NISN wajib diisi.',
             'nisn.unique'        => 'NISN sudah terpakai.',
+            'nip.required'       => 'NIP wajib diisi.',
+            'nip.unique'         => 'NIP sudah terpakai.',
             'no_telp.required'   => 'Nomor telepon wajib diisi.',
             'jurusan_id.required' => 'Silakan pilih jurusan.',
             'kelas.required'     => 'Silakan pilih kelas.',
@@ -70,16 +91,26 @@ class AuthController extends Controller
                 'password' => Hash::make($validated['password']),
                 'alamat'   => $validated['alamat'],
                 'no_telp'  => $validated['no_telp'],
-                'role'     => 'siswa',
+                'role'     => $role, // Sesuai pilihan (siswa atau guru)
             ]);
 
-            // 2. Buat detail data di tabel siswa
-            Siswa::create([
-                'user_id'    => $user->id,
-                'nisn'       => $validated['nisn'],
-                'jurusan_id' => $validated['jurusan_id'],
-                'kelas'      => $validated['kelas'],
-            ]);
+            // 2. Buat detail data sesuai role
+            if ($role === 'siswa') {
+                Siswa::create([
+                    'user_id'    => $user->id,
+                    'nisn'       => $validated['nisn'],
+                    'jurusan_id' => $validated['jurusan_id'],
+                    'kelas'      => $validated['kelas'],
+                ]);
+                $roleMessage = 'Siswa';
+            } else {
+                Guru::create([
+                    'user_id' => $user->id,
+                    'nip'     => $validated['nip'],
+                    'mapel'   => $validated['mapel'] ?? null,
+                ]);
+                $roleMessage = 'Guru';
+            }
 
             DB::commit();
 
@@ -87,7 +118,7 @@ class AuthController extends Controller
             Auth::login($user);
 
             return redirect('/')
-                ->with('success', 'Akun berhasil dibuat! Selamat datang, ' . $user->nama . '.');
+                ->with('success', 'Akun ' . $roleMessage . ' berhasil dibuat! Selamat datang, ' . $user->nama . '.');
 
         } catch (\Exception $e) {
             DB::rollBack();

@@ -23,7 +23,7 @@
                     <img src="{{ asset('assets/logo-muhi.png') }}" alt="Logo Muhi" class="h-16 w-16 object-contain drop-shadow-lg">
                     <div class="text-left">
                         <h1 class="text-2xl font-black text-indigo-600 leading-tight">Perpustakaan</h1>
-                        <p class="text-xs font-bold text-slate-500">SEKOLAH MUHI</p>
+                        <p class="text-xs font-bold text-slate-500">SMK MUHAMMADIYAH 1 YOGYAKARTA</p>
                     </div>
                 </div>
             </div>

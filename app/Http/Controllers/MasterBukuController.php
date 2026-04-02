@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Buku;
 use App\Models\KategoriBuku;
+use App\Models\SubjekBuku;
+use App\Models\Lokasi;
 
 class MasterBukuController extends Controller
 {
@@ -22,29 +24,53 @@ class MasterBukuController extends Controller
     }
 
     /**
-     * Menampilkan daftar master buku (dengan tabel)
+     * Menampilkan daftar master buku (dikelompokkan per judul)
      */
     public function index(Request $request)
     {
-        $query = Buku::with('kategori');
+        // Build base query
+        $baseQuery = Buku::query();
 
         // Filter by kategori
         if ($request->has('kategori_id') && $request->kategori_id != '') {
-            $query->where('kategori_id', $request->kategori_id);
+            $baseQuery->where('kategori_id', $request->kategori_id);
         }
 
         // Filter by search
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $query->where('judul', 'like', "%$search%")
-                  ->orWhere('penulis', 'like', "%$search%")
+            $baseQuery->where(function($q) use ($search) {
+                $q->where('judul', 'like', "%$search%")
+                  ->orWhere('nama_depan_penulis', 'like', "%$search%")
+                  ->orWhere('nama_belakang_penulis', 'like', "%$search%")
                   ->orWhere('penerbit', 'like', "%$search%");
+            });
         }
 
-        $buku = $query->latest()->paginate(20);
+        // Group by judul dan ambil first record sebagai representative
+        $bukuGroups = $baseQuery
+            ->selectRaw('judul, MIN(id) as first_id, COUNT(*) as total_salinan')
+            ->groupBy('judul')
+            ->orderByDesc('first_id')
+            ->paginate(20);
+
+        // Load relasi untuk first record dari setiap group
+        $firstIds = $bukuGroups->pluck('first_id')->toArray();
+        $bukuData = Buku::with('kategori', 'subjek')
+            ->whereIn('id', $firstIds)
+            ->get()
+            ->keyBy('id');
+
+        // Attach relasi ke group data
+        foreach ($bukuGroups as $group) {
+            if (isset($bukuData[$group->first_id])) {
+                $group->buku = $bukuData[$group->first_id];
+            }
+        }
+
         $kategori = KategoriBuku::all();
 
-        return view('master.buku.index', compact('buku', 'kategori'));
+        return view('master.buku.index', compact('bukuGroups', 'kategori'))->with('buku', $bukuGroups);
     }
 
     /**
@@ -53,7 +79,8 @@ class MasterBukuController extends Controller
     public function create()
     {
         $kategori = KategoriBuku::all();
-        return view('master.buku.create', compact('kategori'));
+        $subjek = SubjekBuku::orderBy('kode_ddc')->get();
+        return view('master.buku.create', compact('kategori', 'subjek'));
     }
 
     /**
@@ -63,25 +90,39 @@ class MasterBukuController extends Controller
     {
         $validated = $request->validate([
             'judul' => 'required|string|max:150',
-            'penulis' => 'required|string|max:100',
+            'nama_depan_penulis' => 'required|string|max:100',
+            'nama_belakang_penulis' => 'nullable|string|max:100',
             'penerbit' => 'required|string|max:100',
             'tahun_terbit' => 'required|digits:4|integer',
             'kategori_id' => 'required|exists:kategori_buku,id',
+            'subjek_id' => 'required|exists:subjek_buku,id',
             'jumlah' => 'required|integer|min:1',
         ]);
 
-        Buku::create($validated);
+        // Auto-generate huruf judul awal dari karakter pertama (non-spasi)
+        $validated['huruf_judul_awal'] = $this->extractFirstLetter($validated['judul']);
 
-        return redirect()->route('master-buku.index')->with('success', 'Buku berhasil ditambahkan.');
+        // Auto-generate nomor salinan untuk semua copy
+        for ($i = 1; $i <= $validated['jumlah']; $i++) {
+            $copy = $validated;
+            $copy['nomor_salinan'] = "c.$i";
+            Buku::create($copy);
+        }
+
+        return redirect()->route('master-buku.index')->with('success', "Buku berhasil ditambahkan dengan {$validated['jumlah']} salinan.");
     }
 
     /**
-     * Tampilkan detail buku
+     * Tampilkan detail buku beserta semua saliinannya
      */
     public function show($id)
     {
-        $buku = Buku::with('kategori')->findOrFail($id);
-        return view('master.buku.show', compact('buku'));
+        $buku = Buku::with('kategori', 'subjek')->findOrFail($id);
+        $allCopies = Buku::where('judul', $buku->judul)
+            ->with('lokasi')
+            ->orderBy('nomor_salinan')
+            ->get();
+        return view('master.buku.show', compact('buku', 'allCopies'));
     }
 
     /**
@@ -90,8 +131,14 @@ class MasterBukuController extends Controller
     public function edit($id)
     {
         $buku = Buku::findOrFail($id);
+        $allCopies = Buku::where('judul', $buku->judul)
+            ->with('lokasi')
+            ->orderBy('nomor_salinan')
+            ->get();
         $kategori = KategoriBuku::all();
-        return view('master.buku.edit', compact('buku', 'kategori'));
+        $subjek = SubjekBuku::orderBy('kode_ddc')->get();
+        $lokasi = Lokasi::all();
+        return view('master.buku.edit', compact('buku', 'allCopies', 'kategori', 'subjek', 'lokasi'));
     }
 
     /**
@@ -99,28 +146,166 @@ class MasterBukuController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Log incoming request for debugging
+        \Log::info('MasterBukuController@update - Processing request', [
+            'buku_id' => $id,
+            'tambah_stok_raw' => $request->input('tambah_stok'),
+            'all_input' => $request->all()
+        ]);
+
         $validated = $request->validate([
             'judul' => 'required|string|max:150',
-            'penulis' => 'required|string|max:100',
+            'nama_depan_penulis' => 'required|string|max:100',
+            'nama_belakang_penulis' => 'nullable|string|max:100',
             'penerbit' => 'required|string|max:100',
             'tahun_terbit' => 'required|digits:4|integer',
             'kategori_id' => 'required|exists:kategori_buku,id',
-            'jumlah' => 'required|integer|min:0',
+            'subjek_id' => 'required|exists:subjek_buku,id',
+            'lokasi_id' => 'nullable|exists:lokasi,id',
+            'tambah_stok' => 'nullable|numeric|min:0',
         ]);
 
+        // Extract dan cast tambah_stok dengan explicit handling
+        $tambahStokInput = $request->input('tambah_stok', '0');
+        $tambahStok = (int) filter_var($tambahStokInput, FILTER_VALIDATE_INT, ['options' => ['default' => 0, 'min_range' => 0]]);
+        
+        \Log::info('MasterBukuController@update - Tambah Stok Processing', [
+            'input_value' => $tambahStokInput,
+            'casted_value' => $tambahStok,
+            'type' => gettype($tambahStok),
+            'is_greater_than_zero' => $tambahStok > 0
+        ]);
+        
+        // Remove dari validated karena bukan field database
+        unset($validated['tambah_stok']);
+        
         $buku = Buku::findOrFail($id);
+        
+        // Auto-generate huruf judul awal dari karakter pertama (non-spasi)
+        $validated['huruf_judul_awal'] = $this->extractFirstLetter($validated['judul']);
+        
+        // Update buku yang dipilih
         $buku->update($validated);
+        
+        // Jika ada penambahan stok, buat copies baru
+        $copiesCreated = 0;
+        if ($tambahStok > 0) {
+            \Log::info('MasterBukuController@update - Creating new copies', [
+                'judul' => $buku->judul,
+                'tambah_stok' => $tambahStok
+            ]);
 
-        return redirect()->route('master-buku.index')->with('success', 'Buku berhasil diperbarui.');
+            // Hitung total salinan setelah update
+            $currentCopies = Buku::where('judul', $buku->judul)->count();
+            $startNumber = $currentCopies + 1;
+            
+            \Log::debug('Copy creation details', [
+                'current_copies_count' => $currentCopies,
+                'start_number' => $startNumber,
+                'will_create' => $tambahStok
+            ]);
+            
+            // Prepare base data untuk semua copies baru
+            $baseData = [
+                'judul' => $buku->judul,
+                'nama_depan_penulis' => $buku->nama_depan_penulis,
+                'nama_belakang_penulis' => $buku->nama_belakang_penulis,
+                'penerbit' => $buku->penerbit,
+                'tahun_terbit' => $buku->tahun_terbit,
+                'kategori_id' => $buku->kategori_id,
+                'subjek_id' => $buku->subjek_id,
+                'lokasi_id' => $buku->lokasi_id,
+                'huruf_judul_awal' => $buku->huruf_judul_awal,
+                'jumlah' => 1
+            ];
+            
+            // Buat copies baru satu per satu
+            try {
+                for ($i = 0; $i < $tambahStok; $i++) {
+                    $newCopy = $baseData;
+                    $newCopy['nomor_salinan'] = 'c.' . ($startNumber + $i);
+                    Buku::create($newCopy);
+                    $copiesCreated++;
+                    
+                    \Log::debug('Copy created', [
+                        'iteration' => $i,
+                        'nomor_salinan' => $newCopy['nomor_salinan']
+                    ]);
+                }
+                
+                \Log::info('MasterBukuController@update - Copies created successfully', [
+                    'total_created' => $copiesCreated
+                ]);
+            } catch (\Exception $e) {
+                // Log error tapi tetap success update buku
+                \Log::error('Error creating book copies: ' . $e->getMessage(), [
+                    'exception' => $e,
+                    'copies_created_before_error' => $copiesCreated
+                ]);
+            }
+        } else {
+            \Log::info('MasterBukuController@update - No copies to create', [
+                'tambah_stok' => $tambahStok,
+                'reason' => $tambahStok <= 0 ? 'Value is 0 or negative' : 'Unknown'
+            ]);
+        }
+
+        // Buat pesan success yang lebih informatif
+        $message = 'Buku berhasil diperbarui.';
+        if ($copiesCreated > 0) {
+            $message .= " ✅ Ditambahkan $copiesCreated salinan baru.";
+        } elseif ($tambahStok === 0) {
+            $message .= " (Tidak ada penambahan stok)";
+        }
+        
+        \Log::info('MasterBukuController@update - Redirect with message', [
+            'message' => $message,
+            'copies_created' => $copiesCreated
+        ]);
+        
+        return redirect()->route('master-buku.index')->with('success', $message);
     }
 
     /**
-     * Hapus buku dari database
+     * Hapus semua salinan buku dari database berdasarkan judul
      */
     public function destroy($id)
     {
         $buku = Buku::findOrFail($id);
-        $buku->delete();
-        return redirect()->route('master-buku.index')->with('success', 'Buku berhasil dihapus.');
+        $judul = $buku->judul;
+        
+        // Hapus semua buku dengan judul yang sama (semua salinan)
+        $count = Buku::where('judul', $judul)->delete();
+        
+        return redirect()->route('master-buku.index')->with('success', "Buku '$judul' dan semua $count saliinannya berhasil dihapus.");
+    }
+
+    /**
+     * Extract first letter dari teks (skip spaces)
+     */
+    private function extractFirstLetter($text)
+    {
+        $text = trim($text);
+        for ($i = 0; $i < strlen($text); $i++) {
+            if ($text[$i] !== ' ') {
+                return strtoupper($text[$i]);
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Tampilkan halaman cetak label buku
+     */
+    public function printLabel($id)
+    {
+        $buku = Buku::with('subjek')->findOrFail($id);
+        
+        // Ambil semua copies dari buku dengan judul yang sama
+        $copies = Buku::where('judul', $buku->judul)
+            ->orderBy('nomor_salinan', 'asc')
+            ->get();
+        
+        return view('master.buku.label', compact('buku', 'copies'));
     }
 }

@@ -28,7 +28,7 @@ class MasterBukuController extends Controller
      */
     public function index(Request $request)
     {
-        // Build base query
+        // Build base query - otomatis exclude soft deleted records
         $baseQuery = Buku::query();
 
         // Filter by kategori
@@ -49,7 +49,7 @@ class MasterBukuController extends Controller
 
         // Group by judul dan ambil first record sebagai representative
         $bukuGroups = $baseQuery
-            ->selectRaw('judul, MIN(id) as first_id, COUNT(*) as total_salinan')
+            ->selectRaw('judul, MIN(id) as first_id, COUNT(*) as total_salinan, COALESCE(SUM(jumlah), 0) as stok_tersedia')
             ->groupBy('judul')
             ->orderByDesc('first_id')
             ->paginate(20);
@@ -274,10 +274,85 @@ class MasterBukuController extends Controller
         $buku = Buku::findOrFail($id);
         $judul = $buku->judul;
         
-        // Hapus semua buku dengan judul yang sama (semua salinan)
+        // Cek apakah ada buku dengan judul ini yang sedang dipinjam (status 'dipinjam')
+        $bukuWithActiveBorrow = Buku::where('judul', $judul)
+            ->whereHas('detailPeminjaman', function($query) {
+                $query->whereHas('peminjaman', function($q) {
+                    $q->where('status', 'dipinjam');
+                });
+            })
+            ->exists();
+        
+        if ($bukuWithActiveBorrow) {
+            return back()->with('error', "Tidak bisa menghapus buku '$judul' karena masih ada yang sedang dipinjam. Pastikan semua salinan sudah dikembalikan terlebih dahulu.");
+        }
+        
+        // Soft delete semua buku dengan judul yang sama (semua salinan)
         $count = Buku::where('judul', $judul)->delete();
         
-        return redirect()->route('master-buku.index')->with('success', "Buku '$judul' dan semua $count saliinannya berhasil dihapus.");
+        return redirect()->route('master-buku.index')->with('success', "Buku '$judul' dan semua $count saliinannya berhasil diarsipkan (soft deleted).");
+    }
+
+    /**
+     * Menampilkan daftar buku yang sudah di-soft delete
+     */
+    public function trash()
+    {
+        // Query buku yang sudah dihapus (soft delete)
+        $bukuDeleted = Buku::onlyTrashed()
+            ->selectRaw('judul, MIN(id) as first_id, COUNT(*) as total_salinan, COALESCE(SUM(jumlah), 0) as stok_tersedia')
+            ->groupBy('judul')
+            ->orderByDesc('deleted_at')
+            ->paginate(20);
+
+        // Load relasi untuk first record dari setiap group
+        $firstIds = $bukuDeleted->pluck('first_id')->toArray();
+        $bukuData = Buku::onlyTrashed()
+            ->with('kategori', 'subjek')
+            ->whereIn('id', $firstIds)
+            ->get()
+            ->keyBy('id');
+
+        // Attach relasi ke group data
+        foreach ($bukuDeleted as $group) {
+            if (isset($bukuData[$group->first_id])) {
+                $group->buku = $bukuData[$group->first_id];
+            }
+        }
+
+        return view('master.buku.trash', compact('bukuDeleted'));
+    }
+
+    /**
+     * Restore buku yang sudah di-soft delete
+     */
+    public function restore($id)
+    {
+        $buku = Buku::onlyTrashed()->findOrFail($id);
+        $judul = $buku->judul;
+
+        // Restore semua buku dengan judul yang sama
+        $count = Buku::onlyTrashed()
+            ->where('judul', $judul)
+            ->restore();
+
+        return redirect()->route('master-buku.trash')->with('success', "Buku '$judul' ($count salinan) berhasil di-restore.");
+    }
+
+    /**
+     * Hapus permanen buku yang sudah di-soft delete
+     */
+    public function permanentDelete($id)
+    {
+        $buku = Buku::onlyTrashed()->findOrFail($id);
+        $judul = $buku->judul;
+
+        // Hapus permanen semua buku dengan judul yang sama
+        $count = Buku::onlyTrashed()
+            ->where('judul', $judul)
+            ->forceDelete();
+
+        return redirect()->route('master-buku.trash')->with('success', "Buku '$judul' ($count salinan) berhasil dihapus permanen dari database.");
     }
 
     /**

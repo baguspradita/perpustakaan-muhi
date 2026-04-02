@@ -78,12 +78,15 @@
                         <div>
                             <label class="block text-sm font-black text-slate-700 uppercase tracking-wider mb-2">Pilih Buku (Maks. 3)</label>
                             <div class="bg-slate-50 border border-slate-100 rounded-3xl p-4 max-h-80 overflow-y-auto space-y-2">
-                                @forelse($buku as $b)
+                                @forelse($bukuByTitle as $b)
                                 <label class="flex items-center p-3 bg-white rounded-2xl border border-slate-100 cursor-pointer hover:border-indigo-200 hover:bg-indigo-50/30 transition-all group">
                                     <input type="checkbox" name="buku_id[]" value="{{ $b->id }}" class="w-5 h-5 rounded-lg border-slate-300 text-indigo-600 focus:ring-indigo-500 mr-3">
                                     <div class="flex-1">
                                         <p class="text-sm font-bold text-slate-800">{{ $b->judul }}</p>
-                                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{{ $b->kategori->nama }} • Jumlah: <span class="text-indigo-600">{{ $b->jumlah }}</span></p>
+                                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
+                                            {{ $b->kategori->nama_kategori ?? 'Kategori' }} • 
+                                            <span class="text-indigo-600">{{ $b->total_exemplar }} Eksemplar Tersedia</span>
+                                        </p>
                                     </div>
                                 </label>
                                 @empty

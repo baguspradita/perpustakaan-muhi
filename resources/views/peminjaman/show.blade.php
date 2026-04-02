@@ -219,9 +219,16 @@
                                         <h4 class="text-lg font-bold text-slate-800 leading-tight mb-1">{{ $detail->buku->judul }}</h4>
                                         <p class="text-sm font-medium text-slate-500 mb-2">{{ $detail->buku->pengarang }} • {{ $detail->buku->penerbit }}</p>
 
-                                        <span class="inline-flex items-center px-2 py-1 bg-indigo-50 border border-indigo-100 rounded-lg text-[10px] font-black uppercase tracking-widest text-indigo-600">
-                                            {{ $detail->buku->kategori->nama_kategori ?? 'Kategori' }}
-                                        </span>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span class="inline-flex items-center px-2 py-1 bg-indigo-50 border border-indigo-100 rounded-lg text-[10px] font-black uppercase tracking-widest text-indigo-600">
+                                                {{ $detail->buku->kategori->nama_kategori ?? 'Kategori' }}
+                                            </span>
+                                            @if($detail->id_eksamplar)
+                                            <span class="inline-flex items-center px-2 py-1 bg-emerald-50 border border-emerald-100 rounded-lg text-[10px] font-black uppercase tracking-widest text-emerald-600">
+                                                ID Eksamplar: {{ $detail->id_eksamplar }}
+                                            </span>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                                 @else

@@ -6,10 +6,16 @@
                 <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Kelola Buku</h2>
                 <p class="text-slate-500 font-medium">Tambah, edit, dan hapus data buku perpustakaan</p>
             </div>
-            <a href="{{ route('master-buku.create') }}" class="px-6 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg flex items-center gap-2 w-fit">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                Tambah Buku
-            </a>
+            <div class="flex gap-3 flex-wrap">
+                <a href="{{ route('master-buku.trash') }}" class="px-6 py-2.5 bg-orange-600 text-white font-semibold rounded-xl hover:bg-orange-700 transition-colors shadow-md hover:shadow-lg flex items-center gap-2 w-fit">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    Tempat Sampah
+                </a>
+                <a href="{{ route('master-buku.create') }}" class="px-6 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg flex items-center gap-2 w-fit">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Tambah Buku
+                </a>
+            </div>
         </div>
     </div>
 
@@ -92,8 +98,11 @@
                                     </span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-sm font-bold text-center text-emerald-600">
-                                {{ $item->total_salinan }}
+                            <td class="px-6 py-4 text-sm font-bold text-center">
+                                <div class="flex flex-col items-center gap-1">
+                                    <span class="text-emerald-600">{{ $item->stok_tersedia }}</span>
+                                    <span class="text-slate-400 text-xs">dari {{ $item->total_salinan }}</span>
+                                </div>
                             </td>
                             <td class="px-6 py-4 text-sm">
                                 <div class="flex gap-2 justify-center flex-wrap">

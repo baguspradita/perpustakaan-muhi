@@ -74,16 +74,16 @@ Klik "Lihat" untuk melihat semua 13 salinan:
 ```
 [ Daftar Semua Salinan (13) ]
 
-No Salinan | Huruf | Lokasi      | ID Record
+No Salinan | Huruf | Lokasi      | ID Eksamplar
 -----------|-------|-------------|----------
-c.1        | L     | Rak A1      | #1
-c.2        | L     | Rak A1      | #2
-c.3        | L     | Rak A1      | #3
+c.1        | L     | Rak A1      | 00001
+c.2        | L     | Rak A1      | 00002
+c.3        | L     | Rak A1      | 00003
 ...
-c.10       | L     | Rak A1      | #10
-c.11       | L     | Rak A1      | #115
-c.12       | L     | Rak A1      | #116
-c.13       | L     | Rak A1      | #117
+c.10       | L     | Rak A1      | 00010
+c.11       | L     | Rak A1      | 00115
+c.12       | L     | Rak A1      | 00116
+c.13       | L     | Rak A1      | 00117
 ```
 
 ## Contoh Skenario Real

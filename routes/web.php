@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\MasterBukuController;
 use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\GuruController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KategoriBukuController;
 use App\Http\Controllers\SubjekBukuController;
@@ -33,6 +34,9 @@ Route::middleware('auth')->group(function () {
     // Master Data - Jurusan
     Route::resource('jurusan', JurusanController::class);
 
+    // Master Data - Guru
+    Route::resource('guru', GuruController::class);
+
     // Master Data - Kategori Buku
     Route::resource('kategori-buku', KategoriBukuController::class);
 
@@ -43,6 +47,9 @@ Route::middleware('auth')->group(function () {
     // Master Data - Kelola/Manajemen Buku (CRUD)
     Route::resource('master-buku', MasterBukuController::class);
     Route::get('master-buku/{id}/label', [MasterBukuController::class, 'printLabel'])->name('master-buku.printLabel');
+    Route::get('master-buku-trash/view', [MasterBukuController::class, 'trash'])->name('master-buku.trash');
+    Route::post('master-buku/{id}/restore', [MasterBukuController::class, 'restore'])->name('master-buku.restore');
+    Route::delete('master-buku/{id}/permanent-delete', [MasterBukuController::class, 'permanentDelete'])->name('master-buku.permanent-delete');
 
     // Master Data - Lokasi Buku
     Route::resource('lokasi', LokasiController::class);

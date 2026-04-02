@@ -34,13 +34,20 @@ class PeminjamanController extends Controller
     public function create()
     {
         $siswa = User::where('role', 'siswa')->get();
-        $buku = Buku::where('jumlah', '>', 0)->get();
+        
+        // Get unique book titles with count of available exemplars
+        // Otomatis exclude soft deleted books karena SoftDeletes trait
+        $bukuByTitle = Buku::where('jumlah', '>', 0)
+            ->groupBy('judul', 'kategori_id')
+            ->selectRaw('judul, kategori_id, MIN(id) as id, COUNT(*) as total_exemplar')
+            ->with('kategori')
+            ->get();
 
-        return view('peminjaman.create', compact('siswa', 'buku'));
+        return view('peminjaman.create', compact('siswa', 'bukuByTitle'));
     }
 
     /**
-     * Menyimpan data peminjaman baru
+     * Menyimpan data peminjaman baru dengan auto-assign exemplar
      */
     public function store(Request $request)
     {
@@ -62,21 +69,49 @@ class PeminjamanController extends Controller
                 'status' => 'dipinjam',
             ]);
 
-            foreach ($request->buku_id as $bukuId) {
+            foreach ($request->buku_id as $bukuJudulId) {
+                // bukuJudulId adalah first_id (ID dari judul) dari GROUP BY query
+                // Cari exemplar pertama yang tersedia dengan judul yang sama
+                $firstBuku = Buku::find($bukuJudulId);
+                
+                if (!$firstBuku) {
+                    throw new \Exception("Buku dengan ID $bukuJudulId tidak ditemukan");
+                }
+
+                // Cari exemplar pertama dari judul yang sama yang belum dipinjam
+                $availableExemplar = Buku::where('judul', $firstBuku->judul)
+                    ->whereNotIn('id', function($query) {
+                        // Exclude id yang sedang dipinjam (status aktif)
+                        $query->select('buku_id')
+                            ->from('detail_peminjaman')
+                            ->join('peminjaman', 'peminjaman.id', '=', 'detail_peminjaman.peminjaman_id')
+                            ->where('peminjaman.status', 'dipinjam');
+                    })
+                    ->orderBy('id')
+                    ->first();
+
+                if (!$availableExemplar) {
+                    throw new \Exception("Semua salinan buku '{$firstBuku->judul}' sedang dipinjam atau tidak tersedia");
+                }
+
+                // Hitung ID Eksamplar dengan format 5 digit
+                $idEksamplar = str_pad($availableExemplar->id, 5, '0', STR_PAD_LEFT);
+
+                // Catat detail peminjaman dengan id_eksamplar
                 DetailPeminjaman::create([
                     'peminjaman_id' => $peminjaman->id,
-                    'buku_id' => $bukuId,
-                    'jumlah' => 1, // Default 1 buku per jenis
+                    'buku_id' => $availableExemplar->id,
+                    'id_eksamplar' => $idEksamplar,
+                    'jumlah' => 1,
                 ]);
 
                 // Kurangi stok buku
-                $buku = Buku::find($bukuId);
-                $buku->decrement('jumlah');
+                $availableExemplar->decrement('jumlah');
             }
 
             DB::commit();
 
-            return redirect()->route('peminjaman.index')->with('success', 'Peminjaman berhasil dicatat.');
+            return redirect()->route('peminjaman.index')->with('success', 'Peminjaman berhasil dicatat. Exemplar telah auto-assign.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -130,9 +165,8 @@ class PeminjamanController extends Controller
 
             // Kembalikan stok buku
             foreach ($peminjaman->detailPeminjaman as $detail) {
-                $buku = Buku::find($detail->buku_id);
-                if ($buku) {
-                    $buku->increment('jumlah');
+                if ($detail->buku) {
+                    $detail->buku->increment('jumlah');
                 }
             }
 

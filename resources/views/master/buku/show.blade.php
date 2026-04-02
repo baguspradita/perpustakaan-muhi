@@ -82,7 +82,7 @@
                                 <th class="px-4 py-3 text-left text-xs font-bold text-slate-600">No Salinan</th>
                                 <th class="px-4 py-3 text-left text-xs font-bold text-slate-600">Huruf Judul</th>
                                 <th class="px-4 py-3 text-left text-xs font-bold text-slate-600">Lokasi</th>
-                                <th class="px-4 py-3 text-left text-xs font-bold text-slate-600">ID Record</th>
+                                <th class="px-4 py-3 text-left text-xs font-bold text-slate-600">ID Eksamplar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,7 +91,7 @@
                                     <td class="px-4 py-3 text-sm font-semibold text-slate-800">{{ $copy->nomor_salinan }}</td>
                                     <td class="px-4 py-3 text-sm text-slate-600">{{ $copy->huruf_judul_awal }}</td>
                                     <td class="px-4 py-3 text-sm text-slate-600">{{ optional($copy->lokasi)->nama_lokasi ?? '-' }}</td>
-                                    <td class="px-4 py-3 text-sm font-mono text-slate-500">#{{ $copy->id }}</td>
+                                    <td class="px-4 py-3 text-sm font-mono text-slate-500 font-bold">{{ str_pad($copy->id, 5, '0', STR_PAD_LEFT) }}</td>
                                 </tr>
                             @empty
                                 <tr>

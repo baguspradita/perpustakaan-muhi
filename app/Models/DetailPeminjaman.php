@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DetailPeminjaman extends Model
 {
     protected $table = 'detail_peminjaman';
-    protected $fillable = ['peminjaman_id', 'buku_id', 'jumlah'];
+    protected $fillable = ['peminjaman_id', 'buku_id', 'id_eksamplar', 'jumlah'];
     public $timestamps = false;
 
     public function peminjaman()

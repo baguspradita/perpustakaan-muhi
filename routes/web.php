@@ -9,6 +9,7 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\KategoriBukuController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\LokasiController;
 
 // Halaman utama (Dashboard) - Harus login
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
@@ -36,6 +37,9 @@ Route::middleware('auth')->group(function () {
 
     // Master Data - Kelola/Manajemen Buku (CRUD)
     Route::resource('master-buku', MasterBukuController::class);
+
+    // Master Data - Lokasi Buku
+    Route::resource('lokasi', LokasiController::class);
 
     // Katalog Buku (Index & Show - View saja)
     Route::get('buku', [BukuController::class, 'index'])->name('buku.index');

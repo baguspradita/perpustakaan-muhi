@@ -16,6 +16,13 @@ class BukuSeeder extends Seeder
         $sainsId = \App\Models\KategoriBuku::where('nama_kategori', 'Sains')->first()->id;
         $teknoId = \App\Models\KategoriBuku::where('nama_kategori', 'Teknologi')->first()->id;
 
+        // Ambil ID lokasi yang tersedia
+        $rakFiksi = \App\Models\Lokasi::where('nama_lokasi', 'Rak A1')->first()->id;
+        $rakSains = \App\Models\Lokasi::where('nama_lokasi', 'Rak A2')->first()->id;
+        $rakPelajaran = \App\Models\Lokasi::where('nama_lokasi', 'Rak B1')->first()->id;
+        $rakReferensi = \App\Models\Lokasi::where('nama_lokasi', 'Rak B2')->first()->id;
+        $lemariKaca = \App\Models\Lokasi::where('nama_lokasi', 'Lemari Kaca 01')->first()->id;
+
         $books = [
             // Kategori Fiksi
             [
@@ -24,6 +31,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Bentang Pustaka',
                 'tahun_terbit' => '2005',
                 'kategori_id' => $fiksiId,
+                'lokasi_id' => $rakFiksi,
                 'jumlah' => 10,
             ],
             [
@@ -32,6 +40,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Gramedia',
                 'tahun_terbit' => '2014',
                 'kategori_id' => $fiksiId,
+                'lokasi_id' => $rakFiksi,
                 'jumlah' => 8,
             ],
             [
@@ -40,6 +49,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Republika',
                 'tahun_terbit' => '2016',
                 'kategori_id' => $fiksiId,
+                'lokasi_id' => $lemariKaca,
                 'jumlah' => 6,
             ],
             [
@@ -48,6 +58,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Gramedia',
                 'tahun_terbit' => '2015',
                 'kategori_id' => $fiksiId,
+                'lokasi_id' => $rakFiksi,
                 'jumlah' => 7,
             ],
             [
@@ -56,6 +67,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Bentang Pustaka',
                 'tahun_terbit' => '2006',
                 'kategori_id' => $fiksiId,
+                'lokasi_id' => $rakFiksi,
                 'jumlah' => 5,
             ],
             [
@@ -64,6 +76,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Gramedia',
                 'tahun_terbit' => '2008',
                 'kategori_id' => $fiksiId,
+                'lokasi_id' => $rakFiksi,
                 'jumlah' => 4,
             ],
             [
@@ -72,6 +85,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Republika',
                 'tahun_terbit' => '2004',
                 'kategori_id' => $fiksiId,
+                'lokasi_id' => $rakFiksi,
                 'jumlah' => 12,
             ],
             
@@ -82,6 +96,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Random House',
                 'tahun_terbit' => '1980',
                 'kategori_id' => $sainsId,
+                'lokasi_id' => $rakSains,
                 'jumlah' => 3,
             ],
             [
@@ -90,6 +105,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Bantam Books',
                 'tahun_terbit' => '1988',
                 'kategori_id' => $sainsId,
+                'lokasi_id' => $rakSains,
                 'jumlah' => 5,
             ],
             [
@@ -98,6 +114,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Pustaka Populer Obor',
                 'tahun_terbit' => '1997',
                 'kategori_id' => $sainsId,
+                'lokasi_id' => $rakSains,
                 'jumlah' => 4,
             ],
             [
@@ -106,6 +123,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Physics Today',
                 'tahun_terbit' => '1945',
                 'kategori_id' => $sainsId,
+                'lokasi_id' => $rakReferensi,
                 'jumlah' => 2,
             ],
             [
@@ -114,6 +132,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Prentice Hall',
                 'tahun_terbit' => '2010',
                 'kategori_id' => $sainsId,
+                'lokasi_id' => $rakPelajaran,
                 'jumlah' => 8,
             ],
             [
@@ -122,6 +141,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'John Wiley & Sons',
                 'tahun_terbit' => '2011',
                 'kategori_id' => $sainsId,
+                'lokasi_id' => $rakPelajaran,
                 'jumlah' => 6,
             ],
 
@@ -132,6 +152,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Pearson',
                 'tahun_terbit' => '2008',
                 'kategori_id' => $teknoId,
+                'lokasi_id' => $rakPelajaran,
                 'jumlah' => 7,
             ],
             [
@@ -140,6 +161,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Addison-Wesley',
                 'tahun_terbit' => '1999',
                 'kategori_id' => $teknoId,
+                'lokasi_id' => $rakPelajaran,
                 'jumlah' => 5,
             ],
             [
@@ -148,6 +170,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Addison-Wesley',
                 'tahun_terbit' => '1994',
                 'kategori_id' => $teknoId,
+                'lokasi_id' => $rakPelajaran,
                 'jumlah' => 3,
             ],
             [
@@ -156,6 +179,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Addison-Wesley',
                 'tahun_terbit' => '1968',
                 'kategori_id' => $teknoId,
+                'lokasi_id' => $rakPelajaran,
                 'jumlah' => 2,
             ],
             [
@@ -164,6 +188,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'MIT Press',
                 'tahun_terbit' => '2009',
                 'kategori_id' => $teknoId,
+                'lokasi_id' => $rakPelajaran,
                 'jumlah' => 6,
             ],
             [
@@ -172,6 +197,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Manning Publications',
                 'tahun_terbit' => '2013',
                 'kategori_id' => $teknoId,
+                'lokasi_id' => $rakPelajaran,
                 'jumlah' => 4,
             ],
             [
@@ -180,6 +206,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => 'Packt Publishing',
                 'tahun_terbit' => '2017',
                 'kategori_id' => $teknoId,
+                'lokasi_id' => $rakPelajaran,
                 'jumlah' => 8,
             ],
             [
@@ -188,6 +215,7 @@ class BukuSeeder extends Seeder
                 'penerbit' => "O'Reilly Media",
                 'tahun_terbit' => '2017',
                 'kategori_id' => $teknoId,
+                'lokasi_id' => $rakPelajaran,
                 'jumlah' => 9,
             ],
         ];

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('penerbit', 100);
             $table->year('tahun_terbit');
             $table->foreignId('kategori_id')->constrained('kategori_buku');
+            $table->foreignId('lokasi_id')->constrained('lokasi');
             $table->integer('jumlah');
             $table->timestamps();
         });

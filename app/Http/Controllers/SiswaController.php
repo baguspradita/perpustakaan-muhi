@@ -18,11 +18,13 @@ class SiswaController extends Controller
         }
 
         // Query dasar mengambil siswa dan relasi jurusannya
-        $query = User::with('jurusan')->where('role', 'siswa');
+        $query = User::with(['siswa', 'jurusan'])->where('role', 'siswa');
 
         // Jika ada filter jurusan dari request (dropdown)
         if ($request->has('jurusan_id') && $request->jurusan_id != '') {
-            $query->where('jurusan_id', $request->jurusan_id);
+            $query->whereHas('siswa', function($q) use ($request) {
+                $q->where('jurusan_id', $request->jurusan_id);
+            });
         }
 
         // Jika ada pencarian nama
@@ -50,7 +52,7 @@ class SiswaController extends Controller
             abort(403, 'Akses ditolak.');
         }
 
-        $siswa = User::with('jurusan')->where('role', 'siswa')->findOrFail($id);
+        $siswa = User::with(['siswa', 'jurusan'])->where('role', 'siswa')->findOrFail($id);
         return view('siswa.show', compact('siswa'));
     }
 
@@ -64,7 +66,7 @@ class SiswaController extends Controller
             abort(403, 'Akses ditolak.');
         }
 
-        $siswa = User::with('jurusan')->where('role', 'siswa')->findOrFail($id);
+        $siswa = User::with(['siswa', 'jurusan'])->where('role', 'siswa')->findOrFail($id);
         $jurusan = \App\Models\Jurusan::all();
 
         return view('siswa.edit', compact('siswa', 'jurusan'));
@@ -97,8 +99,19 @@ class SiswaController extends Controller
             'email.email'    => 'Format email tidak valid.',
         ]);
 
-        // Simpan perubahan
-        $siswa->update($validated);
+        // Simpan perubahan ke tabel users
+        $siswa->update([
+            'nama'    => $validated['nama'],
+            'email'   => $validated['email'],
+            'no_telp' => $validated['no_telp'],
+            'alamat'  => $validated['alamat'],
+        ]);
+
+        // Simpan perubahan ke tabel siswa (detail profil)
+        $siswa->siswa()->update([
+            'jurusan_id' => $validated['jurusan_id'],
+            'kelas'      => $validated['kelas'],
+        ]);
 
         return redirect()->route('siswa.show', $id)
             ->with('success', 'Data siswa berhasil diperbarui.');

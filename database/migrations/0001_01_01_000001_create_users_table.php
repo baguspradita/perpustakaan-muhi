@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('password', 255);
             $table->text('alamat');
             $table->string('no_telp', 20);
-            $table->enum('role', ['petugas', 'siswa']);
+            $table->enum('role', ['petugas', 'siswa', 'guru']);
             $table->timestamps();
         });
 
@@ -47,5 +47,4 @@ return new class extends Migration
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
     }
-}
-;
+};

@@ -63,4 +63,59 @@ class User extends Authenticatable
     {
         return $this->hasMany(Peminjaman::class);
     }
+
+    /**
+     * Relasi shortcut ke Jurusan melalui Siswa
+     */
+    public function jurusan()
+    {
+        return $this->hasOneThrough(
+            Jurusan::class,
+            Siswa::class,
+            'user_id',    // FK di tabel siswa
+            'id',         // FK di tabel jurusan
+            'id',         // Local key di tabel users
+            'jurusan_id'  // Local key di tabel siswa
+        );
+    }
+
+    /**
+     * Accessor untuk jurusan_id dari tabel siswa
+     */
+    public function getJurusanIdAttribute()
+    {
+        return $this->siswa->jurusan_id ?? null;
+    }
+
+    /**
+     * Accessor untuk kelas dari tabel siswa
+     */
+    public function getKelasAttribute()
+    {
+        return $this->siswa->kelas ?? null;
+    }
+
+    /**
+     * Relasi ke model Guru
+     */
+    public function guru()
+    {
+        return $this->hasOne(Guru::class);
+    }
+
+    /**
+     * Accessor untuk NIP dari tabel guru
+     */
+    public function getNipAttribute()
+    {
+        return $this->guru->nip ?? null;
+    }
+
+    /**
+     * Accessor untuk Mapel dari tabel guru
+     */
+    public function getMapelAttribute()
+    {
+        return $this->guru->mapel ?? null;
+    }
 }

@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             JurusanSeeder::class,
             UserSeeder::class,
             PetugasSeeder::class,
+            GuruSeeder::class,
             SiswaSeeder::class,
             KategoriBukuSeeder::class,
             BukuSeeder::class,

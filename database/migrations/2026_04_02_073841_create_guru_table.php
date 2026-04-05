@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nip', 20)->unique();
             $table->string('mapel', 100)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

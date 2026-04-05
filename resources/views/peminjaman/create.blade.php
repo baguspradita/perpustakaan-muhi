@@ -48,27 +48,46 @@
                         </div>
                         @else
                         <!-- Jika petugas, bisa memilih siswa atau guru -->
-                        <div>
-                            <label for="user_id" class="block text-sm font-black text-slate-700 uppercase tracking-wider mb-2">Pilih Peminjam</label>
-                            <select name="user_id" id="user_id" class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 outline-none transition-all font-medium text-slate-800" required>
-                                <option value="" disabled selected>Cari nama peminjam...</option>
-                                
-                                <!-- Group Siswa -->
-                                <optgroup label="SISWA">
-                                    @foreach($peminjam->where('peminjam_type', 'Siswa') as $p)
-                                    <option value="{{ $p->id }}">{{ $p->nama }} ({{ $p->jurusan_name }})</option>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Dropdown Siswa -->
+                            <div>
+                                <label for="user_id_siswa" class="block text-sm font-black text-slate-700 uppercase tracking-wider mb-2">Pilih Siswa</label>
+                                <select name="user_id_siswa" id="user_id_siswa" class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 outline-none transition-all font-medium text-slate-800">
+                                    <option value="">-- Pilih Siswa --</option>
+                                    @foreach($siswa as $s)
+                                    <option value="{{ $s->id }}">{{ $s->nama }} ({{ $s->jurusan_name }})</option>
                                     @endforeach
-                                </optgroup>
-                                
-                                <!-- Group Guru -->
-                                <optgroup label="GURU">
-                                    @foreach($peminjam->where('peminjam_type', 'Guru') as $p)
-                                    <option value="{{ $p->id }}">{{ $p->nama }} ({{ $p->guru_mapel }})</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Dropdown Guru -->
+                            <div>
+                                <label for="user_id_guru" class="block text-sm font-black text-slate-700 uppercase tracking-wider mb-2">Pilih Guru</label>
+                                <select name="user_id_guru" id="user_id_guru" class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 outline-none transition-all font-medium text-slate-800">
+                                    <option value="">-- Pilih Guru --</option>
+                                    @foreach($guru as $g)
+                                    <option value="{{ $g->id }}">{{ $g->nama }} ({{ $g->guru_mapel }})</option>
                                     @endforeach
-                                </optgroup>
-                            </select>
-                            @error('user_id') <p class="text-rose-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
+                                </select>
+                            </div>
                         </div>
+
+                        <!-- Hidden input untuk menahan user_id yang dipilih -->
+                        <input type="hidden" name="user_id" id="user_id" value="">
+
+                        @error('user_id') <p class="text-rose-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
+
+                        <script>
+                        document.getElementById('user_id_siswa').addEventListener('change', function() {
+                            document.getElementById('user_id').value = this.value;
+                            document.getElementById('user_id_guru').value = '';
+                        });
+
+                        document.getElementById('user_id_guru').addEventListener('change', function() {
+                            document.getElementById('user_id').value = this.value;
+                            document.getElementById('user_id_siswa').value = '';
+                        });
+                        </script>
                         @endif
 
                         <div>

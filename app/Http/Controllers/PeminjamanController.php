@@ -33,31 +33,35 @@ class PeminjamanController extends Controller
      */
     public function create()
     {
-        // Ambil siswa yang memiliki jurusan
+        // Ambil siswa yang memiliki jurusan (exclude yang sudah didelete)
         $siswa = User::where('role', 'siswa')
+            ->whereNull('deleted_at')
             ->whereHas('siswa', function($query) {
                 $query->whereNotNull('jurusan_id');
             })
             ->with('siswa.jurusan')
+            ->orderBy('nama')
             ->get()
             ->map(function($user) {
-                $user->peminjam_type = 'Siswa';
                 $user->jurusan_name = $user->siswa->jurusan->nama ?? '-';
                 return $user;
             });
         
-        // Ambil semua guru
+        // Ambil semua guru (exclude yang sudah didelete)
         $guru = User::where('role', 'guru')
-            ->with('guru')
+            ->whereNull('deleted_at')
+            ->whereHas('guru', function($query) {
+                $query->whereNull('deleted_at');
+            })
+            ->with(['guru' => function($query) {
+                $query->whereNull('deleted_at');
+            }])
+            ->orderBy('nama')
             ->get()
             ->map(function($user) {
-                $user->peminjam_type = 'Guru';
                 $user->guru_mapel = $user->guru->mapel ?? '-';
                 return $user;
             });
-        
-        // Gabungkan siswa dan guru, lalu sort berdasarkan nama
-        $peminjam = $siswa->merge($guru)->sortBy('nama');
         
         // Get unique book titles with count of available exemplars
         // Otomatis exclude soft deleted books karena SoftDeletes trait
@@ -67,7 +71,7 @@ class PeminjamanController extends Controller
             ->with('kategori')
             ->get();
 
-        return view('peminjaman.create', compact('peminjam', 'bukuByTitle'));
+        return view('peminjaman.create', compact('siswa', 'guru', 'bukuByTitle'));
     }
 
     /**
@@ -82,6 +86,12 @@ class PeminjamanController extends Controller
             'tgl_pinjam' => 'required|date',
             'tgl_jatuh_tempo' => 'required|date|after_or_equal:tgl_pinjam',
         ]);
+
+        // Cegah peminjaman untuk user yang sudah didelete
+        $user = User::withTrashed()->findOrFail($request->user_id);
+        if ($user->deleted_at !== null) {
+            return back()->with('error', 'Tidak bisa membuat peminjaman! Siswa/Guru ini sudah dihapus dari sistem.');
+        }
 
         try {
             DB::beginTransaction();

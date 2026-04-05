@@ -77,4 +77,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/siswa/{id}', [SiswaController::class, 'show'])->name('siswa.show');
     Route::get('/siswa/{id}/edit', [SiswaController::class, 'edit'])->name('siswa.edit');
     Route::put('/siswa/{id}', [SiswaController::class, 'update'])->name('siswa.update');
+    Route::delete('/siswa/{id}', [SiswaController::class, 'destroy'])->name('siswa.destroy');
 });

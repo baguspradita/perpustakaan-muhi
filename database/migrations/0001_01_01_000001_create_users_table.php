@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('no_telp', 20);
             $table->enum('role', ['petugas', 'siswa', 'guru']);
             $table->timestamps();
+             $table->softDeletes();
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

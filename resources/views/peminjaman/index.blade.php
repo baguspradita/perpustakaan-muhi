@@ -5,7 +5,7 @@
     <div class="mb-8">
         <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Peminjaman Buku</h2>
         <p class="text-slate-500 font-medium">Kelola transaksi peminjaman buku siswa di sini.</p>
-        <div class="mt-4 flex gap-3">
+        <div class="mt-4 flex gap-3 justify-end">
             <a href="{{ route('peminjaman.create') }}" class="inline-flex items-center px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-md flex items-center gap-2 transition-all">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>

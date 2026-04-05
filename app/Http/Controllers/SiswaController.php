@@ -116,4 +116,33 @@ class SiswaController extends Controller
         return redirect()->route('siswa.show', $id)
             ->with('success', 'Data siswa berhasil diperbarui.');
     }
+
+    /**
+     * Menghapus data siswa (soft delete)
+     */
+    public function destroy($id)
+    {
+        // Periksa apakah user adalah admin/petugas
+        if (auth()->user()->role !== 'petugas') {
+            abort(403, 'Akses ditolak.');
+        }
+
+        $siswa = User::where('role', 'siswa')->findOrFail($id);
+
+        // Cek apakah siswa memiliki peminjaman aktif
+        $activeLoan = \App\Models\Peminjaman::where('user_id', $id)
+            ->where('status', 'dipinjam')
+            ->exists();
+
+        if ($activeLoan) {
+            return back()->with('error', 'Tidak bisa menghapus siswa! Siswa masih memiliki peminjaman aktif.');
+        }
+
+        // Soft delete siswa dan user
+        $siswa->delete();
+        $siswa->siswa()->delete();
+
+        return redirect()->route('siswa.index')
+            ->with('success', 'Data siswa berhasil dihapus.');
+    }
 }

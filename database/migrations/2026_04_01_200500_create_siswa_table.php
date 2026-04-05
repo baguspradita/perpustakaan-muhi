@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('jurusan_id')->constrained('jurusan');
             $table->enum('kelas', ['10', '11', '12']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

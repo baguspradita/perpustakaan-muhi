@@ -33,7 +33,31 @@ class PeminjamanController extends Controller
      */
     public function create()
     {
-        $siswa = User::where('role', 'siswa')->get();
+        // Ambil siswa yang memiliki jurusan
+        $siswa = User::where('role', 'siswa')
+            ->whereHas('siswa', function($query) {
+                $query->whereNotNull('jurusan_id');
+            })
+            ->with('siswa.jurusan')
+            ->get()
+            ->map(function($user) {
+                $user->peminjam_type = 'Siswa';
+                $user->jurusan_name = $user->siswa->jurusan->nama ?? '-';
+                return $user;
+            });
+        
+        // Ambil semua guru
+        $guru = User::where('role', 'guru')
+            ->with('guru')
+            ->get()
+            ->map(function($user) {
+                $user->peminjam_type = 'Guru';
+                $user->guru_mapel = $user->guru->mapel ?? '-';
+                return $user;
+            });
+        
+        // Gabungkan siswa dan guru, lalu sort berdasarkan nama
+        $peminjam = $siswa->merge($guru)->sortBy('nama');
         
         // Get unique book titles with count of available exemplars
         // Otomatis exclude soft deleted books karena SoftDeletes trait
@@ -43,7 +67,7 @@ class PeminjamanController extends Controller
             ->with('kategori')
             ->get();
 
-        return view('peminjaman.create', compact('siswa', 'bukuByTitle'));
+        return view('peminjaman.create', compact('peminjam', 'bukuByTitle'));
     }
 
     /**
@@ -71,6 +95,9 @@ class PeminjamanController extends Controller
 
             foreach ($request->buku_id as $bukuJudulId) {
                 // bukuJudulId adalah first_id (ID dari judul) dari GROUP BY query
+                // Ambil jumlah buku yang dipinjam untuk buku ini, default 1
+                $jumlahPinjam = (int)($request->buku_jumlah[$bukuJudulId] ?? 1);
+                
                 // Cari exemplar pertama yang tersedia dengan judul yang sama
                 $firstBuku = Buku::find($bukuJudulId);
                 
@@ -78,35 +105,38 @@ class PeminjamanController extends Controller
                     throw new \Exception("Buku dengan ID $bukuJudulId tidak ditemukan");
                 }
 
-                // Cari exemplar pertama dari judul yang sama yang belum dipinjam
-                $availableExemplar = Buku::where('judul', $firstBuku->judul)
-                    ->whereNotIn('id', function($query) {
-                        // Exclude id yang sedang dipinjam (status aktif)
-                        $query->select('buku_id')
-                            ->from('detail_peminjaman')
-                            ->join('peminjaman', 'peminjaman.id', '=', 'detail_peminjaman.peminjaman_id')
-                            ->where('peminjaman.status', 'dipinjam');
-                    })
-                    ->orderBy('id')
-                    ->first();
+                // Loop berdasarkan jumlah yang diminta
+                for ($i = 0; $i < $jumlahPinjam; $i++) {
+                    // Cari exemplar pertama dari judul yang sama yang belum dipinjam
+                    $availableExemplar = Buku::where('judul', $firstBuku->judul)
+                        ->whereNotIn('id', function($query) {
+                            // Exclude id yang sedang dipinjam (status aktif)
+                            $query->select('buku_id')
+                                ->from('detail_peminjaman')
+                                ->join('peminjaman', 'peminjaman.id', '=', 'detail_peminjaman.peminjaman_id')
+                                ->where('peminjaman.status', 'dipinjam');
+                        })
+                        ->orderBy('id')
+                        ->first();
 
-                if (!$availableExemplar) {
-                    throw new \Exception("Semua salinan buku '{$firstBuku->judul}' sedang dipinjam atau tidak tersedia");
+                    if (!$availableExemplar) {
+                        throw new \Exception("Tidak cukup salinan buku '{$firstBuku->judul}'. Hanya tersedia " . ($i) . " dari " . $jumlahPinjam . " yang diminta");
+                    }
+
+                    // Hitung ID Eksamplar dengan format 5 digit
+                    $idEksamplar = str_pad($availableExemplar->id, 5, '0', STR_PAD_LEFT);
+
+                    // Catat detail peminjaman dengan id_eksamplar
+                    DetailPeminjaman::create([
+                        'peminjaman_id' => $peminjaman->id,
+                        'buku_id' => $availableExemplar->id,
+                        'id_eksamplar' => $idEksamplar,
+                        'jumlah' => 1,
+                    ]);
+
+                    // Kurangi stok buku
+                    $availableExemplar->decrement('jumlah');
                 }
-
-                // Hitung ID Eksamplar dengan format 5 digit
-                $idEksamplar = str_pad($availableExemplar->id, 5, '0', STR_PAD_LEFT);
-
-                // Catat detail peminjaman dengan id_eksamplar
-                DetailPeminjaman::create([
-                    'peminjaman_id' => $peminjaman->id,
-                    'buku_id' => $availableExemplar->id,
-                    'id_eksamplar' => $idEksamplar,
-                    'jumlah' => 1,
-                ]);
-
-                // Kurangi stok buku
-                $availableExemplar->decrement('jumlah');
             }
 
             DB::commit();

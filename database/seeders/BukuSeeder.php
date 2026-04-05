@@ -271,13 +271,17 @@ class BukuSeeder extends Seeder
             // Extract huruf pertama dari judul (non-spasi)
             $hurufPertama = $this->extractFirstLetter($b['judul']);
             
+            // Gabungkan nama penulis
+            $namaPenulis = trim($b['nama_depan_penulis'] . ' ' . $b['nama_belakang_penulis']);
+            
             // Generate nomor salinan untuk setiap copy
             $jumlah = $b['jumlah'];
-            unset($b['jumlah']); // Hapus field jumlah sementara
+            unset($b['jumlah'], $b['nama_depan_penulis'], $b['nama_belakang_penulis']); // Hapus field yang tidak perlu
             
             for ($i = 1; $i <= $jumlah; $i++) {
                 $copy = $b;
                 $copy['huruf_judul_awal'] = $hurufPertama;
+                $copy['nama_penulis'] = $namaPenulis;
                 $copy['nomor_salinan'] = "c.$i";
                 $copy['jumlah'] = 1; // Setiap copy adalah satu item
                 \App\Models\Buku::create($copy);

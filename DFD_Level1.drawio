@@ -1,0 +1,187 @@
+<mxfile host="app.diagrams.net" agent="5.0">
+  <diagram id="dfd_level1" name="DFD LEVEL 1 - SISTEM PERPUSTAKAAN">
+    <mxGraphModel dx="1191" dy="694" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bg" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=none;" value="" vertex="1">
+          <mxGeometry height="900" width="1200" as="geometry" />
+        </mxCell>
+        <mxCell id="title" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=18;fontStyle=1" value="DFD LEVEL 1 - SISTEM PERPUSTAKAAN MUHI SMK YOGYAKARTA" vertex="1">
+          <mxGeometry height="30" width="800" x="200" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="entity_siswa" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;fontSize=12;fontStyle=1" value="SISWA" vertex="1">
+          <mxGeometry height="100" width="100" x="50" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="entity_guru" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;fontSize=12;fontStyle=1" value="GURU" vertex="1">
+          <mxGeometry height="100" width="100" x="50" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="entity_petugas" parent="1" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;fontSize=12;fontStyle=1" value="PETUGAS" vertex="1">
+          <mxGeometry height="100" width="100" x="1050" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_1_0" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e1f5ff;strokeColor=#0277bd;strokeWidth=3;fontSize=11;fontStyle=1" value="1.0&#xa;AUTENTIKASI" vertex="1">
+          <mxGeometry height="120" width="120" x="250" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_2_0" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#7b1fa2;strokeWidth=3;fontSize=11;fontStyle=1" value="2.0&#xa;MASTER DATA" vertex="1">
+          <mxGeometry height="120" width="120" x="550" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_3_0" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#388e3c;strokeWidth=3;fontSize=11;fontStyle=1" value="3.0&#xa;PEMINJAMAN" vertex="1">
+          <mxGeometry height="120" width="120" x="250" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_4_0" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#e65100;strokeWidth=3;fontSize=10;fontStyle=1" value="4.0&#xa;PENGEMBALIAN&#xa;&amp; DENDA" vertex="1">
+          <mxGeometry height="120" width="120" x="550" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_5_0" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c2185b;strokeWidth=3;fontSize=10;fontStyle=1" value="5.0&#xa;RIWAYAT&#xa;PEMINJAMAN" vertex="1">
+          <mxGeometry height="120" width="120" x="850" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="ds1" parent="1" style="shape=rectangle;html=1;rounded=0;whiteSpace=wrap;strokeColor=#000000;strokeWidth=2;fillColor=#ffffcc;fontSize=10;fontStyle=1;double=1;doubleLines=1;spacing=0" value="DS1. USERS" vertex="1">
+          <mxGeometry height="50" width="100" x="250" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="ds2" parent="1" style="shape=rectangle;html=1;rounded=0;whiteSpace=wrap;strokeColor=#000000;strokeWidth=2;fillColor=#ffffcc;fontSize=10;fontStyle=1;double=1;doubleLines=1;spacing=0" value="DS2. BUKU" vertex="1">
+          <mxGeometry height="50" width="100" x="400" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="ds3" parent="1" style="shape=rectangle;html=1;rounded=0;whiteSpace=wrap;strokeColor=#000000;strokeWidth=2;fillColor=#ffffcc;fontSize=10;fontStyle=1;double=1;doubleLines=1;spacing=0" value="DS3. KATEGORI" vertex="1">
+          <mxGeometry height="50" width="100" x="550" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="ds4" parent="1" style="shape=rectangle;html=1;rounded=0;whiteSpace=wrap;strokeColor=#000000;strokeWidth=2;fillColor=#ffffcc;fontSize=10;fontStyle=1;double=1;doubleLines=1;spacing=0" value="DS4. JURUSAN" vertex="1">
+          <mxGeometry height="50" width="100" x="700" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="ds5" parent="1" style="shape=rectangle;html=1;rounded=0;whiteSpace=wrap;strokeColor=#000000;strokeWidth=2;fillColor=#ffffcc;fontSize=10;fontStyle=1;double=1;doubleLines=1;spacing=0" value="DS5. PEMINJAMAN" vertex="1">
+          <mxGeometry height="50" width="100" x="850" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="ds6" parent="1" style="shape=rectangle;html=1;rounded=0;whiteSpace=wrap;strokeColor=#000000;strokeWidth=2;fillColor=#ffffcc;fontSize=10;fontStyle=1;double=1;doubleLines=1;spacing=0" value="DS6. PENGEMBALIAN" vertex="1">
+          <mxGeometry height="50" width="100" x="1000" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="ds7" parent="1" style="shape=rectangle;html=1;rounded=0;whiteSpace=wrap;strokeColor=#000000;strokeWidth=2;fillColor=#ffffcc;fontSize=9;fontStyle=1;double=1;doubleLines=1;spacing=0" value="DS7. LOKASI&#xa;BUKU" vertex="1">
+          <mxGeometry height="70" width="80" x="1100" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_siswa_auth" edge="1" parent="1" source="entity_siswa" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_1_0" value="LOGIN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_auth_siswa" edge="1" parent="1" source="proc_1_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_siswa" value="STATUS LOGIN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_guru_auth" edge="1" parent="1" source="entity_guru" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_1_0" value="LOGIN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_auth_guru" edge="1" parent="1" source="proc_1_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_guru" value="STATUS LOGIN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_petugas_auth" edge="1" parent="1" source="entity_petugas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_1_0" value="LOGIN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_auth_petugas" edge="1" parent="1" source="proc_1_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_petugas" value="STATUS LOGIN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_petugas_master" edge="1" parent="1" source="entity_petugas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_2_0" value="INPUT DATA&#xa;MASTER">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_master_petugas" edge="1" parent="1" source="proc_2_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_petugas" value="LAPORAN&#xa;MASTER">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_siswa_pinjam" edge="1" parent="1" source="entity_siswa" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_3_0" value="PERMINTAAN&#xa;PEMINJAMAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_pinjam_siswa" edge="1" parent="1" source="proc_3_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_siswa" value="KONFIRMASI&#xa;PEMINJAMAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_guru_pinjam" edge="1" parent="1" source="entity_guru" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_3_0" value="PERMINTAAN&#xa;PEMINJAMAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_pinjam_guru" edge="1" parent="1" source="proc_3_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_guru" value="KONFIRMASI&#xa;PEMINJAMAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_petugas_verif_pinjam" edge="1" parent="1" source="entity_petugas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_3_0" value="VERIFIKASI&#xa;&amp; APPROVAL">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_pinjam_petugas" edge="1" parent="1" source="proc_3_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_petugas" value="STATUS&#xa;PEMINJAMAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_siswa_kembali" edge="1" parent="1" source="entity_siswa" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_4_0" value="PENGEMBALIAN&#xa;BUKU">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_kembali_siswa" edge="1" parent="1" source="proc_4_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_siswa" value="BUKTI&#xa;PENGEMBALIAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_guru_kembali" edge="1" parent="1" source="entity_guru" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_4_0" value="PENGEMBALIAN&#xa;BUKU">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_kembali_guru" edge="1" parent="1" source="proc_4_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_guru" value="BUKTI&#xa;PENGEMBALIAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_petugas_verif_kembali" edge="1" parent="1" source="entity_petugas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_4_0" value="VERIFIKASI&#xa;PENGEMBALIAN">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_kembali_petugas" edge="1" parent="1" source="proc_4_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_petugas" value="LAPORAN DENDA&#xa;&amp; STATUS">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_siswa_riwayat" edge="1" parent="1" source="entity_siswa" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_5_0" value="PERMINTAAN&#xa;RIWAYAT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_riwayat_siswa" edge="1" parent="1" source="proc_5_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_siswa" value="RIWAYAT&#xa;PRIBADI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_guru_riwayat" edge="1" parent="1" source="entity_guru" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_5_0" value="PERMINTAAN&#xa;RIWAYAT">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_riwayat_guru" edge="1" parent="1" source="proc_5_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_guru" value="RIWAYAT&#xa;PRIBADI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_petugas_riwayat" edge="1" parent="1" source="entity_petugas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="proc_5_0" value="PERMINTAAN&#xa;RIWAYAT SEMUA">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_riwayat_petugas" edge="1" parent="1" source="proc_5_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;strokeWidth=2;endArrow=block;endFill=1;fontSize=9" target="entity_petugas" value="RIWAYAT SEMUA&#xa;ANGGOTA">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_auth_ds1" edge="1" parent="1" source="proc_1_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;dashPattern=3;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=8" target="ds1" value="READ/WRITE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_master_ds2" edge="1" parent="1" source="proc_2_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;dashPattern=3;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=8" target="ds2" value="READ/WRITE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_master_ds3" edge="1" parent="1" source="proc_2_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;dashPattern=3;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=8" target="ds3" value="READ/WRITE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_master_ds4" edge="1" parent="1" source="proc_2_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;dashPattern=3;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=8" target="ds4" value="READ/WRITE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_pinjam_ds1" edge="1" parent="1" source="proc_3_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;dashPattern=3;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=8" target="ds1" value="READ">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_pinjam_ds2" edge="1" parent="1" source="proc_3_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;dashPattern=3;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=8" target="ds2" value="READ">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_pinjam_ds5" edge="1" parent="1" source="proc_3_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;dashPattern=3;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=8" target="ds5" value="WRITE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_kembali_ds5" edge="1" parent="1" source="proc_4_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;dashPattern=3;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=8" target="ds5" value="READ">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_kembali_ds6" edge="1" parent="1" source="proc_4_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;dashPattern=3;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=8" target="ds6" value="WRITE">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_riwayat_ds5" edge="1" parent="1" source="proc_5_0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;dashPattern=3;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;strokeWidth=1.5;endArrow=block;endFill=1;fontSize=8" target="ds5" value="READ">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_title" parent="1" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontStyle=1" value="KETERANGAN" vertex="1">
+          <mxGeometry height="20" width="80" x="50" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_entity" parent="1" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9" value="⚫ = External Entity (User/Actor)" vertex="1">
+          <mxGeometry height="20" width="180" x="50" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_process" parent="1" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9" value="⭕ = Process (Function)" vertex="1">
+          <mxGeometry height="20" width="180" x="250" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_datastore" parent="1" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9" value="▭▭ = Data Store" vertex="1">
+          <mxGeometry height="20" width="180" x="450" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_solid" parent="1" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9" value="─→ = Solid Data Flow" vertex="1">
+          <mxGeometry height="20" width="180" x="650" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_dotted" parent="1" style="text;html=1;align=left;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=9" value="⋯→ = Dotted Data Store Flow" vertex="1">
+          <mxGeometry height="20" width="200" x="850" y="805" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

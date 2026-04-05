@@ -12,7 +12,7 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <!-- Card: Total Peminjaman -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-500 text-sm font-semibold">Total Peminjaman</p>
@@ -27,7 +27,7 @@
         </div>
 
         <!-- Card: Sedang Dipinjam -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-500 text-sm font-semibold">Sedang Dipinjam</p>
@@ -44,7 +44,7 @@
         </div>
 
         <!-- Card: Sudah Dikembalikan -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-500 text-sm font-semibold">Sudah Dikembalikan</p>
@@ -62,7 +62,7 @@
     </div>
 
     <!-- Tabel Riwayat Peminjaman -->
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead class="bg-slate-50 border-b border-slate-200">

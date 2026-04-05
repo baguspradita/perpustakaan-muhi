@@ -25,17 +25,10 @@
                 @error('judul')<span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>@enderror
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Nama Depan Penulis <span class="text-red-500">*</span></label>
-                    <input type="text" name="nama_depan_penulis" value="{{ old('nama_depan_penulis') }}" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama depan" required>
-                    @error('nama_depan_penulis')<span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>@enderror
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Nama Belakang Penulis</label>
-                    <input type="text" name="nama_belakang_penulis" value="{{ old('nama_belakang_penulis') }}" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama belakang (opsional)">
-                    @error('nama_belakang_penulis')<span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>@enderror
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Nama Penulis <span class="text-red-500">*</span></label>
+                <input type="text" name="nama_penulis" value="{{ old('nama_penulis') }}" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Nama lengkap penulis" required>
+                @error('nama_penulis')<span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>@enderror
             </div>
 
             <div>

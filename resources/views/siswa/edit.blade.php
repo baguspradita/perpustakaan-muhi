@@ -33,7 +33,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Kolom Kiri: Informasi Pribadi -->
             <div class="lg:col-span-2">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-8">
+                <div class="bg-white rounded-3xl border border-slate-100 shadow-md p-8">
                     <h3 class="text-xl font-bold text-slate-800 mb-6">Informasi Pribadi</h3>
 
                     <div class="space-y-5">
@@ -109,7 +109,7 @@
 
             <!-- Kolom Kanan: Informasi Akademik -->
             <div class="space-y-6">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-8">
+                <div class="bg-white rounded-3xl border border-slate-100 shadow-md p-8">
                     <h3 class="text-xl font-bold text-slate-800 mb-6">Informasi Akademik</h3>
 
                     <div class="space-y-5">
@@ -168,7 +168,7 @@
         <div class="mt-8 flex items-center gap-4">
             <button
                 type="submit"
-                class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-xl transition-all shadow-sm shadow-indigo-200 flex items-center gap-2"
+                class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-xl transition-all shadow-md shadow-indigo-200 flex items-center gap-2"
             >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 Simpan Perubahan

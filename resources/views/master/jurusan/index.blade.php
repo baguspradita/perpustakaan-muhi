@@ -25,15 +25,28 @@
     </div>
     @endif
 
+    <!-- Alert Error -->
+    @if($message = Session::get('error'))
+    <div class="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-3">
+        <svg class="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+        </svg>
+        <div>
+            <p class="font-semibold text-rose-900">Gagal!</p>
+            <p class="text-sm text-rose-700">{{ $message }}</p>
+        </div>
+    </div>
+    @endif
+
     <!-- Card Tabel Jurusan -->
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-md overflow-hidden">
         <!-- Header Card dengan Tombol Tambah (padding diperbesar agar teks tidak terpotong) -->
         <div class="px-8 py-8 border-b border-slate-100 flex items-center justify-between">
             <div>
                 <h3 class="text-lg font-bold text-slate-800 leading-snug">Daftar Jurusan</h3>
                 <p class="text-sm text-slate-500">Total: {{ count($jurusan) }} jurusan</p>
             </div>
-            <a href="{{ route('jurusan.create') }}" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 active:bg-indigo-800 transition-colors flex items-center gap-2 shadow-sm">
+            <a href="{{ route('jurusan.create') }}" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 active:bg-indigo-800 transition-colors flex items-center gap-2 shadow-md">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </path>

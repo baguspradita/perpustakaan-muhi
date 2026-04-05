@@ -41,8 +41,7 @@ class MasterBukuController extends Controller
             $search = $request->search;
             $baseQuery->where(function($q) use ($search) {
                 $q->where('judul', 'like', "%$search%")
-                  ->orWhere('nama_depan_penulis', 'like', "%$search%")
-                  ->orWhere('nama_belakang_penulis', 'like', "%$search%")
+                  ->orWhere('nama_penulis', 'like', "%$search%")
                   ->orWhere('penerbit', 'like', "%$search%");
             });
         }
@@ -90,8 +89,7 @@ class MasterBukuController extends Controller
     {
         $validated = $request->validate([
             'judul' => 'required|string|max:150',
-            'nama_depan_penulis' => 'required|string|max:100',
-            'nama_belakang_penulis' => 'nullable|string|max:100',
+            'nama_penulis' => 'required|string|max:200',
             'penerbit' => 'required|string|max:100',
             'tahun_terbit' => 'required|digits:4|integer',
             'kategori_id' => 'required|exists:kategori_buku,id',
@@ -155,8 +153,7 @@ class MasterBukuController extends Controller
 
         $validated = $request->validate([
             'judul' => 'required|string|max:150',
-            'nama_depan_penulis' => 'required|string|max:100',
-            'nama_belakang_penulis' => 'nullable|string|max:100',
+            'nama_penulis' => 'required|string|max:200',
             'penerbit' => 'required|string|max:100',
             'tahun_terbit' => 'required|digits:4|integer',
             'kategori_id' => 'required|exists:kategori_buku,id',
@@ -208,8 +205,7 @@ class MasterBukuController extends Controller
             // Prepare base data untuk semua copies baru
             $baseData = [
                 'judul' => $buku->judul,
-                'nama_depan_penulis' => $buku->nama_depan_penulis,
-                'nama_belakang_penulis' => $buku->nama_belakang_penulis,
+                'nama_penulis' => $buku->nama_penulis,
                 'penerbit' => $buku->penerbit,
                 'tahun_terbit' => $buku->tahun_terbit,
                 'kategori_id' => $buku->kategori_id,

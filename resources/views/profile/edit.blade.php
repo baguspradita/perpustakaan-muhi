@@ -20,7 +20,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- FORM CARD -->
         <div class="lg:col-span-2">
-            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-white rounded-3xl shadow-md border border-slate-200 overflow-hidden">
                 <div class="p-8 border-b border-slate-100">
                     <h3 class="text-lg font-bold text-slate-800">Biodata Diri</h3>
                     <p class="text-sm text-slate-500 mt-1">Pastikan data Anda selalu up-to-date untuk memudahkan proses peminjaman buku.</p>
@@ -140,7 +140,7 @@
             </div>
 
             <!-- Profile Overview Widget -->
-            <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-md">
                 <div class="flex flex-col items-center text-center">
                     <div class="w-24 h-24 rounded-full bg-slate-100 border-4 border-indigo-50 flex items-center justify-center text-indigo-600 text-3xl font-black mb-4">
                         {{ substr(auth()->user()->nama, 0, 1) }}

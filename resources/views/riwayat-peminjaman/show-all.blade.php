@@ -18,7 +18,7 @@
         <div class="lg:col-span-2 space-y-8">
             
             <!-- Informasi Anggota -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
                 <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
                     <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -48,7 +48,7 @@
             </div>
 
             <!-- Informasi Peminjaman -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
                 <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
                     <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -92,7 +92,7 @@
             </div>
 
             <!-- Daftar Buku Dipinjam -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
                 <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
                     <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
@@ -103,6 +103,7 @@
                 <div class="space-y-4">
                     @forelse($peminjaman->detailPeminjaman as $detail)
                         <div class="border border-slate-200 rounded-lg p-5 hover:border-indigo-300 hover:bg-indigo-50 transition-all">
+                            @if($detail->buku)
                             <div class="flex items-start gap-4">
                                 <!-- Thumbnail Placeholder -->
                                 <div class="bg-slate-100 rounded-lg p-3 flex-shrink-0">
@@ -135,30 +136,33 @@
                                     <!-- Status Return for each book -->
                                     @if($peminjaman->pengembalian && $peminjaman->pengembalian->tgl_kembali)
                                         <div class="mt-4 pt-4 border-t border-slate-200">
-                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div>
-                                                    <p class="text-xs text-slate-500 font-semibold uppercase tracking-wide">Tanggal Dikembalikan</p>
-                                                    <p class="text-slate-800 font-semibold mt-1">{{ $peminjaman->pengembalian->tgl_kembali->format('d F Y') }}</p>
-                                                </div>
-                                                <div>
-                                                    <p class="text-xs text-slate-500 font-semibold uppercase tracking-wide">Status Buku</p>
-                                                    <p class="text-slate-800 font-semibold mt-1">
-                                                        @if($peminjaman->pengembalian->kondisi === 'baik')
-                                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-emerald-50 text-emerald-700">
-                                                                ✓ Baik
-                                                            </span>
-                                                        @else
-                                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-50 text-red-700">
-                                                                ! {{ ucfirst($peminjaman->pengembalian->kondisi) }}
-                                                            </span>
-                                                        @endif
-                                                    </p>
-                                                </div>
+                                            <div>
+                                                <p class="text-xs text-slate-500 font-semibold uppercase tracking-wide">Tanggal Dikembalikan</p>
+                                                <p class="text-slate-800 font-semibold mt-1">{{ $peminjaman->pengembalian->tgl_kembali->format('d F Y') }}</p>
+                                                @if($peminjaman->pengembalian->denda > 0)
+                                                    <div class="mt-2 pt-2 border-t border-slate-100">
+                                                        <p class="text-xs text-slate-500 font-semibold uppercase tracking-wide">Denda</p>
+                                                        <p class="text-red-700 font-bold text-lg mt-1">Rp {{ number_format($peminjaman->pengembalian->denda, 0, ',', '.') }}</p>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     @endif
                                 </div>
                             </div>
+                            @else
+                            <div class="flex items-center gap-4">
+                                <div class="bg-red-100 rounded-lg p-3 flex-shrink-0">
+                                    <svg class="w-12 h-12 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-red-700 font-semibold">Data Buku Tidak Ditemukan</p>
+                                    <p class="text-sm text-red-600 mt-1">Buku dengan ID #{{ $detail->buku_id }} telah dihapus dari sistem.</p>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     @empty
                         <div class="text-center py-12">
@@ -170,7 +174,7 @@
 
             <!-- Informasi Pengembalian -->
             @if($peminjaman->pengembalian && $peminjaman->pengembalian->tgl_kembali)
-                <div class="bg-white rounded-xl shadow-sm border border-emerald-200 p-6 bg-emerald-50">
+                <div class="bg-white rounded-xl shadow-md border border-emerald-200 p-6 bg-emerald-50">
                     <h3 class="text-lg font-bold text-emerald-900 mb-6 flex items-center gap-2">
                         <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -183,12 +187,7 @@
                             <p class="text-emerald-900 font-bold mt-1">{{ $peminjaman->pengembalian->tgl_kembali->format('d F Y') }}</p>
                             <p class="text-xs text-emerald-600 mt-1">{{ $peminjaman->pengembalian->tgl_kembali->format('H:i') }}</p>
                         </div>
-                        <div>
-                            <p class="text-sm text-emerald-700 font-semibold">Kondisi Buku</p>
-                            <p class="text-emerald-900 font-bold mt-1 capitalize">
-                                {{ $peminjaman->pengembalian->kondisi }}
-                            </p>
-                        </div>
+                
                         <div>
                             <p class="text-sm text-emerald-700 font-semibold">Keterlambatan</p>
                             @php
@@ -213,7 +212,7 @@
             <!-- Summary Card -->
             <div class="sticky top-6 space-y-6">
                 <!-- Status Summary -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
                     <h4 class="font-bold text-slate-800 mb-4">Ringkasan Peminjaman</h4>
                     
                     <div class="space-y-4">
@@ -256,7 +255,7 @@
                 </div>
 
                 <!-- Timeline Card -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
                     <h4 class="font-bold text-slate-800 mb-4">Timeline</h4>
                     
                     <div class="space-y-4">

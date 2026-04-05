@@ -30,7 +30,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @forelse($bukuGroups as $item)
             <!-- Card Buku Individu -->
-            <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group">
+            <div class="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all group">
                 <!-- Cover Placeholder (Warna Gradasi) -->
                 <div class="h-48 bg-gradient-to-br from-indigo-500 to-purple-600 p-6 flex flex-col justify-end">
                     <span class="inline-block px-2.5 py-1 bg-white/20 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest rounded-lg mb-2">

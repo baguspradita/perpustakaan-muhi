@@ -37,13 +37,13 @@
     @endif
 
     <!-- Card Tabel Lokasi -->
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-md overflow-hidden">
         <div class="px-8 py-8 border-b border-slate-100 flex items-center justify-between">
             <div>
                 <h3 class="text-lg font-bold text-slate-800 leading-snug">Daftar Lokasi</h3>
                 <p class="text-sm text-slate-500">Total: {{ $lokasi->total() }} lokasi</p>
             </div>
-            <a href="{{ route('lokasi.create') }}" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 active:bg-indigo-800 transition-colors flex items-center gap-2 shadow-sm">
+            <a href="{{ route('lokasi.create') }}" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 active:bg-indigo-800 transition-colors flex items-center gap-2 shadow-md">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>

@@ -33,7 +33,7 @@
     @endif
 
     <!-- Table -->
-    <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>
@@ -55,7 +55,7 @@
                             <td class="px-6 py-4 text-sm font-medium text-slate-900">
                                 {{ $item->judul }}
                             </td>
-                            <td class="px-6 py-4 text-sm text-slate-600">{{ $item->buku->nama_depan_penulis }} {{ $item->buku->nama_belakang_penulis }}</td>
+                            <td class="px-6 py-4 text-sm text-slate-600">{{ $item->buku->nama_penulis }}</td>
                             <td class="px-6 py-4 text-sm">
                                 <span class="px-3 py-1 bg-indigo-50 text-indigo-700 font-medium rounded-full text-xs">
                                     {{ optional($item->buku->kategori)->nama_kategori ?? '-' }}

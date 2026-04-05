@@ -95,6 +95,11 @@ class JurusanController extends Controller
      */
     public function destroy(Jurusan $jurusan)
     {
+        // Cek apakah masih ada siswa dalam jurusan ini
+        if ($jurusan->siswa()->count() > 0) {
+            return redirect()->route('jurusan.index')->with('error', 'Tidak dapat menghapus jurusan yang masih memiliki siswa. Silakan ubah data siswa terlebih dahulu.');
+        }
+
         // Hapus data jurusan dari database
         $jurusan->delete();
 

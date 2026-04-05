@@ -3,16 +3,8 @@
 
     <!-- Header -->
     <div class="mb-8">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-                <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Daftar Guru</h2>
-                <p class="text-slate-500 font-medium">Kelola data guru di perpustakaan</p>
-            </div>
-            <a href="{{ route('guru.create') }}" class="px-6 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg flex items-center gap-2 w-fit">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                Tambah Guru
-            </a>
-        </div>
+        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Daftar Guru</h2>
+        <p class="text-slate-500 font-medium">Kelola data guru di perpustakaan</p>
     </div>
 
     <!-- Success Message -->
@@ -32,7 +24,7 @@
     @endif
 
     <!-- Filter & Search -->
-    <div class="mb-6 bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+    <div class="mb-6 bg-white p-6 rounded-lg shadow-md border border-slate-200">
         <form action="{{ route('guru.index') }}" method="GET" class="flex gap-4">
             <div class="flex-1">
                 <input type="text" name="search" value="{{ $search }}" placeholder="Cari nama guru, email, NIP, atau mata pelajaran..." class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -51,7 +43,7 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>

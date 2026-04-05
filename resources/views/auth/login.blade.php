@@ -19,7 +19,7 @@
         <!-- Logo / Title Centered -->
         <div class="text-center mb-10">
             <div class="flex justify-center mb-6">
-                <div class="inline-flex items-center gap-4 p-5 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100 shadow-sm">
+                <div class="inline-flex items-center gap-4 p-5 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100 shadow-md">
                     <img src="{{ asset('assets/logo-muhi.png') }}" alt="Logo Muhi" class="h-16 w-16 object-contain drop-shadow-lg">
                     <div class="text-left">
                         <h1 class="text-2xl font-black text-indigo-600 leading-tight">Perpustakaan</h1>

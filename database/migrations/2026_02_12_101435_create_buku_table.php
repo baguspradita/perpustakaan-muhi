@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('buku', function (Blueprint $table) {
             $table->id();
             $table->string('judul', 150);
+            $table->string('nama_penulis', 200)->nullable();
             
-            $table->string('nama_depan_penulis', 100)->nullable();
-            $table->string('nama_belakang_penulis', 100)->nullable();
             $table->char('huruf_judul_awal', 1)->nullable();
             $table->string('nomor_salinan', 10)->nullable();
 
@@ -27,8 +26,8 @@ return new class extends Migration
             $table->unsignedBigInteger('subjek_id')->nullable();
             $table->foreign('subjek_id')->references('id')->on('subjek_buku')->onDelete('set null');
             $table->integer('jumlah');
-             $table->softDeletes()->after('updated_at');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

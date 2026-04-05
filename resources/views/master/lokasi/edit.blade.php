@@ -11,7 +11,7 @@
     </div>
 
     <!-- Form Card -->
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-8 max-w-2xl">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-md p-8 max-w-2xl">
         <form action="{{ route('lokasi.update', $lokasi->id) }}" method="POST">
             @csrf
             @method('PUT')

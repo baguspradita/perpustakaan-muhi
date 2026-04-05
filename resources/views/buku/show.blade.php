@@ -4,7 +4,7 @@
     <!-- Header -->
     <div class="mb-8">
         <div class="flex items-center gap-4 mb-2">
-            <a href="{{ route('buku.index') }}" class="p-2 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 transition-colors shadow-sm">
+            <a href="{{ route('buku.index') }}" class="p-2 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 transition-colors shadow-md">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -18,7 +18,7 @@
         <!-- Kolom Kiri: Info Buku -->
         <div class="lg:col-span-2 space-y-6">
             <!-- Card Info Buku -->
-            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-md p-8">
                 <div class="space-y-6">
                     <!-- Judul -->
                     <div>
@@ -29,7 +29,7 @@
                     <!-- Penulis -->
                     <div class="border-t border-slate-100 pt-6">
                         <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Penulis</label>
-                        <p class="text-lg text-slate-800">{{ $buku->nama_depan_penulis }} {{ $buku->nama_belakang_penulis }}</p>
+                        <p class="text-lg text-slate-800">{{ $buku->nama_penulis }}</p>
                     </div>
 
                     <!-- Penerbit & Tahun -->
@@ -67,7 +67,7 @@
             </div>
 
             <!-- Card Daftar Salinan -->
-            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-md p-8">
                 <h3 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
                     <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     Daftar Salinan ({{ $salinan->count() }} Exemplar)
@@ -100,7 +100,7 @@
         <!-- Kolom Kanan: Ringkasan Stok -->
         <div class="lg:col-span-1">
             <!-- Card Ringkasan Stok -->
-            <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl border border-indigo-100 shadow-sm p-6 sticky top-20">
+            <div class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl border border-indigo-100 shadow-md p-6 sticky top-20">
                 <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-6">Informasi Stok</h3>
 
                 <div class="space-y-4">

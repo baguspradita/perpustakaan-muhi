@@ -1,17 +1,13 @@
 <x-app-layout>
     <!-- Header -->
     <div class="mb-8">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-                <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Kelola Subjek Buku</h2>
-                <p class="text-slate-500 font-medium">Tambah, edit, dan hapus data subjek/DDC perpustakaan</p>
-            </div>
-            <div class="flex gap-2">
-                <a href="{{ route('subjek-buku.create') }}" class="px-6 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg flex items-center gap-2 w-fit">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                    Tambah Subjek
-                </a>
-            </div>
+        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Kelola Subjek Buku</h2>
+        <p class="text-slate-500 font-medium">Tambah, edit, dan hapus data subjek/DDC perpustakaan</p>
+        <div class="mt-4 flex gap-3 justify-end">
+            <a href="{{ route('subjek-buku.create') }}" class="px-6 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors shadow-md flex items-center gap-2 w-fit">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                Tambah Subjek
+            </a>
         </div>
     </div>
 
@@ -32,7 +28,7 @@
     @endif
 
     <!-- Filter & Search -->
-    <div class="mb-6 bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+    <div class="mb-6 bg-white p-6 rounded-lg shadow-md border border-slate-200">
         <form action="{{ route('subjek-buku.index') }}" method="GET" class="flex flex-col md:flex-row gap-4">
             <div class="flex-1">
                 <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari kode DDC atau nama subjek..." class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -52,7 +48,7 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-md border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>

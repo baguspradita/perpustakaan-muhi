@@ -18,7 +18,7 @@
         <!-- Kolom Utama -->
         <div class="lg:col-span-2">
             <!-- Info Peminjaman -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6 mb-6">
                 <h3 class="text-xl font-bold text-slate-800 mb-6">Informasi Peminjaman</h3>
                 
                 <div class="grid grid-cols-2 gap-6">
@@ -70,17 +70,18 @@
             </div>
 
             <!-- Daftar Buku yang Dipinjam -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-6">
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6 mb-6">
                 <h3 class="text-xl font-bold text-slate-800 mb-6">Daftar Buku Dipinjam ({{ $peminjaman->detailPeminjaman->count() }})</h3>
 
                 <div class="space-y-4">
                     @forelse($peminjaman->detailPeminjaman as $detail)
+                        @if($detail->buku)
                         <div class="border border-slate-200 rounded-lg p-4 hover:border-indigo-300 transition-colors">
                             <div class="flex justify-between items-start mb-3">
                                 <div class="flex-1">
                                     <h4 class="text-lg font-bold text-slate-800">{{ $detail->buku->judul }}</h4>
                                     <p class="text-sm text-slate-600 mt-1">
-                                        <span class="font-semibold">Penulis:</span> {{ $detail->buku->nama_depan_penulis }} {{ $detail->buku->nama_belakang_penulis ?? '' }}
+                                        <span class="font-semibold">Penulis:</span> {{ $detail->buku->nama_penulis }}
                                     </p>
                                     <p class="text-sm text-slate-600">
                                         <span class="font-semibold">Penerbit:</span> {{ $detail->buku->penerbit }}
@@ -108,6 +109,19 @@
                                 </div>
                             </div>
                         </div>
+                        @else
+                        <div class="border border-red-200 bg-red-50 rounded-lg p-4">
+                            <div class="flex items-center gap-3">
+                                <svg class="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <p class="font-semibold text-red-700">Data Buku Tidak Ditemukan</p>
+                                    <p class="text-sm text-red-600">Buku dengan ID #{{ $detail->buku_id }} telah dihapus dari sistem.</p>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
                     @empty
                         <p class="text-slate-500 text-center py-8">Tidak ada buku dalam peminjaman ini</p>
                     @endforelse
@@ -116,7 +130,7 @@
 
             <!-- Info Pengembalian (Jika Sudah Dikembalikan) -->
             @if($peminjaman->pengembalian)
-                <div class="bg-white rounded-xl shadow-sm border border-emerald-200 p-6 mb-6">
+                <div class="bg-white rounded-xl shadow-md border border-emerald-200 p-6 mb-6">
                     <h3 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
                         <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -157,7 +171,7 @@
                     </div>
                 </div>
             @else
-                <div class="bg-white rounded-xl shadow-sm border border-amber-200 p-6 mb-6">
+                <div class="bg-white rounded-xl shadow-md border border-amber-200 p-6 mb-6">
                     <div class="flex items-center gap-3">
                         <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -174,7 +188,7 @@
         <!-- Sidebar -->
         <div class="lg:col-span-1">
             <!-- Card Ringkasan -->
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sticky top-6">
+            <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6 sticky top-6">
                 <h4 class="font-bold text-slate-800 text-lg mb-6">Ringkasan</h4>
 
                 <div class="space-y-4">

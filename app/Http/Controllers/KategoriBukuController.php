@@ -86,6 +86,11 @@ class KategoriBukuController extends Controller
      */
     public function destroy(KategoriBuku $kategoriBuku)
     {
+        // Cek apakah masih ada buku dalam kategori ini
+        if ($kategoriBuku->buku()->count() > 0) {
+            return redirect()->route('kategori-buku.index')->with('error', 'Tidak dapat menghapus kategori yang masih memiliki buku. Silakan ubah kategori buku terlebih dahulu.');
+        }
+
         // Hapus data kategori dari database
         $kategoriBuku->delete();
         

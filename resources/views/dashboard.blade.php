@@ -9,7 +9,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
 
         <!-- Kartu Total Buku -->
-        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+        <div class="bg-white p-6 rounded-3xl shadow-md border border-slate-100 hover:shadow-lg transition-shadow">
             <div class="flex items-center justify-between mb-4">
                 <div class="p-3 bg-indigo-50 rounded-2xl">
                     <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -23,7 +23,7 @@
 
         <!-- Kartu Total Siswa -->
         @if(auth()->user()->role === 'petugas')
-        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+        <div class="bg-white p-6 rounded-3xl shadow-md border border-slate-100 hover:shadow-lg transition-shadow">
             <div class="flex items-center justify-between mb-4">
                 <div class="p-3 bg-emerald-50 rounded-2xl">
                     <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -37,7 +37,7 @@
 
 
         <!-- Kartu Peminjaman Aktif -->
-        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+        <div class="bg-white p-6 rounded-3xl shadow-md border border-slate-100 hover:shadow-lg transition-shadow">
             <div class="flex items-center justify-between mb-4">
                 <div class="p-3 bg-amber-50 rounded-2xl">
                     <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@
     </div>
 
     <!-- Section Contoh: Buku Terbaru atau Aktivitas (Placeholder) -->
-    <div class="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm">
+    <div class="bg-white rounded-3xl border border-slate-100 p-8 shadow-md">
         <h4 class="text-lg font-bold text-slate-800 mb-4">Panduan Cepat</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">

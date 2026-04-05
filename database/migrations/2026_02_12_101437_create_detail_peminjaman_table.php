@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('peminjaman_id')->constrained('peminjaman');
             $table->foreignId('buku_id')->constrained('buku');
             $table->integer('jumlah')->default(1);
-            $table->string('id_eksamplar', 10)->nullable()->after('buku_id')->comment('ID Eksamplar buku yang dipinjam (format 5 digit: 00001)');
+            $table->string('id_eksamplar', 10)->nullable()->comment('ID Eksamplar buku yang dipinjam (format 5 digit: 00001)');
             $table->timestamps();
         });
     }

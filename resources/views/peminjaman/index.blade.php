@@ -2,14 +2,12 @@
     <x-slot name="title">Daftar Peminjaman - Perpustakaan Muhi</x-slot>
 
     <!-- Header Halaman -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div>
-            <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Peminjaman Buku</h2>
-            <p class="text-slate-500 font-medium">Kelola transaksi peminjaman buku siswa di sini.</p>
-        </div>
-        <div>
-            <a href="{{ route('peminjaman.create') }}" class="inline-flex items-center px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-2xl shadow-lg shadow-indigo-100 transition-all hover:-translate-y-0.5 active:scale-95">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="mb-8">
+        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Peminjaman Buku</h2>
+        <p class="text-slate-500 font-medium">Kelola transaksi peminjaman buku siswa di sini.</p>
+        <div class="mt-4 flex gap-3">
+            <a href="{{ route('peminjaman.create') }}" class="inline-flex items-center px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl shadow-md flex items-center gap-2 transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
                 Tambah Peminjaman
@@ -27,8 +25,35 @@
     </div>
     @endif
 
+    <!-- Filter & Search -->
+    <div class="mb-6 bg-white p-6 rounded-lg shadow-md border border-slate-200">
+        <form action="{{ route('peminjaman.index') }}" method="GET" class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1">
+                <input type="text" name="cari" placeholder="Cari nama siswa atau buku..." value="{{ request('cari') }}" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+            
+            <select name="status" class="px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="">Semua Status</option>
+                <option value="dipinjam" {{ request('status') == 'dipinjam' ? 'selected' : '' }}>Dipinjam</option>
+                <option value="kembali" {{ request('status') == 'kembali' ? 'selected' : '' }}>Dikembalikan</option>
+                <option value="terlambat" {{ request('status') == 'terlambat' ? 'selected' : '' }}>Terlambat</option>
+            </select>
+
+            <div class="flex gap-2">
+                <button type="submit" class="px-6 py-2.5 bg-indigo-100 text-indigo-600 font-medium rounded-lg hover:bg-indigo-200 transition-colors">
+                    Cari
+                </button>
+                @if(request('cari') || request('status'))
+                    <a href="{{ route('peminjaman.index') }}" class="px-6 py-2.5 bg-slate-100 text-slate-600 font-medium rounded-lg hover:bg-slate-200 transition-colors">
+                        Reset
+                    </a>
+                @endif
+            </div>
+        </form>
+    </div>
+
     <!-- Table Section -->
-    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-3xl border border-slate-100 shadow-md overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-left">
                 <thead class="bg-slate-50/50 border-b border-slate-100">
@@ -134,25 +159,27 @@
                             @endif
                         </td>
 
-                        <td class="px-6 py-4 text-right flex justify-end gap-2">
+                        <td class="px-6 py-4 text-center flex justify-end gap-2">
                             @if(auth()->user()->role === 'petugas')
                                 @if($currentStatus !== 'kembali')
                                 <form action="{{ route('peminjaman.kembali', $p->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin buku-buku ini telah dikembalikan?')">
                                     @csrf
-                                    <button type="submit" class="p-2 text-slate-400 hover:text-emerald-600 transition-colors" title="Kembalikan Buku">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-emerald-50 text-emerald-600 font-medium rounded-lg hover:bg-emerald-600 hover:text-white transition-colors gap-1.5" title="Kembalikan Buku">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z"></path>
                                         </svg>
+                                        <span class="text-xs">Kembali</span>
                                     </button>
                                 </form>
                                 @endif
                             @endif
 
-                            <a href="{{ route('peminjaman.show', $p->id) }}" class="p-2 text-slate-400 hover:text-indigo-600 transition-colors inline-block" title="Detail Peminjaman">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <a href="{{ route('peminjaman.show', $p->id) }}" class="inline-flex items-center px-3 py-1.5 bg-indigo-50 text-indigo-600 font-medium rounded-lg hover:bg-indigo-600 hover:text-white transition-colors gap-1.5" title="Detail Peminjaman">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                 </svg>
+                                <span class="text-xs">Detail</span>
                             </a>
                         </td>
                     </tr>

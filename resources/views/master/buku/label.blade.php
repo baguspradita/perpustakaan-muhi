@@ -167,7 +167,7 @@
                     <div class="divider"></div>
 
                     <div class="label-row author">
-                        {{ strtoupper(substr($copy->nama_depan_penulis ?? 'UNKNOWN', 0, 3)) }}
+                        {{ strtoupper(substr($copy->nama_penulis ?? 'UNKNOWN', 0, 3)) }}
                     </div>
 
                     <div class="divider"></div>

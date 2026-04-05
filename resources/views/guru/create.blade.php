@@ -4,7 +4,7 @@
     <!-- Header -->
     <div class="mb-8">
         <div class="flex items-center gap-4 mb-2">
-            <a href="{{ route('guru.index') }}" class="p-2 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 transition-colors shadow-sm">
+            <a href="{{ route('guru.index') }}" class="p-2 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 transition-colors shadow-md">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -16,7 +16,7 @@
 
     <!-- Form Card -->
     <div class="max-w-2xl mx-auto">
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-md p-8">
             <!-- Error Messages -->
             @if($errors->any())
                 <div class="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg">

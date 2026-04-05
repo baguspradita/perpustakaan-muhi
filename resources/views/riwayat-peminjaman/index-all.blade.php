@@ -10,7 +10,7 @@
     </div>
 
     <!-- Filter & Search -->
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+    <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6 mb-8">
         <form method="GET" action="{{ route('riwayat-peminjaman.index-all') }}" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Search -->
@@ -59,7 +59,7 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <!-- Total Peminjaman -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-500 text-sm font-semibold">Total Peminjaman</p>
@@ -74,7 +74,7 @@
         </div>
 
         <!-- Sedang Dipinjam -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-500 text-sm font-semibold">Sedang Dipinjam</p>
@@ -89,7 +89,7 @@
         </div>
 
         <!-- Sudah Dikembalikan -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-500 text-sm font-semibold">Sudah Dikembalikan</p>
@@ -104,7 +104,7 @@
         </div>
 
         <!-- Terlambat -->
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-slate-500 text-sm font-semibold">Terlambat</p>
@@ -120,7 +120,7 @@
     </div>
 
     <!-- Tabel Riwayat Peminjaman -->
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead class="bg-slate-50 border-b border-slate-200">

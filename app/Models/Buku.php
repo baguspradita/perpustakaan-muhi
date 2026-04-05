@@ -15,8 +15,7 @@ class Buku extends Model
     // Hanya kolom ini yang boleh diisi melalui create() atau update()
     protected $fillable = [
         'judul', 
-        'nama_depan_penulis',
-        'nama_belakang_penulis',
+        'nama_penulis',
         'penerbit', 
         'tahun_terbit', 
         'kategori_id', 

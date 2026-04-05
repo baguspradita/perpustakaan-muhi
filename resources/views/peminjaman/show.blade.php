@@ -4,7 +4,7 @@
     <!-- Header Halaman -->
     <div class="mb-8">
         <div class="flex items-center gap-4 mb-2">
-            <a href="{{ route('peminjaman.index') }}" class="p-2 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 transition-colors shadow-sm">
+            <a href="{{ route('peminjaman.index') }}" class="p-2 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 transition-colors shadow-md">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
@@ -18,7 +18,7 @@
     <div class="max-w-5xl mx-auto space-y-6">
 
         <!-- Status & Aksi -->
-        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="bg-white rounded-3xl border border-slate-100 shadow-md p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Status Peminjaman</p>
                 @php
@@ -74,7 +74,7 @@
             <div class="lg:col-span-1 space-y-6">
 
                 <!-- Info Siswa -->
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 relative overflow-hidden">
+                <div class="bg-white rounded-3xl border border-slate-100 shadow-md p-6 relative overflow-hidden">
                     <div class="absolute -right-6 -top-6 w-24 h-24 bg-indigo-50 rounded-full opacity-50 z-0 pointer-events-none"></div>
 
                     <div class="relative z-10">
@@ -103,7 +103,7 @@
                     </div>
 
                     <!-- Detail Waktu -->
-                    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 relative overflow-hidden">
+                    <div class="bg-white rounded-3xl border border-slate-100 shadow-md p-6 relative overflow-hidden">
                         <div class="absolute -left-6 -bottom-6 w-24 h-24 bg-amber-50 rounded-full opacity-50 z-0 pointer-events-none"></div>
 
                         <div class="relative z-10">
@@ -150,7 +150,7 @@
                         </div>
 
                         <!-- Denda -->
-                        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 relative overflow-hidden">
+                        <div class="bg-white rounded-3xl border border-slate-100 shadow-md p-6 relative overflow-hidden">
                             <div class="relative z-10">
                                 <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 flex items-center">
                                     <svg class="w-5 h-5 mr-2 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -194,7 +194,7 @@
 
                     <!-- Daftar Buku -->
                     <div class="lg:col-span-2">
-                        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 h-full">
+                        <div class="bg-white rounded-3xl border border-slate-100 shadow-md p-6 sm:p-8 h-full">
                             <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest mb-6 flex items-center">
                                 <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>

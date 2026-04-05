@@ -29,7 +29,6 @@ class PetugasSeeder extends Seeder
             ['user_id' => $user->id],
             [
                 'nip' => '197001012023011001',
-                'jabatan' => 'Kepala Perpustakaan',
             ]
         );
 
@@ -48,7 +47,6 @@ class PetugasSeeder extends Seeder
             ['user_id' => $user2->id],
             [
                 'nip' => '198505052023011002',
-                'jabatan' => 'Staf Administrasi',
             ]
         );
     }

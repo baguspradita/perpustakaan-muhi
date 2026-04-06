@@ -149,16 +149,7 @@
                             @error('buku_id') <p class="text-rose-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
                         </div>
 
-                        <!-- Summary Buku yang Dipilih -->
-                        <div class="bg-indigo-50 border-2 border-indigo-100 rounded-2xl p-4 hidden" id="summary-section">
-                            <p class="text-xs font-black text-indigo-700 uppercase tracking-wider mb-3">📚 Ringkasan Peminjaman</p>
-                            <div id="summary-list" class="space-y-2">
-                                <!-- Akan diisi by JavaScript -->
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-indigo-200">
-                                <p class="text-sm font-bold text-indigo-900">Total Buku: <span id="total-buku" class="text-indigo-600">0</span></p>
-                            </div>
-                        </div>
+                        
                     </div>
 
                 </div>
@@ -262,25 +253,34 @@
                 totalBuku += jumlah;
             });
             
-            // Update summary
+            // Update summary (dengan null check)
             const summarySection = document.getElementById('summary-section');
             const summaryList = document.getElementById('summary-list');
             const totalBukuEl = document.getElementById('total-buku');
             
             if (selectedBooks.length > 0) {
-                summarySection.classList.remove('hidden');
-                summaryList.innerHTML = selectedBooks.map(b => `
-                    <div class="flex items-center justify-between py-2 px-3 bg-white rounded-lg border border-indigo-200">
-                        <span class="text-sm font-semibold text-slate-800 line-clamp-1">${b.judul}</span>
-                        <span class="text-sm font-bold text-indigo-600 bg-indigo-100 px-3 py-1 rounded">× ${b.jumlah}</span>
-                    </div>
-                `).join('');
-                totalBukuEl.textContent = totalBuku;
+                // Only update if summary section exists
+                if (summarySection) {
+                    summarySection.classList.remove('hidden');
+                }
+                if (summaryList) {
+                    summaryList.innerHTML = selectedBooks.map(b => `
+                        <div class="flex items-center justify-between py-2 px-3 bg-white rounded-lg border border-indigo-200">
+                            <span class="text-sm font-semibold text-slate-800 line-clamp-1">${b.judul}</span>
+                            <span class="text-sm font-bold text-indigo-600 bg-indigo-100 px-3 py-1 rounded">× ${b.jumlah}</span>
+                        </div>
+                    `).join('');
+                }
+                if (totalBukuEl) {
+                    totalBukuEl.textContent = totalBuku;
+                }
                 
                 // Enable submit button
                 document.getElementById('btn-submit').disabled = false;
             } else {
-                summarySection.classList.add('hidden');
+                if (summarySection) {
+                    summarySection.classList.add('hidden');
+                }
                 document.getElementById('btn-submit').disabled = true;
             }
         }

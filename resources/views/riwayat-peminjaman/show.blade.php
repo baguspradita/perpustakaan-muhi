@@ -9,7 +9,7 @@
             </a>
             <div>
                 <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Detail Riwayat Peminjaman</h2>
-                <p class="text-slate-500 font-medium">ID: #{{ $peminjaman->id }}</p>
+               
             </div>
         </div>
     </div>
@@ -223,17 +223,8 @@
                                     <span class="w-2 h-2 bg-amber-600 rounded-full mr-2"></span>
                                     Sedang Dipinjam
                                 </span>
-                                @if($peminjaman->tgl_jatuh_tempo < now()->toDateString())
-                                    <div class="mt-2 bg-red-50 border border-red-200 rounded-lg p-3">
-                                        <p class="text-xs font-semibold text-red-700">
-                                            ⚠️ Terlambat {{ now()->diffInDays($peminjaman->tgl_jatuh_tempo) }} hari
-                                        </p>
-                                    </div>
-                                @else
-                                    <p class="text-xs text-slate-600 mt-2">
-                                        Sisa waktu: <span class="font-semibold">{{ now()->diffInDays($peminjaman->tgl_jatuh_tempo) }} hari</span>
-                                    </p>
-                                @endif
+                
+                                    
                             </div>
                         @else
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-emerald-50 text-emerald-700 w-full justify-center">

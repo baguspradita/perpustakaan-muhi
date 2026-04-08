@@ -53,4 +53,35 @@ class ProfileController extends Controller
         return redirect()->route('profile.edit')
             ->with('success', 'Profil Anda berhasil diperbarui.');
     }
+
+    /**
+     * Memperbarui kata sandi user
+     */
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required',
+            'password'         => 'required|string|min:8|confirmed',
+        ], [
+            'current_password.required' => 'Kata sandi saat ini wajib diisi.',
+            'password.required'         => 'Kata sandi baru wajib diisi.',
+            'password.min'              => 'Kata sandi baru minimal 8 karakter.',
+            'password.confirmed'        => 'Konfirmasi kata sandi baru tidak cocok.',
+        ]);
+
+        $user = auth()->user();
+
+        // Cek apakah kata sandi saat ini benar
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Kata sandi saat ini tidak sesuai.']);
+        }
+
+        // Simpan kata sandi baru
+        /** @var \App\Models\User $user */
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->route('profile.edit')
+            ->with('success', 'Kata sandi Anda berhasil diperbarui.');
+    }
 }

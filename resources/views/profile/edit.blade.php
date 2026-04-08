@@ -110,6 +110,80 @@
                     </div>
                 </form>
             </div>
+
+            <!-- PASSWORD CARD -->
+            <div class="bg-white rounded-3xl shadow-md border border-slate-200 overflow-hidden mt-8">
+                <div class="p-8 border-b border-slate-100 flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800">Ubah Kata Sandi</h3>
+                        <p class="text-sm text-slate-500 mt-1">Perbarui kata sandi Anda secara berkala untuk menjaga keamanan akun.</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <form action="{{ route('profile.password.update') }}" method="POST" class="p-8 space-y-6">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="space-y-6">
+                        <!-- Current Password -->
+                        <div>
+                            <label for="current_password" class="block text-sm font-semibold text-slate-700 mb-2">Kata Sandi Saat Ini</label>
+                            <div class="relative">
+                                <input type="password" name="current_password" id="current_password" required
+                                    class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                                <div class="absolute left-4 top-3.5 text-slate-400">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            @error('current_password') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- New Password -->
+                            <div>
+                                <label for="password" class="block text-sm font-semibold text-slate-700 mb-2">Kata Sandi Baru</label>
+                                <div class="relative">
+                                    <input type="password" name="password" id="password" required
+                                        class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                                    <div class="absolute left-4 top-3.5 text-slate-400">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                                @error('password') <p class="text-xs text-red-500 mt-1">{{ $message }}</p> @enderror
+                            </div>
+
+                            <!-- Confirm Password -->
+                            <div>
+                                <label for="password_confirmation" class="block text-sm font-semibold text-slate-700 mb-2">Konfirmasi Kata Sandi Baru</label>
+                                <div class="relative">
+                                    <input type="password" name="password_confirmation" id="password_confirmation" required
+                                        class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all">
+                                    <div class="absolute left-4 top-3.5 text-slate-400">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end pt-6 border-t border-slate-100">
+                        <button type="submit" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-slate-200 transition-all transform hover:-translate-y-0.5 active:scale-95">
+                            Perbarui Kata Sandi
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <!-- INFO CARD -->

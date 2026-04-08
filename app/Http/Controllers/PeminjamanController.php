@@ -13,10 +13,18 @@ class PeminjamanController extends Controller
 {
     /**
      * Menampilkan daftar peminjaman
+     * - Siswa/Guru: Hanya melihat peminjaman miliknya sendiri
+     * - Petugas: Melihat semua peminjaman
      */
     public function index(Request $request)
     {
         $query = Peminjaman::with(['user', 'detailPeminjaman.buku', 'pengembalian']);
+
+        // Filter berdasarkan role user yang login
+        if (auth()->user()->role !== 'petugas') {
+            // Siswa/Guru hanya bisa lihat peminjaman miliknya sendiri
+            $query->where('user_id', auth()->id());
+        }
 
         // Filter status jika ada
         if ($request->has('status') && $request->status != '') {
@@ -43,7 +51,7 @@ class PeminjamanController extends Controller
             ->orderBy('nama')
             ->get()
             ->map(function($user) {
-                $user->jurusan_name = $user->siswa->jurusan->nama ?? '-';
+                $user->jurusan_name = $user->siswa->jurusan->nama_jurusan ?? '-';
                 return $user;
             });
         
@@ -64,13 +72,14 @@ class PeminjamanController extends Controller
             });
         
         // Get unique book titles with count of available exemplars
-        // Otomatis exclude soft deleted books karena SoftDeletes trait
-        $bukuByTitle = Buku::where('jumlah', '>', 0)
-            ->groupBy('judul', 'kategori_id')
-            ->selectRaw('judul, kategori_id, MIN(id) as id, COUNT(*) as total_exemplar')
+        // Ambil data buku, kelompokkan berdasarkan metadata yang sama, ambil ID terkecil sebagai perwakilan
+        $bukuByTitle = Buku::withoutTrashed()
+            ->where('jumlah', '>', 0)
+            ->groupBy('judul', 'kategori_id', 'nama_penulis', 'penerbit', 'tahun_terbit')
+            ->selectRaw('judul, kategori_id, nama_penulis, penerbit, tahun_terbit, MIN(id) as id, MIN(nomor_salinan) as nomor_salinan, SUM(jumlah) as total_exemplar')
             ->with('kategori')
             ->get();
-
+        
         return view('peminjaman.create', compact('siswa', 'guru', 'bukuByTitle'));
     }
 
@@ -108,8 +117,8 @@ class PeminjamanController extends Controller
                 // Ambil jumlah buku yang dipinjam untuk buku ini, default 1
                 $jumlahPinjam = (int)($request->buku_jumlah[$bukuJudulId] ?? 1);
                 
-                // Cari exemplar pertama yang tersedia dengan judul yang sama
-                $firstBuku = Buku::find($bukuJudulId);
+                // Cari exemplar pertama yang tersedia dengan judul yang sama (exclude soft deleted)
+                $firstBuku = Buku::withoutTrashed()->find($bukuJudulId);
                 
                 if (!$firstBuku) {
                     throw new \Exception("Buku dengan ID $bukuJudulId tidak ditemukan");
@@ -117,38 +126,49 @@ class PeminjamanController extends Controller
 
                 // Loop berdasarkan jumlah yang diminta
                 for ($i = 0; $i < $jumlahPinjam; $i++) {
-                    // Cari exemplar pertama dari judul yang sama yang belum dipinjam
-                    $availableExemplar = Buku::where('judul', $firstBuku->judul)
-                        ->whereNotIn('id', function($query) {
-                            // Exclude id yang sedang dipinjam (status aktif)
-                            $query->select('buku_id')
-                                ->from('detail_peminjaman')
-                                ->join('peminjaman', 'peminjaman.id', '=', 'detail_peminjaman.peminjaman_id')
-                                ->where('peminjaman.status', 'dipinjam');
-                        })
-                        ->orderBy('id')
-                        ->first();
+                    // Prioritas: gunakan buku ID yang dipilih langsung jika masih tersedia
+                    $availableExemplar = null;
+                    if ($i === 0 && $firstBuku->jumlah > 0) {
+                        $availableExemplar = $firstBuku;
+                    } else {
+                        // Jika tidak, cari exemplar lain dari spesifikasi yang sama (judul, kategori, penulis, dll)
+                        $query = Buku::withoutTrashed()
+                            ->where('judul', $firstBuku->judul)
+                            ->where('kategori_id', $firstBuku->kategori_id)
+                            ->where('jumlah', '>', 0);
+
+                        // Tambahkan metadata lain jika tersedia untuk akurasi tinggi
+                        
+                        // Handle nullable fields to ensure exact match
+                        foreach (['nama_penulis', 'penerbit', 'tahun_terbit'] as $field) {
+                            if (is_null($firstBuku->$field)) {
+                                $query->whereNull($field);
+                            } else {
+                                $query->where($field, $firstBuku->$field);
+                            }
+                        }
+
+                        $availableExemplar = $query->orderBy('id')->first();
+                    }
 
                     if (!$availableExemplar) {
                         throw new \Exception("Tidak cukup salinan buku '{$firstBuku->judul}'. Hanya tersedia " . ($i) . " dari " . $jumlahPinjam . " yang diminta");
                     }
 
-                    // Hitung ID Eksamplar dengan format 5 digit
-                    $idEksamplar = str_pad($availableExemplar->id, 5, '0', STR_PAD_LEFT);
-
-                    // Catat detail peminjaman dengan id_eksamplar
-                    DetailPeminjaman::create([
-                        'peminjaman_id' => $peminjaman->id,
-                        'buku_id' => $availableExemplar->id,
-                        'id_eksamplar' => $idEksamplar,
-                        'jumlah' => 1,
-                    ]);
-
                     // Kurangi stok buku
                     $availableExemplar->decrement('jumlah');
+
+                    // Catat detail peminjaman dengan id_eksamplar
+                    $peminjaman->detailPeminjaman()->create([
+                        'peminjaman_id' => $peminjaman->id,
+                        'buku_id' => $availableExemplar->id,
+                        'id_eksamplar' => $availableExemplar->nomor_salinan,
+                        'jumlah' => 1,
+                    ]);
                 }
             }
 
+            \Log::info('--- PEMINJAMAN DIAGNOSTIC END ---');
             DB::commit();
 
             return redirect()->route('peminjaman.index')->with('success', 'Peminjaman berhasil dicatat. Exemplar telah auto-assign.');

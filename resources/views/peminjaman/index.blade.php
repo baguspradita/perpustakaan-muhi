@@ -88,12 +88,12 @@
                                     @if($detail->buku)
                                     <span class="inline-block px-2 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold rounded-lg">{{ $detail->buku->judul }}</span>
                                     @if($detail->id_eksamplar)
-                                    <span class="inline-block px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[8px] font-bold rounded border border-emerald-100">ID: {{ $detail->id_eksamplar }}</span>
+                                    <span class="inline-block px-2 py-0.5 bg-emerald-50 text-emerald-600 text-[8px] font-bold rounded border border-emerald-100">Salinan: {{ $detail->id_eksamplar }}</span>
                                     @endif
                                     @else
                                     <span class="inline-block px-2 py-1 bg-red-50 text-red-600 text-[10px] font-bold rounded-lg">Data Buku Dihapus</span>
                                     @if($detail->id_eksamplar)
-                                    <span class="inline-block px-2 py-0.5 bg-orange-50 text-orange-600 text-[8px] font-bold rounded border border-orange-100">ID: {{ $detail->id_eksamplar }}</span>
+                                    <span class="inline-block px-2 py-0.5 bg-orange-50 text-orange-600 text-[8px] font-bold rounded border border-orange-100">Salinan: {{ $detail->id_eksamplar }}</span>
                                     @endif
                                     @endif
                                 </div>

@@ -89,7 +89,7 @@
                                 </div>
                                 <div class="text-right">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700">
-                                        ID Eksamplar: {{ str_pad($detail->buku->id, 5, '0', STR_PAD_LEFT) }}
+                                        ID Eksamplar: {{ $detail->id_eksamplar ?? str_pad($detail->buku->id, 5, '0', STR_PAD_LEFT) }}
                                     </span>
                                 </div>
                             </div>

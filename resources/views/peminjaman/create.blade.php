@@ -59,7 +59,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
+
                             <!-- Dropdown Guru -->
                             <div>
                                 <label for="user_id_guru" class="block text-sm font-black text-slate-700 uppercase tracking-wider mb-2">Pilih Guru</label>
@@ -78,15 +78,23 @@
                         @error('user_id') <p class="text-rose-500 text-xs mt-1 font-bold">{{ $message }}</p> @enderror
 
                         <script>
-                        document.getElementById('user_id_siswa').addEventListener('change', function() {
-                            document.getElementById('user_id').value = this.value;
-                            document.getElementById('user_id_guru').value = '';
-                        });
+                            const selectSiswa = document.getElementById('user_id_siswa');
+                            const selectGuru = document.getElementById('user_id_guru');
+                            const inputUserId = document.getElementById('user_id');
 
-                        document.getElementById('user_id_guru').addEventListener('change', function() {
-                            document.getElementById('user_id').value = this.value;
-                            document.getElementById('user_id_siswa').value = '';
-                        });
+                            if (selectSiswa && inputUserId) {
+                                selectSiswa.addEventListener('change', function() {
+                                    inputUserId.value = this.value;
+                                    if (selectGuru) selectGuru.value = '';
+                                });
+                            }
+
+                            if (selectGuru && inputUserId) {
+                                selectGuru.addEventListener('change', function() {
+                                    inputUserId.value = this.value;
+                                    if (selectSiswa) selectSiswa.value = '';
+                                });
+                            }
                         </script>
                         @endif
 
@@ -114,7 +122,7 @@
                                         <div class="flex items-start gap-3 flex-1">
                                             <input type="checkbox" name="buku_id[]" value="{{ $b->id }}" class="w-5 h-5 rounded-lg border-slate-300 text-indigo-600 focus:ring-indigo-500 mt-1 checkbox-buku transition-all" data-buku-id="{{ $b->id }}" data-max="{{ $b->total_exemplar }}">
                                             <div class="flex-1">
-                                                <p class="text-sm font-bold text-slate-900 line-clamp-2">{{ $b->judul }}</p>
+                                                <p class="text-sm font-bold text-slate-900 line-clamp-2">{{ $b->judul }} <span class="ml-1 text-[10px] text-slate-400 font-mono font-normal">({{ $b->nomor_salinan }})</span></p>
                                                 <p class="text-xs text-slate-500 font-semibold uppercase tracking-widest mt-1">
                                                     {{ $b->kategori->nama_kategori ?? 'Kategori' }}
                                                 </p>
@@ -149,16 +157,24 @@
                             @error('buku_id') <p class="text-rose-500 text-xs mt-2 font-bold">{{ $message }}</p> @enderror
                         </div>
 
-                        
+                        <!-- Ringkasan Peminjaman (Ditambahkan) -->
+                        <div id="summary-section" class="hidden mt-6 bg-indigo-50 border border-indigo-100 rounded-3xl p-5">
+                            <h3 class="text-xs font-black text-indigo-700 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                                Ringkasan Peminjaman (<span id="total-buku">0</span> Buku)
+                            </h3>
+                            <div id="summary-list" class="space-y-2">
+                                <!-- List buku yang dipilih akan muncul di sini via JS -->
+                            </div>
+                        </div>
                     </div>
-
                 </div>
 
                 <div class="mt-10 flex items-center justify-end gap-3">
                     <a href="{{ route('peminjaman.index') }}" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-2xl transition-all">
                         Batal
                     </a>
-                    <button type="submit" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold rounded-2xl shadow-lg shadow-indigo-100 transition-all hover:-translate-y-0.5 active:scale-95" id="btn-submit" disabled>
+                    <button type="submit" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-indigo-100 transition-all hover:-translate-y-0.5 active:scale-95" id="btn-submit">
                         ✓ Simpan Peminjaman
                     </button>
                 </div>
@@ -168,121 +184,77 @@
 
     <script>
         // Data buku dari server
-        const bukuData = @json($bukuByTitle->mapWithKeys(fn($b) => [$b->id => ['judul' => $b->judul, 'max' => $b->total_exemplar]]));
+        const bukuData = @json($bukuByTitle->mapWithKeys(fn($b) => [$b->id => ['judul' => $b->judul, 'max' => $b->total_exemplar, 'nomor_salinan' => $b->nomor_salinan]]));
 
-        // Handle checkbox
-        document.querySelectorAll('.checkbox-buku').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const bukuId = this.dataset.bukuId;
-                const jumlahSection = document.querySelector(`.jumlah-section[data-buku-id="${bukuId}"]`);
-                const inputJumlah = document.querySelector(`input[data-buku-id="${bukuId}"]`);
-                
-                if (this.checked) {
-                    jumlahSection.classList.remove('hidden');
-                    inputJumlah.value = '1';
-                    inputJumlah.disabled = false;
-                } else {
-                    jumlahSection.classList.add('hidden');
-                    inputJumlah.value = '1';
-                }
-                
-                updateSummary();
-            });
-        });
-
-        // Handle tombol +
-        document.querySelectorAll('.btn-plus').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const bukuId = this.dataset.bukuId;
-                const input = document.querySelector(`input[data-buku-id="${bukuId}"]`);
-                const max = parseInt(input.dataset.max);
-                const current = parseInt(input.value) || 1;
-                
-                if (current < max) {
-                    input.value = current + 1;
-                }
-                updateSummary();
-            });
-        });
-
-        // Handle tombol -
-        document.querySelectorAll('.btn-minus').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                const bukuId = this.dataset.bukuId;
-                const input = document.querySelector(`input[data-buku-id="${bukuId}"]`);
-                const current = parseInt(input.value) || 1;
-                
-                if (current > 1) {
-                    input.value = current - 1;
-                }
-                updateSummary();
-            });
-        });
-
-        // Handle input jumlah langsung
-        document.querySelectorAll('.input-jumlah').forEach(input => {
-            input.addEventListener('change', function() {
-                const max = parseInt(this.dataset.max);
-                let value = parseInt(this.value) || 1;
-                
-                if (value > max) {
-                    value = max;
-                    this.value = max;
-                }
-                if (value < 1) {
-                    value = 1;
-                    this.value = 1;
-                }
-                updateSummary();
-            });
-        });
-
-        // Update summary dan submit button
         function updateSummary() {
-            const selectedBooks = [];
-            let totalBuku = 0;
-            
-            document.querySelectorAll('.checkbox-buku:checked').forEach(checkbox => {
-                const bukuId = checkbox.value;
-                const jumlah = parseInt(document.querySelector(`input[data-buku-id="${bukuId}"]`).value) || 1;
-                const judul = bukuData[bukuId]?.judul || 'Buku';
-                
-                selectedBooks.push({ judul, jumlah, bukuId });
-                totalBuku += jumlah;
-            });
-            
-            // Update summary (dengan null check)
-            const summarySection = document.getElementById('summary-section');
-            const summaryList = document.getElementById('summary-list');
-            const totalBukuEl = document.getElementById('total-buku');
-            
-            if (selectedBooks.length > 0) {
-                // Only update if summary section exists
-                if (summarySection) {
-                    summarySection.classList.remove('hidden');
+            try {
+                const selectedBooks = [];
+                let totalBuku = 0;
+
+                document.querySelectorAll('.checkbox-buku:checked').forEach(checkbox => {
+                    const bukuId = checkbox.value;
+                    const inputJumlah = document.querySelector(`input.input-jumlah[data-buku-id="${bukuId}"]`);
+                    const jumlah = inputJumlah ? (parseInt(inputJumlah.value) || 1) : 1;
+                    const bData = bukuData[bukuId] || {};
+                    const judul = bData.judul || 'Buku';
+                    const nomorSalinan = bData.nomor_salinan || '-';
+
+                    selectedBooks.push({ judul, jumlah, bukuId, nomorSalinan });
+                    totalBuku += jumlah;
+                });
+
+                const summarySection = document.getElementById('summary-section');
+                const summaryList = document.getElementById('summary-list');
+                const totalBukuEl = document.getElementById('total-buku');
+
+                if (selectedBooks.length > 0) {
+                    if (summarySection) summarySection.classList.remove('hidden');
+                    if (summaryList) {
+                        summaryList.innerHTML = selectedBooks.map(b => `
+                            <div class="flex items-center justify-between py-2 px-3 bg-white rounded-lg border border-indigo-200">
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-semibold text-slate-800 line-clamp-1">${b.judul}</span>
+                                    <span class="text-[10px] font-bold text-indigo-500 uppercase tracking-tighter">Salinan: ${b.nomorSalinan}</span>
+                                </div>
+                                <span class="text-sm font-bold text-indigo-600 bg-indigo-100 px-3 py-1 rounded">× ${b.jumlah}</span>
+                            </div>
+                        `).join('');
+                    }
+                    if (totalBukuEl) totalBukuEl.textContent = totalBuku;
+                } else {
+                    if (summarySection) summarySection.classList.add('hidden');
                 }
-                if (summaryList) {
-                    summaryList.innerHTML = selectedBooks.map(b => `
-                        <div class="flex items-center justify-between py-2 px-3 bg-white rounded-lg border border-indigo-200">
-                            <span class="text-sm font-semibold text-slate-800 line-clamp-1">${b.judul}</span>
-                            <span class="text-sm font-bold text-indigo-600 bg-indigo-100 px-3 py-1 rounded">× ${b.jumlah}</span>
-                        </div>
-                    `).join('');
-                }
-                if (totalBukuEl) {
-                    totalBukuEl.textContent = totalBuku;
-                }
-                
-                // Enable submit button
-                document.getElementById('btn-submit').disabled = false;
-            } else {
-                if (summarySection) {
-                    summarySection.classList.add('hidden');
-                }
-                document.getElementById('btn-submit').disabled = true;
+            } catch (err) {
+                console.error("Summary error:", err);
             }
         }
+
+        // Handle checkbox change
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('checkbox-buku')) {
+                const bukuId = e.target.dataset.bukuId;
+                const jumlahSection = document.querySelector(`.jumlah-section[data-buku-id="${bukuId}"]`);
+                const inputJumlah = document.querySelector(`input[data-buku-id="${bukuId}"]`);
+
+                if (e.target.checked) {
+                    if (jumlahSection) jumlahSection.classList.remove('hidden');
+                    if (inputJumlah) inputJumlah.disabled = false;
+                } else {
+                    if (jumlahSection) jumlahSection.classList.add('hidden');
+                }
+                updateSummary();
+            }
+            
+            if (e.target.classList.contains('input-jumlah')) {
+                const max = parseInt(e.target.dataset.max) || 100;
+                let value = parseInt(e.target.value) || 1;
+                if (value > max) e.target.value = max;
+                if (value < 1) e.target.value = 1;
+                updateSummary();
+            }
+        });
+
+        // Initialize on load
+        window.addEventListener('load', updateSummary);
     </script>
 </x-app-layout>

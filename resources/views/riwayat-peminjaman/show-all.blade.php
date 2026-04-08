@@ -121,11 +121,11 @@
                                         </div>
                                         <div>
                                             <p class="text-xs text-slate-500 font-semibold uppercase tracking-wide">ID Eksamplar</p>
-                                            <p class="text-slate-800 font-mono font-bold mt-1 text-lg tracking-wider">{{ str_pad($detail->buku->id, 5, '0', STR_PAD_LEFT) }}</p>
+                                            <p class="text-slate-800 font-mono font-bold mt-1 text-lg tracking-wider">{{ $detail->id_eksamplar ?? str_pad($detail->buku->id, 5, '0', STR_PAD_LEFT) }}</p>
                                         </div>
                                         <div>
                                             <p class="text-xs text-slate-500 font-semibold uppercase tracking-wide">Pengarang</p>
-                                            <p class="text-slate-600 mt-1">{{ $detail->buku->pengarang ?? '-' }}</p>
+                                            <p class="text-slate-600 mt-1">{{ $detail->buku->nama_penulis ?? '-' }}</p>
                                         </div>
                                         <div>
                                             <p class="text-xs text-slate-500 font-semibold uppercase tracking-wide">Penerbit</p>

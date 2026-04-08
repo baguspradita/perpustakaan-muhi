@@ -187,7 +187,7 @@
                                             <div class="flex items-start justify-between gap-2 mb-2">
                                                 <div>
                                                     <h4 class="text-sm font-bold text-slate-800 line-clamp-2">{{ $detail->buku->judul }}</h4>
-                                                    <p class="text-xs text-slate-500 font-medium mt-0.5">{{ $detail->buku->pengarang !== null ? $detail->buku->pengarang : '-' }}</p>
+                                                    <p class="text-xs text-slate-500 font-medium mt-0.5">{{ $detail->buku->nama_penulis !== null ? $detail->buku->nama_penulis : '-' }}</p>
                                                 </div>
                                                 <span class="flex-shrink-0 px-2 py-1 bg-slate-200 text-slate-700 text-xs font-bold rounded-lg">{{ $index + 1 }}</span>
                                             </div>
@@ -199,7 +199,7 @@
                                                 </span>
                                                 @if($detail->id_eksamplar)
                                                     <span class="inline-flex items-center px-2 py-1 bg-emerald-50 border border-emerald-100 rounded text-xs font-bold uppercase tracking-widest text-emerald-600">
-                                                        ID: {{ $detail->id_eksamplar }}
+                                                        Salinan: {{ $detail->id_eksamplar }}
                                                     </span>
                                                 @endif
                                             </div>

@@ -21,7 +21,7 @@
             <h3 class="text-4xl font-black text-slate-800">{{ $stats['total_buku'] }}</h3>
         </div>
 
-        <!-- Kartu Total Siswa -->
+        <!-- Kartu Total Anggota -->
         @if(auth()->user()->role === 'petugas')
         <div class="bg-white p-6 rounded-3xl shadow-md border border-slate-100 hover:shadow-lg transition-shadow">
             <div class="flex items-center justify-between mb-4">
@@ -31,8 +31,8 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-slate-500 text-sm font-semibold uppercase tracking-wider">Siswa Terdaftar</p>
-            <h3 class="text-4xl font-black text-slate-800">{{ $stats['total_siswa'] }}</h3>
+            <p class="text-slate-500 text-sm font-semibold uppercase tracking-wider">Total Anggota</p>
+            <h3 class="text-4xl font-black text-slate-800">{{ $stats['total_anggota'] }}</h3>
         </div>
 
 

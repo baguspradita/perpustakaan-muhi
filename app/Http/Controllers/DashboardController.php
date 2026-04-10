@@ -14,7 +14,7 @@ class DashboardController extends Controller
         // Mengambil data statistik sederhana dari database
         $stats = [
             'total_buku' => \App\Models\Buku::count(),
-            'total_siswa' => \App\Models\User::where('role', 'siswa')->count(),
+            'total_anggota' => \App\Models\User::whereIn('role', ['siswa', 'guru'])->count(),
             'total_peminjaman' => \App\Models\Peminjaman::count(),
         ];
 

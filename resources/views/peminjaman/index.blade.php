@@ -162,7 +162,7 @@
                         <td class="px-6 py-4 text-center flex justify-end gap-2">
                             @if(auth()->user()->role === 'petugas')
                                 @if($currentStatus !== 'kembali')
-                                <form action="{{ route('peminjaman.kembali', $p->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin buku-buku ini telah dikembalikan?')">
+                                <form id="returnFormIndex{{ $p->id }}" action="{{ route('peminjaman.kembali', $p->id) }}" method="POST" onsubmit="return confirmReturn('returnFormIndex{{ $p->id }}', 'buku-buku ini')">
                                     @csrf
                                     <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-emerald-50 text-emerald-600 font-medium rounded-lg hover:bg-emerald-600 hover:text-white transition-colors gap-1.5" title="Kembalikan Buku">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

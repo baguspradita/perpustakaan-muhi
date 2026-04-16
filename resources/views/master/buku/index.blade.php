@@ -114,7 +114,7 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4H9a2 2 0 00-2 2v2a2 2 0 002 2h6a2 2 0 002-2v-2a2 2 0 00-2-2zm-6-4h.01M7 16h.01M17 16h.01M7 12h.01M17 12h.01"></path></svg>
                                         <span class="text-xs">Label</span>
                                     </a>
-                                    <form action="{{ route('master-buku.destroy', $item->first_id) }}" method="POST" style="display:inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua salinan buku ini (' + {{ $item->total_salinan }} + ' salinan)?')">
+                                    <form id="deleteFormBuku{{ $item->first_id }}" action="{{ route('master-buku.destroy', $item->first_id) }}" method="POST" style="display:inline" onsubmit="return confirmDelete('deleteFormBuku{{ $item->first_id }}', '{{ $item->judul }}')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="px-3 py-1.5 bg-red-50 text-red-600 font-medium rounded-lg hover:bg-red-600 hover:text-white transition-colors inline-flex items-center gap-1.5" title="Hapus semua salinan">

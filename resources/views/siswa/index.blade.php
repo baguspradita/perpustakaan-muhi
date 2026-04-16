@@ -79,7 +79,7 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                         <span class="text-xs">Edit</span>
                                     </a>
-                                    <form action="{{ route('siswa.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus siswa ini? Data akan dipindahkan ke arsip.');">
+                                    <form id="deleteFormSiswa{{ $item->id }}" action="{{ route('siswa.destroy', $item->id) }}" method="POST" class="inline" onsubmit="return confirmDelete('deleteFormSiswa{{ $item->id }}', '{{ $item->nama }}')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 font-medium rounded-lg hover:bg-red-600 hover:text-white transition-colors gap-1.5" title="Hapus">

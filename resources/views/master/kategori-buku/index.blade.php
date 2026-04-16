@@ -79,7 +79,7 @@
                                 </svg>
                                 <span class="text-xs">Edit</span>
                             </a>
-                            <form action="{{ route('kategori-buku.destroy', $item->id) }}" method="POST" style="display:inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori buku ini?')">
+                            <form id="deleteFormKategori{{ $item->id }}" action="{{ route('kategori-buku.destroy', $item->id) }}" method="POST" style="display:inline" onsubmit="return confirmDelete('deleteFormKategori{{ $item->id }}', '{{ $item->nama }}')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="px-3 py-1.5 bg-red-50 text-red-600 font-medium rounded-lg hover:bg-red-600 hover:text-white transition-colors inline-flex items-center gap-1.5" title="Hapus">

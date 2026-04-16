@@ -73,7 +73,7 @@
                         </span>
 
                         @if(auth()->user()->role === 'petugas' && $currentStatus !== 'kembali')
-                        <form action="{{ route('peminjaman.kembali', $peminjaman->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin buku-buku ini telah dikembalikan?')">
+                        <form id="returnForm{{ $peminjaman->id }}" action="{{ route('peminjaman.kembali', $peminjaman->id) }}" method="POST" onsubmit="return confirmReturn('returnForm{{ $peminjaman->id }}', 'buku-buku ini')">
                             @csrf
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-2xl shadow-lg shadow-emerald-100 transition-all hover:-translate-y-0.5 active:scale-95">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

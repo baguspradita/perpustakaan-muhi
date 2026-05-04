@@ -42,7 +42,7 @@
                     </div>
                     <div>
                         <p class="text-sm text-slate-500 font-semibold">No HP</p>
-                        <p class="text-slate-800 mt-1">{{ $peminjaman->user->no_hp ?? '-' }}</p>
+                        <p class="text-slate-800 mt-1">{{ $peminjaman->user->no_telp ?? '-' }}</p>
                     </div>
                 </div>
             </div>
@@ -254,79 +254,5 @@
                     </div>
                 </div>
 
-                <!-- Timeline Card -->
-                <div class="bg-white rounded-xl shadow-md border border-slate-200 p-6">
-                    <h4 class="font-bold text-slate-800 mb-4">Timeline</h4>
-                    
-                    <div class="space-y-4">
-                        <!-- Dipinjam -->
-                        <div class="flex gap-4">
-                            <div class="flex flex-col items-center">
-                                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                    </svg>
-                                </div>
-                                <div class="w-1 h-8 bg-slate-200 my-2"></div>
-                            </div>
-                            <div class="flex-1 pt-1">
-                                <p class="font-semibold text-slate-800">Dipinjam</p>
-                                <p class="text-sm text-slate-500">{{ $peminjaman->tgl_pinjam->format('d F Y, H:i') }}</p>
-                            </div>
-                        </div>
-
-                        <!-- Jatuh Tempo -->
-                        <div class="flex gap-4">
-                            <div class="flex flex-col items-center">
-                                <div class="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                    <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                @if($peminjaman->status === 'dikembalikan')
-                                    <div class="w-1 h-8 bg-slate-200 my-2"></div>
-                                @endif
-                            </div>
-                            <div class="flex-1 pt-1">
-                                <p class="font-semibold text-slate-800">Jatuh Tempo</p>
-                                <p class="text-sm text-slate-500">{{ $peminjaman->tgl_jatuh_tempo->format('d F Y') }}</p>
-                            </div>
-                        </div>
-
-                        <!-- Dikembalikan -->
-                        @if($peminjaman->status === 'dikembalikan')
-                            <div class="flex gap-4">
-                                <div class="flex flex-col items-center">
-                                    <div class="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="flex-1 pt-1">
-                                    <p class="font-semibold text-slate-800">Dikembalikan</p>
-                                    <p class="text-sm text-slate-500">{{ $peminjaman->pengembalian->tgl_kembali->format('d F Y, H:i') }}</p>
-                                </div>
-                            </div>
-                        @else
-                            <div class="flex gap-4">
-                                <div class="flex flex-col items-center">
-                                    <div class="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-dashed border-slate-300">
-                                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                    </div>
-                                </div>
-                                <div class="flex-1 pt-1">
-                                    <p class="font-semibold text-slate-800">Menunggu Pengembalian</p>
-                                    <p class="text-sm text-slate-500">-</p>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </x-app-layout>

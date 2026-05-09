@@ -127,6 +127,7 @@
                     <tr>
                         <th class="px-6 py-4 text-left font-semibold text-slate-700">No</th>
                         <th class="px-6 py-4 text-left font-semibold text-slate-700">Nama Anggota</th>
+                        <th class="px-6 py-4 text-center font-semibold text-slate-700">Status Keanggotaan</th>
                         <th class="px-6 py-4 text-left font-semibold text-slate-700">Role</th>
                         <th class="px-6 py-4 text-left font-semibold text-slate-700">Tanggal Peminjaman</th>
                         <th class="px-6 py-4 text-left font-semibold text-slate-700">Jatuh Tempo</th>
@@ -146,6 +147,17 @@
                                     <p class="font-semibold text-slate-800">{{ $peminjaman->user->nama }}</p>
                                     <p class="text-xs text-slate-500">{{ $peminjaman->user->email }}</p>
                                 </div>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                @if($peminjaman->user->role === 'siswa')
+                                    <span class="px-2 py-1 bg-{{ $peminjaman->user->siswa->status_color }}-100 text-{{ $peminjaman->user->siswa->status_color }}-700 rounded-full text-[10px] font-black uppercase tracking-wider">
+                                        {{ $peminjaman->user->siswa->status_label }}
+                                    </span>
+                                @elseif($peminjaman->user->role === 'guru')
+                                    <span class="px-2 py-1 bg-{{ $peminjaman->user->guru->status_color }}-100 text-{{ $peminjaman->user->guru->status_color }}-600 rounded-full text-[10px] font-black uppercase tracking-wider">
+                                        {{ $peminjaman->user->guru->status_label }}
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold {{ $peminjaman->user->role === 'siswa' ? 'bg-blue-100 text-blue-700' : 'bg-purple-100 text-purple-700' }}">

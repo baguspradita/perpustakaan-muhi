@@ -5,14 +5,14 @@
     </div>
 
     @if($errors->any())
-        <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg">
-            <h3 class="font-bold mb-3">Ada kesalahan dalam form:</h3>
-            <ul class="list-disc list-inside space-y-1">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
+    <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg">
+        <h3 class="font-bold mb-3">Ada kesalahan dalam form:</h3>
+        <ul class="list-disc list-inside space-y-1">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
     @endif
 
     <form action="{{ route('master-buku.store') }}" method="POST" class="bg-white p-8 rounded-lg shadow-md max-w-2xl">
@@ -56,7 +56,7 @@
                 <select name="kategori_id" required class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <option value="">-- Pilih Kategori --</option>
                     @foreach($kategori as $k)
-                        <option value="{{ $k->id }}" {{ old('kategori_id') == $k->id ? 'selected' : '' }}>{{ $k->nama_kategori }}</option>
+                    <option value="{{ $k->id }}" {{ old('kategori_id') == $k->id ? 'selected' : '' }}>{{ $k->nama_kategori }}</option>
                     @endforeach
                 </select>
                 @error('kategori_id')<span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>@enderror
@@ -67,19 +67,34 @@
                 <select name="subjek_id" required class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     <option value="">-- Pilih Subjek --</option>
                     @foreach($subjek as $s)
-                        <option value="{{ $s->id }}" {{ old('subjek_id') == $s->id ? 'selected' : '' }}>{{ $s->kode_ddc }} - {{ $s->nama_subjek }}</option>
+                    <option value="{{ $s->id }}" {{ old('subjek_id') == $s->id ? 'selected' : '' }}>{{ $s->kode_ddc }} - {{ $s->nama_subjek }}</option>
                     @endforeach
                 </select>
                 @error('subjek_id')<span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>@enderror
             </div>
 
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Lokasi Rak/Lemari</label>
+                <select name="lokasi_id" class="w-full px-4 py-2.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="">-- Pilih Lokasi --</option>
+                    @foreach($lokasi as $l)
+                    <option value="{{ $l->id }}" {{ old('lokasi_id') == $l->id ? 'selected' : '' }}>{{ $l->nama_lokasi }}</option>
+                    @endforeach
+                </select>
+                @error('lokasi_id')<span class="text-red-500 text-sm mt-1 block">{{ $message }}</span>@enderror
+            </div>
+
             <div class="flex gap-3 pt-4 border-t border-slate-200">
                 <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors inline-flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
                     Simpan Buku
                 </button>
                 <a href="{{ route('master-buku.index') }}" class="px-6 py-2.5 bg-slate-300 text-slate-800 font-semibold rounded-lg hover:bg-slate-400 transition-colors inline-flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
                     Batal
                 </a>
             </div>

@@ -35,25 +35,28 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     // Master Data - Jurusan
     Route::resource('jurusan', JurusanController::class);
+    Route::patch('jurusan/{jurusan}/update-status', [JurusanController::class, 'updateStatus'])->name('jurusan.update-status');
 
     // Master Data - Guru
     Route::resource('guru', GuruController::class);
+    Route::patch('guru/{guru}/update-status', [GuruController::class, 'updateStatus'])->name('guru.update-status');
 
     // Master Data - Kategori Buku
     Route::resource('kategori-buku', KategoriBukuController::class);
+    Route::patch('kategori-buku/{kategoriBuku}/update-status', [KategoriBukuController::class, 'updateStatus'])->name('kategori-buku.update-status');
 
     // Master Data - Subjek Buku/DDC
     Route::resource('subjek-buku', SubjekBukuController::class);
+    Route::patch('subjek-buku/{id}/update-status', [SubjekBukuController::class, 'updateStatus'])->name('subjek-buku.update-status');
 
     // Master Data - Kelola/Manajemen Buku (CRUD)
     Route::resource('master-buku', MasterBukuController::class);
+    Route::patch('master-buku/{id}/update-status', [MasterBukuController::class, 'updateStatus'])->name('master-buku.update-status');
     Route::get('master-buku/{id}/label', [MasterBukuController::class, 'printLabel'])->name('master-buku.printLabel');
-    Route::get('master-buku-trash/view', [MasterBukuController::class, 'trash'])->name('master-buku.trash');
-    Route::post('master-buku/{id}/restore', [MasterBukuController::class, 'restore'])->name('master-buku.restore');
-    Route::delete('master-buku/{id}/permanent-delete', [MasterBukuController::class, 'permanentDelete'])->name('master-buku.permanent-delete');
 
     // Master Data - Lokasi Buku
     Route::resource('lokasi', LokasiController::class);
+    Route::patch('lokasi/{lokasi}/update-status', [LokasiController::class, 'updateStatus'])->name('lokasi.update-status');
 
     // Katalog Buku (Index & Show - View saja)
     Route::get('buku', [BukuController::class, 'index'])->name('buku.index');
@@ -79,4 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/siswa/{id}/edit', [SiswaController::class, 'edit'])->name('siswa.edit');
     Route::put('/siswa/{id}', [SiswaController::class, 'update'])->name('siswa.update');
     Route::delete('/siswa/{id}', [SiswaController::class, 'destroy'])->name('siswa.destroy');
+    Route::get('siswa/{id}/edit-status', [SiswaController::class, 'editStatus'])->name('siswa.edit-status');
+    Route::patch('siswa/{id}/update-status', [SiswaController::class, 'updateStatus'])->name('siswa.update-status');
+    Route::patch('siswa/{id}/quick-change-status', [SiswaController::class, 'quickChangeStatus'])->name('siswa.quick-change-status');
 });

@@ -27,7 +27,7 @@ class AuthController extends Controller
      */
     public function showRegister()
     {
-        $jurusan = Jurusan::all();
+        $jurusan = Jurusan::where('status', 'aktif')->get();
         return view('auth.register', compact('jurusan'));
     }
 

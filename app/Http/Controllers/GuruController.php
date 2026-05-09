@@ -49,12 +49,7 @@ class GuruController extends Controller
      */
     public function create()
     {
-        // Hanya ambil user dengan role 'guru' yang belum terdaftar di tabel guru
-        $availableUsers = User::where('role', 'guru')
-            ->doesntHave('guru')
-            ->get();
-
-        return view('guru.create', compact('availableUsers'));
+        return view('guru.create');
     }
 
     /**
@@ -62,27 +57,44 @@ class GuruController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id|unique:guru,user_id',
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
             'nip' => 'required|string|max:20|unique:guru,nip',
             'mapel' => 'required|string|max:100',
         ], [
-            'user_id.unique' => 'User ini sudah terdaftar sebagai guru.',
+            'email.unique' => 'Email ini sudah terdaftar.',
             'nip.unique' => 'Nomor NIP sudah digunakan.',
+            'password.min' => 'Password minimal 8 karakter.',
         ]);
 
         try {
             DB::beginTransaction();
 
-            Guru::create($validated);
+            // 1. Buat User baru dengan role guru
+            $user = User::create([
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'role' => 'guru',
+            ]);
+
+            // 2. Buat data Guru yang terhubung ke user
+            Guru::create([
+                'user_id' => $user->id,
+                'nip' => $request->nip,
+                'mapel' => $request->mapel,
+                'status' => 'aktif',
+            ]);
 
             DB::commit();
 
             return redirect()->route('guru.index')
-                ->with('success', 'Data guru berhasil ditambahkan.');
+                ->with('success', "Guru '{$user->nama}' berhasil didaftarkan.");
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
         }
     }
 
@@ -113,23 +125,45 @@ class GuruController extends Controller
     {
         $guru = Guru::findOrFail($id);
 
-        $validated = $request->validate([
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $guru->user_id,
+            'password' => 'nullable|string|min:8',
             'nip' => 'required|string|max:20|unique:guru,nip,' . $id,
             'mapel' => 'required|string|max:100',
+        ], [
+            'email.unique' => 'Email ini sudah digunakan oleh user lain.',
+            'nip.unique' => 'Nomor NIP sudah digunakan.',
         ]);
 
         try {
             DB::beginTransaction();
 
-            $guru->update($validated);
+            // 1. Update data User
+            $userData = [
+                'nama' => $request->nama,
+                'email' => $request->email,
+            ];
+            
+            if ($request->filled('password')) {
+                $userData['password'] = bcrypt($request->password);
+            }
+            
+            $guru->user->update($userData);
+
+            // 2. Update data Guru
+            $guru->update([
+                'nip' => $request->nip,
+                'mapel' => $request->mapel,
+            ]);
 
             DB::commit();
 
             return redirect()->route('guru.show', $id)
-                ->with('success', 'Data guru berhasil diperbarui.');
+                ->with('success', "Data guru '{$guru->user->nama}' berhasil diperbarui.");
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage())->withInput();
         }
     }
 
@@ -150,6 +184,32 @@ class GuruController extends Controller
 
             return redirect()->route('guru.index')
                 ->with('success', "Data guru '{$namaGuru}' berhasil dihapus.");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Update status guru
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $guru = Guru::findOrFail($id);
+
+        $validated = $request->validate([
+            'status' => 'required|in:aktif,nonaktif',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $guru->update($validated);
+
+            DB::commit();
+
+            $statusText = $validated['status'] === 'aktif' ? 'Diaktifkan' : 'Dinonaktifkan';
+            return back()->with('success', "Status guru '{$guru->user->nama}' berhasil {$statusText}.");
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());

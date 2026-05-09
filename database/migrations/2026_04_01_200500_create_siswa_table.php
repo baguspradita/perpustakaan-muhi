@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('nisn', 20)->unique();
             $table->foreignId('jurusan_id')->constrained('jurusan');
             $table->enum('kelas', ['10', '11', '12']);
+            $table->enum('status', ['aktif', 'lulus', 'dikeluarkan', 'pindah'])->default('aktif');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -36,6 +36,11 @@ class MasterBukuController extends Controller
             $baseQuery->where('kategori_id', $request->kategori_id);
         }
 
+        // Filter hanya buku dengan subjek aktif
+        $baseQuery->whereHas('subjek', function($q) {
+            $q->where('status', 'aktif');
+        });
+
         // Filter by search
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
@@ -67,7 +72,7 @@ class MasterBukuController extends Controller
             }
         }
 
-        $kategori = KategoriBuku::all();
+        $kategori = KategoriBuku::where('status', 'aktif')->get();
 
         return view('master.buku.index', compact('bukuGroups', 'kategori'))->with('buku', $bukuGroups);
     }
@@ -77,9 +82,10 @@ class MasterBukuController extends Controller
      */
     public function create()
     {
-        $kategori = KategoriBuku::all();
-        $subjek = SubjekBuku::orderBy('kode_ddc')->get();
-        return view('master.buku.create', compact('kategori', 'subjek'));
+        $kategori = KategoriBuku::where('status', 'aktif')->get();
+        $subjek = SubjekBuku::where('status', 'aktif')->orderBy('kode_ddc')->get();
+        $lokasi = Lokasi::where('status', 'aktif')->get();
+        return view('master.buku.create', compact('kategori', 'subjek', 'lokasi'));
     }
 
     /**
@@ -94,6 +100,7 @@ class MasterBukuController extends Controller
             'tahun_terbit' => 'required|digits:4|integer',
             'kategori_id' => 'required|exists:kategori_buku,id',
             'subjek_id' => 'required|exists:subjek_buku,id',
+            'lokasi_id' => 'nullable|exists:lokasi,id',
             'jumlah' => 'required|integer|min:1',
         ]);
 
@@ -133,9 +140,16 @@ class MasterBukuController extends Controller
             ->with('lokasi')
             ->orderBy('nomor_salinan')
             ->get();
-        $kategori = KategoriBuku::all();
-        $subjek = SubjekBuku::orderBy('kode_ddc')->get();
-        $lokasi = Lokasi::all();
+        $kategori = KategoriBuku::where('status', 'aktif')
+            ->when($buku->kategori_id, fn($q) => $q->orWhere('id', $buku->kategori_id))
+            ->get();
+        $subjek = SubjekBuku::where('status', 'aktif')
+            ->when($buku->subjek_id, fn($q) => $q->orWhere('id', $buku->subjek_id))
+            ->orderBy('kode_ddc')
+            ->get();
+        $lokasi = Lokasi::where('status', 'aktif')
+            ->when($buku->lokasi_id, fn($q) => $q->orWhere('id', $buku->lokasi_id))
+            ->get();
         return view('master.buku.edit', compact('buku', 'allCopies', 'kategori', 'subjek', 'lokasi'));
     }
 
@@ -283,72 +297,10 @@ class MasterBukuController extends Controller
             return back()->with('error', "Tidak bisa menghapus buku '$judul' karena masih ada yang sedang dipinjam. Pastikan semua salinan sudah dikembalikan terlebih dahulu.");
         }
         
-        // Soft delete semua buku dengan judul yang sama (semua salinan)
+        // Hapus semua buku dengan judul yang sama (semua salinan)
         $count = Buku::where('judul', $judul)->delete();
         
-        return redirect()->route('master-buku.index')->with('success', "Buku '$judul' dan semua $count saliinannya berhasil diarsipkan (soft deleted).");
-    }
-
-    /**
-     * Menampilkan daftar buku yang sudah di-soft delete
-     */
-    public function trash()
-    {
-        // Query buku yang sudah dihapus (soft delete)
-        $bukuDeleted = Buku::onlyTrashed()
-            ->selectRaw('judul, MIN(id) as first_id, COUNT(*) as total_salinan, COALESCE(SUM(jumlah), 0) as stok_tersedia')
-            ->groupBy('judul')
-            ->orderByDesc('deleted_at')
-            ->paginate(20);
-
-        // Load relasi untuk first record dari setiap group
-        $firstIds = $bukuDeleted->pluck('first_id')->toArray();
-        $bukuData = Buku::onlyTrashed()
-            ->with('kategori', 'subjek')
-            ->whereIn('id', $firstIds)
-            ->get()
-            ->keyBy('id');
-
-        // Attach relasi ke group data
-        foreach ($bukuDeleted as $group) {
-            if (isset($bukuData[$group->first_id])) {
-                $group->buku = $bukuData[$group->first_id];
-            }
-        }
-
-        return view('master.buku.trash', compact('bukuDeleted'));
-    }
-
-    /**
-     * Restore buku yang sudah di-soft delete
-     */
-    public function restore($id)
-    {
-        $buku = Buku::onlyTrashed()->findOrFail($id);
-        $judul = $buku->judul;
-
-        // Restore semua buku dengan judul yang sama
-        $count = Buku::onlyTrashed()
-            ->where('judul', $judul)
-            ->restore();
-
-        return redirect()->route('master-buku.trash')->with('success', "Buku '$judul' ($count salinan) berhasil di-restore.");
-    }
-
-    /**
-     * Hapus permanen buku yang sudah di-soft delete
-     */
-    public function permanentDelete($id)
-    {
-        $buku = Buku::onlyTrashed()->findOrFail($id);
-        $judul = $buku->judul;
-
-        // Hapus permanen semua buku dengan judul yang sama
-        $count = Buku::onlyTrashed()
-            ->where('judul', $judul)
-            ->forceDelete();
-
-        return redirect()->route('master-buku.trash')->with('success', "Buku '$judul' ($count salinan) berhasil dihapus permanen dari database.");
+        return redirect()->route('master-buku.index')->with('success', "Buku '$judul' dan semua $count saliinannya berhasil dihapus.");
     }
 
     /**
@@ -378,5 +330,28 @@ class MasterBukuController extends Controller
             ->get();
         
         return view('master.buku.label', compact('buku', 'copies'));
+    }
+
+    /**
+     * Update status buku (semua copy dengan judul yang sama)
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $buku = Buku::findOrFail($id);
+
+        $validated = $request->validate([
+            'status' => 'required|in:aktif,nonaktif',
+        ]);
+
+        try {
+            $judul = $buku->judul;
+            // Update semua buku dengan judul yang sama (semua salinan)
+            $countUpdated = Buku::where('judul', $judul)->update($validated);
+            
+            $statusText = $validated['status'] === 'aktif' ? 'Diaktifkan' : 'Dinonaktifkan';
+            return back()->with('success', "Status buku '$judul' ($countUpdated salinan) berhasil {$statusText}.");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

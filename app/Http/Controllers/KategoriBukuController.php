@@ -97,4 +97,23 @@ class KategoriBukuController extends Controller
         // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('kategori-buku.index')->with('success', 'Kategori Buku berhasil dihapus');
     }
+
+    /**
+     * Update status kategori buku
+     */
+    public function updateStatus(Request $request, KategoriBuku $kategoriBuku)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:aktif,nonaktif',
+        ]);
+
+        try {
+            $kategoriBuku->update($validated);
+            
+            $statusText = $validated['status'] === 'aktif' ? 'Diaktifkan' : 'Dinonaktifkan';
+            return back()->with('success', "Status kategori '{$kategoriBuku->nama_kategori}' berhasil {$statusText}.");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 }

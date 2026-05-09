@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Siswa extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $table = 'siswa';
 
@@ -17,7 +16,32 @@ class Siswa extends Model
         'nisn',
         'jurusan_id',
         'kelas',
+        'status',
     ];
+
+    // Method helper untuk menampilkan label status
+    public function getStatusLabelAttribute()
+    {
+        return match ($this->status) {
+            'aktif' => 'Aktif',
+            'lulus' => 'Lulus',
+            'dikeluarkan' => 'Dikeluarkan',
+            'pindah' => 'Pindah',
+            default => 'Unknown'
+        };
+    }
+
+      // Method helper untuk warna badge
+    public function getStatusColorAttribute()
+    {
+        return match($this->status) {
+            'aktif' => 'emerald',      // Hijau
+            'lulus' => 'blue',         // Biru
+            'dikeluarkan' => 'red',    // Merah
+            'pindah' => 'amber',       // Kuning/Oranye
+            default => 'slate'
+        };
+    }
 
     public function user()
     {

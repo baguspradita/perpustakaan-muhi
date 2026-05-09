@@ -27,10 +27,24 @@
             </div>
 
             <!-- Input Keterangan -->
-            <div class="mb-8">
+            <div class="mb-6">
                 <label for="keterangan" class="block text-sm font-bold text-slate-700 mb-2">Keterangan</label>
                 <textarea class="w-full px-4 py-3 rounded-xl border @error('keterangan') border-red-300 bg-red-50 @else border-slate-200 @enderror focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition resize-none" id="keterangan" name="keterangan" rows="5" placeholder="Masukkan keterangan lokasi (opsional)...">{{ old('keterangan') }}</textarea>
                 @error('keterangan')
+                    <p class="mt-2 text-sm text-red-600">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
+
+            <!-- Input Status -->
+            <div class="mb-8">
+                <label for="status" class="block text-sm font-bold text-slate-700 mb-2">Status Lokasi</label>
+                <select name="status" id="status" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                    <option value="aktif" {{ old('status') === 'aktif' ? 'selected' : '' }}>Aktif</option>
+                    <option value="nonaktif" {{ old('status') === 'nonaktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                </select>
+                @error('status')
                     <p class="mt-2 text-sm text-red-600">
                         {{ $message }}
                     </p>

@@ -11,7 +11,29 @@ class Jurusan extends Model
     
     // Tentukan kolom yang dapat diisi massal (mass assignable)
     // Hanya kolom ini yang boleh diisi melalui create() atau update()
-    protected $fillable = ['nama_jurusan', 'deskripsi'];
+    protected $fillable = ['nama_jurusan', 'deskripsi', 'status'];
+
+    protected $casts = [
+        'status' => 'string',
+    ];
+
+    public function getStatusLabelAttribute()
+    {
+        return match($this->status) {
+            'aktif' => 'Aktif',
+            'nonaktif' => 'Tidak Aktif',
+            default => 'Unknown'
+        };
+    }
+
+    public function getStatusColorAttribute()
+    {
+        return match($this->status) {
+            'aktif' => 'emerald',
+            'nonaktif' => 'red',
+            default => 'slate'
+        };
+    }
     
     /**
      * Relasi ke model Siswa (one to many)

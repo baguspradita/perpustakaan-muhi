@@ -58,6 +58,7 @@
                         <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Kategori</th>
                         <th class="px-6 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Subjek (DDC)</th>
                         <th class="px-6 py-4 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Stok</th>
+                        <th class="px-6 py-4 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-4 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
@@ -96,6 +97,11 @@
                                     <span class="text-slate-400 text-xs">dari {{ $item->total_salinan }}</span>
                                 </div>
                             </td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold {{ $item->buku->status === 'aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
+                                    {{ $item->buku->status === 'aktif' ? 'Aktif' : 'Tidak Aktif' }}
+                                </span>
+                            </td>
                             <td class="px-6 py-4 text-sm">
                                 <div class="flex gap-2 justify-center flex-wrap">
                                     <a href="{{ route('master-buku.show', $item->first_id) }}" class="px-3 py-1.5 bg-blue-50 text-blue-600 font-medium rounded-lg hover:bg-blue-600 hover:text-white transition-colors inline-flex items-center gap-1.5" title="Lihat Detail">
@@ -110,14 +116,23 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4H9a2 2 0 00-2 2v2a2 2 0 002 2h6a2 2 0 002-2v-2a2 2 0 00-2-2zm-6-4h.01M7 16h.01M17 16h.01M7 12h.01M17 12h.01"></path></svg>
                                         <span class="text-xs">Label</span>
                                     </a>
-                                    
+                                    <form action="{{ route('master-buku.update-status', $item->first_id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="{{ $item->buku->status === 'aktif' ? 'nonaktif' : 'aktif' }}">
+                                        <button type="submit" class="px-3 py-1.5 {{ $item->buku->status === 'aktif' ? 'bg-red-50 text-red-600 hover:bg-red-600' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-600' }} font-medium rounded-lg hover:text-white transition-colors inline-flex items-center gap-1.5" title="{{ $item->buku->status === 'aktif' ? 'Nonaktifkan' : 'Aktifkan' }}">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                            <span class="text-xs">{{ $item->buku->status === 'aktif' ? 'Nonaktif' : 'Aktif' }}</span>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-12 text-center">
+                            <td colspan="8" class="px-6 py-12 text-center">
                                 <div class="text-slate-500 font-medium">Tidak ada data buku</div>
+                                <p class="text-slate-400 text-sm">Mulai dengan menambahkan buku baru</p>
                             </td>
                         </tr>
                     @endforelse

@@ -40,20 +40,24 @@ class GuruSeeder extends Seeder
         ];
 
         foreach ($gurus as $data) {
-            $user = \App\Models\User::create([
-                'nama'     => $data['nama'],
-                'email'    => $data['email'],
-                'password' => \Illuminate\Support\Facades\Hash::make('password'),
-                'no_telp'  => $data['no_telp'],
-                'alamat'   => $data['alamat'],
-                'role'     => 'guru',
-            ]);
+            $user = \App\Models\User::updateOrCreate(
+                ['email' => $data['email']],
+                [
+                    'nama'     => $data['nama'],
+                    'password' => \Illuminate\Support\Facades\Hash::make('password'),
+                    'no_telp'  => $data['no_telp'],
+                    'alamat'   => $data['alamat'],
+                    'role'     => 'guru',
+                ]
+            );
 
-            \App\Models\Guru::create([
-                'user_id' => $user->id,
-                'nip'     => $data['nip'],
-                'mapel'   => $data['mapel'],
-            ]);
+            \App\Models\Guru::updateOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'nip'     => $data['nip'],
+                    'mapel'   => $data['mapel'],
+                ]
+            );
         }
     }
 }

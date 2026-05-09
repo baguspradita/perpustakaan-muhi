@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_jurusan', 50);
             $table->text('deskripsi')->nullable();
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
             $table->timestamps();
         });
     }

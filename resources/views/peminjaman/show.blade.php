@@ -47,7 +47,18 @@
                             {{ substr($peminjaman->user->nama, 0, 1) }}
                         </div>
                         <div>
-                            <h3 class="text-xl font-bold text-slate-800">{{ $peminjaman->user->nama }}</h3>
+                            <div class="flex items-center gap-2 mb-1">
+                                <h3 class="text-xl font-bold text-slate-800">{{ $peminjaman->user->nama }}</h3>
+                                @if($peminjaman->user->role === 'siswa')
+                                    <span class="px-1.5 py-0.5 bg-{{ $peminjaman->user->siswa->status_color }}-100 text-{{ $peminjaman->user->siswa->status_color }}-600 rounded text-[9px] font-black uppercase tracking-tighter">
+                                        {{ $peminjaman->user->siswa->status_label }}
+                                    </span>
+                                @elseif($peminjaman->user->role === 'guru')
+                                    <span class="px-1.5 py-0.5 bg-{{ $peminjaman->user->guru->status_color }}-100 text-{{ $peminjaman->user->guru->status_color }}-600 rounded text-[9px] font-black uppercase tracking-tighter">
+                                        {{ $peminjaman->user->guru->status_label }}
+                                    </span>
+                                @endif
+                            </div>
                             <p class="text-sm text-slate-500">{{ $peminjaman->user->jurusan->nama_jurusan ?? '-' }} • Kelas {{ $peminjaman->user->kelas ?? '-' }}</p>
                             <p class="text-xs text-slate-400 font-medium">{{ $peminjaman->user->email }}</p>
                         </div>

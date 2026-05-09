@@ -11,10 +11,32 @@ class KategoriBuku extends Model
     
     // Tentukan kolom yang dapat diisi massal (mass assignable)
     // Hanya kolom ini yang boleh diisi melalui create() atau update()
-    protected $fillable = ['nama_kategori', 'deskripsi'];
+    protected $fillable = ['nama_kategori', 'deskripsi', 'status'];
+    
+    protected $casts = [
+        'status' => 'string',
+    ];
     
     // Disable timestamps (created_at, updated_at) jika tidak ada di tabel
     public $timestamps = false;
+
+    public function getStatusLabelAttribute()
+    {
+        return match($this->status) {
+            'aktif' => 'Aktif',
+            'nonaktif' => 'Tidak Aktif',
+            default => 'Unknown'
+        };
+    }
+
+    public function getStatusColorAttribute()
+    {
+        return match($this->status) {
+            'aktif' => 'emerald',
+            'nonaktif' => 'red',
+            default => 'slate'
+        };
+    }
 
     /**
      * Relasi ke model Buku (one to many)

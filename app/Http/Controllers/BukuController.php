@@ -19,6 +19,12 @@ class BukuController extends Controller
             $query->where('kategori_id', $request->kategori_id);
         }
 
+        // Filter hanya buku dengan subjek aktif dan status aktif
+        $query->whereHas('subjek', function($q) {
+            $q->where('status', 'aktif');
+        });
+        $query->where('status', 'aktif');
+
         // Group by judul dan ambil first record dari setiap group
         $bukuGroups = $query
             ->selectRaw('judul, MIN(id) as first_id, COUNT(*) as total_salinan, COALESCE(SUM(jumlah), 0) as stok_tersedia')
@@ -40,7 +46,7 @@ class BukuController extends Controller
             }
         }
 
-        $kategori = KategoriBuku::all();
+        $kategori = KategoriBuku::where('status', 'aktif')->get();
 
         return view('buku.index', compact('bukuGroups', 'kategori'));
     }

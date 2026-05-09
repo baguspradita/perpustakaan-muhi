@@ -3,11 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Buku extends Model
 {
-    use SoftDeletes;
     // Tentukan nama tabel (jika berbeda dari nama model plural)
     protected $table = 'buku';
     
@@ -23,8 +21,31 @@ class Buku extends Model
         'lokasi_id', 
         'jumlah',
         'huruf_judul_awal',
-        'nomor_salinan'
+        'nomor_salinan',
+        'status',
     ];
+
+    protected $casts = [
+        'status' => 'string',
+    ];
+
+    public function getStatusLabelAttribute()
+    {
+        return match($this->status) {
+            'aktif' => 'Aktif',
+            'nonaktif' => 'Tidak Aktif',
+            default => 'Unknown'
+        };
+    }
+
+    public function getStatusColorAttribute()
+    {
+        return match($this->status) {
+            'aktif' => 'emerald',
+            'nonaktif' => 'red',
+            default => 'slate'
+        };
+    }
 
     /**
      * Relasi ke model KategoriBuku (many to one)

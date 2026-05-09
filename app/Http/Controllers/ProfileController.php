@@ -15,7 +15,7 @@ class ProfileController extends Controller
     public function edit()
     {
         $user = auth()->user();
-        $jurusan = Jurusan::all();
+        $jurusan = Jurusan::where('status', 'aktif')->get();
         
         return view('profile.edit', compact('user', 'jurusan'));
     }

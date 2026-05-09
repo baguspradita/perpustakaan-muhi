@@ -106,4 +106,23 @@ class JurusanController extends Controller
         // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('jurusan.index')->with('success', 'Jurusan berhasil dihapus');
     }
+
+    /**
+     * Update status jurusan
+     */
+    public function updateStatus(Request $request, Jurusan $jurusan)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:aktif,nonaktif',
+        ]);
+
+        try {
+            $jurusan->update($validated);
+            
+            $statusText = $validated['status'] === 'aktif' ? 'Diaktifkan' : 'Dinonaktifkan';
+            return back()->with('success', "Status jurusan '{$jurusan->nama_jurusan}' berhasil {$statusText}.");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 }

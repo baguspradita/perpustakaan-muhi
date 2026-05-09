@@ -284,6 +284,7 @@ class BukuSeeder extends Seeder
                 $copy['nama_penulis'] = $namaPenulis;
                 $copy['nomor_salinan'] = "c.$i";
                 $copy['jumlah'] = 1; // Setiap copy adalah satu item
+                $copy['status'] = 'aktif';
                 \App\Models\Buku::create($copy);
             }
         }

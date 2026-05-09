@@ -58,6 +58,7 @@
                         <th class="px-8 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">No</th>
                         <th class="px-8 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Nama Lokasi</th>
                         <th class="px-8 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Keterangan</th>
+                        <th class="px-8 py-4 text-center text-xs font-bold text-slate-600 uppercase tracking-wider">Status</th>
                         <th class="px-8 py-4 text-left text-xs font-bold text-slate-600 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
@@ -71,6 +72,11 @@
                             </span>
                         </td>
                         <td class="px-8 py-4 text-sm text-slate-600">{{ $item->keterangan ?? '-' }}</td>
+                        <td class="px-8 py-4 text-center">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold {{ $item->status === 'aktif' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700' }}">
+                                {{ $item->status === 'aktif' ? 'Aktif' : 'Tidak Aktif' }}
+                            </span>
+                        </td>
                         <td class="px-8 py-4 text-sm flex gap-2">
                             <a href="{{ route('lokasi.edit', $item->id) }}" class="px-3 py-1.5 bg-amber-50 text-amber-600 font-medium rounded-lg hover:bg-amber-600 hover:text-white transition-colors inline-flex items-center gap-1.5" title="Edit">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,12 +84,20 @@
                                 </svg>
                                 <span class="text-xs">Edit</span>
                             </a>
-                            
+                            <form action="{{ route('lokasi.update-status', $item->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="status" value="{{ $item->status === 'aktif' ? 'nonaktif' : 'aktif' }}">
+                                <button type="submit" class="px-3 py-1.5 {{ $item->status === 'aktif' ? 'bg-red-50 text-red-600 hover:bg-red-600' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-600' }} font-medium rounded-lg hover:text-white transition-colors inline-flex items-center gap-1.5" title="{{ $item->status === 'aktif' ? 'Nonaktifkan' : 'Aktifkan' }}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                    <span class="text-xs">{{ $item->status === 'aktif' ? 'Nonaktif' : 'Aktif' }}</span>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" class="px-8 py-12 text-center">
+                        <td colspan="5" class="px-8 py-12 text-center">
                             <svg class="w-12 h-12 mx-auto text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>

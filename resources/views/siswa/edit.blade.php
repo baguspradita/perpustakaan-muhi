@@ -148,6 +148,24 @@
                                 <p class="mt-1.5 text-xs text-red-500 font-medium">{{ $message }}</p>
                             @enderror
                         </div>
+
+                        <!-- Status -->
+                        <div>
+                            <label for="status" class="block text-sm font-semibold text-slate-600 mb-2">Status</label>
+                            <select
+                                id="status"
+                                name="status"
+                                class="w-full px-4 py-3 rounded-xl border {{ $errors->has('status') ? 'border-red-400 bg-red-50' : 'border-slate-200 bg-white' }} text-slate-800 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                            >
+                                <option value="aktif" {{ old('status', $siswa->siswa->status) == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                                <option value="lulus" {{ old('status', $siswa->siswa->status) == 'lulus' ? 'selected' : '' }}>Lulus</option>
+                                <option value="dikeluarkan" {{ old('status', $siswa->siswa->status) == 'dikeluarkan' ? 'selected' : '' }}>Dikeluarkan</option>
+                                <option value="pindah" {{ old('status', $siswa->siswa->status) == 'pindah' ? 'selected' : '' }}>Pindah</option>
+                            </select>
+                            @error('status')
+                                <p class="mt-1.5 text-xs text-red-500 font-medium">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
                 </div>
 

@@ -15,7 +15,30 @@ class Petugas extends Model
         'user_id',
         'nip',
         'jabatan',
+        'status',
     ];
+
+    protected $casts = [
+        'status' => 'string',
+    ];
+
+    public function getStatusLabelAttribute()
+    {
+        return match($this->status) {
+            'aktif' => 'Aktif',
+            'nonaktif' => 'Tidak Aktif',
+            default => 'Unknown'
+        };
+    }
+
+    public function getStatusColorAttribute()
+    {
+        return match($this->status) {
+            'aktif' => 'emerald',
+            'nonaktif' => 'red',
+            default => 'slate'
+        };
+    }
 
     public function user()
     {

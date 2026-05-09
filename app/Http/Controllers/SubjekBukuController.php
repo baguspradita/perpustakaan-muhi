@@ -113,4 +113,25 @@ class SubjekBukuController extends Controller
         $subjek->delete();
         return redirect()->route('subjek-buku.index')->with('success', 'Subjek buku berhasil dihapus.');
     }
+
+    /**
+     * Update status subjek
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $subjek = SubjekBuku::findOrFail($id);
+
+        $validated = $request->validate([
+            'status' => 'required|in:aktif,nonaktif',
+        ]);
+
+        try {
+            $subjek->update($validated);
+            
+            $statusText = $validated['status'] === 'aktif' ? 'Diaktifkan' : 'Dinonaktifkan';
+            return back()->with('success', "Status subjek '{$subjek->nama_subjek}' berhasil {$statusText}.");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 }

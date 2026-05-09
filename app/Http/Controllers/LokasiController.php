@@ -32,6 +32,7 @@ class LokasiController extends Controller
         $request->validate([
             'nama_lokasi' => 'required|string|max:100',
             'keterangan'  => 'nullable|string',
+            'status'      => 'required|in:aktif,nonaktif',
         ]);
 
         Lokasi::create($request->all());
@@ -64,6 +65,7 @@ class LokasiController extends Controller
         $request->validate([
             'nama_lokasi' => 'required|string|max:100',
             'keterangan'  => 'nullable|string',
+            'status'      => 'required|in:aktif,nonaktif',
         ]);
 
         $lokasi->update($request->all());
@@ -87,5 +89,24 @@ class LokasiController extends Controller
 
         return redirect()->route('lokasi.index')
             ->with('success', 'Lokasi berhasil dihapus.');
+    }
+
+    /**
+     * Update status lokasi
+     */
+    public function updateStatus(Request $request, Lokasi $lokasi)
+    {
+        $validated = $request->validate([
+            'status' => 'required|in:aktif,nonaktif',
+        ]);
+
+        try {
+            $lokasi->update($validated);
+            
+            $statusText = $validated['status'] === 'aktif' ? 'Diaktifkan' : 'Dinonaktifkan';
+            return back()->with('success', "Status lokasi '{$lokasi->nama_lokasi}' berhasil {$statusText}.");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

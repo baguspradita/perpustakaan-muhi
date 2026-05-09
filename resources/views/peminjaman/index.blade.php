@@ -59,6 +59,7 @@
                 <thead class="bg-slate-50/50 border-b border-slate-100">
                     <tr>
                         <th class="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-wider">Siswa</th>
+                        <th class="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-wider text-center">Status Anggota</th>
                         <th class="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-wider">Buku</th>
                         <th class="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-wider">Tgl Pinjam</th>
                         <th class="px-6 py-4 text-xs font-black text-slate-400 uppercase tracking-wider">Jatuh Tempo</th>
@@ -80,6 +81,17 @@
                                     <p class="text-xs text-slate-500 font-medium">{{ $p->user->email }}</p>
                                 </div>
                             </div>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            @if($p->user->role === 'siswa')
+                                <span class="px-3 py-1 bg-{{ $p->user->siswa->status_color }}-100 text-{{ $p->user->siswa->status_color }}-700 rounded-full text-[10px] font-black uppercase tracking-wider">
+                                    {{ $p->user->siswa->status_label }}
+                                </span>
+                            @elseif($p->user->role === 'guru')
+                                <span class="px-3 py-1 bg-{{ $p->user->guru->status_color }}-100 text-{{ $p->user->guru->status_color }}-600 rounded-full text-[10px] font-black uppercase tracking-wider">
+                                    {{ $p->user->guru->status_label }}
+                                </span>
+                            @endif
                         </td>
                         <td class="px-6 py-4">
                             <div class="space-y-1">

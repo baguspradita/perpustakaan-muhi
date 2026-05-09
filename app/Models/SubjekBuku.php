@@ -10,7 +10,29 @@ class SubjekBuku extends Model
     protected $table = 'subjek_buku';
     
     // Tentukan kolom yang dapat diisi massal (mass assignable)
-    protected $fillable = ['kode_ddc', 'nama_subjek', 'deskripsi'];
+    protected $fillable = ['kode_ddc', 'nama_subjek', 'deskripsi', 'status'];
+
+    protected $casts = [
+        'status' => 'string',
+    ];
+
+    public function getStatusLabelAttribute()
+    {
+        return match($this->status) {
+            'aktif' => 'Aktif',
+            'nonaktif' => 'Tidak Aktif',
+            default => 'Unknown'
+        };
+    }
+
+    public function getStatusColorAttribute()
+    {
+        return match($this->status) {
+            'aktif' => 'emerald',
+            'nonaktif' => 'red',
+            default => 'slate'
+        };
+    }
 
     /**
      * Relasi ke model Buku (one to many)

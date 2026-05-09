@@ -1,77 +1,108 @@
 <x-app-layout>
-    <x-slot name="title">Edit Guru - Perpustakaan Muhi</x-slot>
+    <x-slot name="title">Edit Data Guru - Perpustakaan Muhi</x-slot>
 
-    <!-- Header -->
-    <div class="mb-8">
-        <div class="flex items-center gap-4 mb-2">
-            <a href="{{ route('guru.show', $guru->id) }}" class="p-2 bg-white border border-slate-100 rounded-xl text-slate-400 hover:text-indigo-600 transition-colors shadow-md">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- Header Halaman -->
+    <div class="mb-10">
+        <div class="flex items-center gap-4 mb-3">
+            <a href="{{ route('guru.show', $guru->id) }}" class="p-2.5 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-indigo-600 transition-all shadow-sm hover:shadow-md">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
             </a>
-            <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Edit Data Guru</h2>
+            <div>
+                <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Perbarui Data Guru</h2>
+                <p class="text-slate-500 font-medium">Modifikasi profil dan informasi tugas guru.</p>
+            </div>
         </div>
-        <p class="text-slate-500 font-medium ml-12">Perbarui informasi guru: {{ $guru->user->nama }}</p>
     </div>
 
-    <!-- Form Card -->
-    <div class="max-w-2xl mx-auto">
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-md p-8">
-            <!-- Error Messages -->
-            @if($errors->any())
-                <div class="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-800 rounded-lg">
-                    <p class="font-bold mb-2">❌ Terjadi kesalahan:</p>
-                    <ul class="list-disc list-inside space-y-1 text-sm">
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+    <div class="max-w-4xl mx-auto">
+        <form action="{{ route('guru.update', $guru->id) }}" method="POST" class="space-y-8">
+            @csrf
+            @method('PUT')
 
-            <!-- Info Box -->
-            <div class="mb-6 p-4 bg-indigo-50 border border-indigo-100 rounded-lg">
-                <p class="text-sm text-indigo-700 font-medium">
-                    <strong>Informasi User:</strong> {{ $guru->user->nama }} ({{ $guru->user->email }})
-                </p>
+            <!-- Section 1: Profil User -->
+            <div class="bg-white rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 p-10 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-full bg-indigo-600"></div>
+                
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="p-3 bg-indigo-50 rounded-2xl text-indigo-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-slate-800 tracking-tight">Profil Akun</h3>
+                        <p class="text-sm text-slate-400 font-bold uppercase tracking-wider">Update Nama & Email</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Nama Lengkap -->
+                    <div class="space-y-2">
+                        <label for="nama" class="block text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Nama Lengkap <span class="text-rose-500">*</span></label>
+                        <input type="text" name="nama" id="nama" value="{{ old('nama', $guru->user->nama) }}" placeholder="Masukkan nama lengkap guru" 
+                            class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-800 placeholder:text-slate-300" required>
+                        @error('nama') <p class="text-rose-500 text-[10px] font-black uppercase tracking-wider mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <!-- Email -->
+                    <div class="space-y-2">
+                        <label for="email" class="block text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Email Aktif <span class="text-rose-500">*</span></label>
+                        <input type="email" name="email" id="email" value="{{ old('email', $guru->user->email) }}" placeholder="guru@domain.com" 
+                            class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-800 placeholder:text-slate-300" required>
+                        @error('email') <p class="text-rose-500 text-[10px] font-black uppercase tracking-wider mt-1">{{ $message }}</p> @enderror
+                    </div>
+
+                    <!-- Password (Optional) -->
+                    <div class="space-y-2">
+                        <label for="password" class="block text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Password Baru (Opsional)</label>
+                        <input type="password" name="password" id="password" placeholder="Kosongkan jika tidak ingin diubah" 
+                            class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-800 placeholder:text-slate-300">
+                        @error('password') <p class="text-rose-500 text-[10px] font-black uppercase tracking-wider mt-1">{{ $message }}</p> @enderror
+                    </div>
+                </div>
             </div>
 
-            <form action="{{ route('guru.update', $guru->id) }}" method="POST" class="space-y-6">
-                @csrf
-                @method('PUT')
+            <!-- Section 2: Detail Keanggotaan -->
+            <div class="bg-white rounded-[40px] border border-slate-100 shadow-xl shadow-slate-200/50 p-10 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-full bg-emerald-500"></div>
 
-                <!-- NIP -->
-                <div>
-                    <label for="nip" class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        Nomor NIP <span class="text-rose-500">*</span>
-                    </label>
-                    <input type="text" name="nip" id="nip" value="{{ old('nip', $guru->nip) }}" placeholder="Contoh: 1234567890123456" class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 outline-none transition-all font-medium text-slate-800" required>
-                    @error('nip')
-                        <p class="text-rose-500 text-xs mt-1 font-bold">{{ $message }}</p>
-                    @enderror
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="p-3 bg-emerald-50 rounded-2xl text-emerald-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-black text-slate-800 tracking-tight">Detail Pegawai</h3>
+                        <p class="text-sm text-slate-400 font-bold uppercase tracking-wider">Identitas NIP & Mapel</p>
+                    </div>
                 </div>
 
-                <!-- Mata Pelajaran -->
-                <div>
-                    <label for="mapel" class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">
-                        Mata Pelajaran <span class="text-rose-500">*</span>
-                    </label>
-                    <input type="text" name="mapel" id="mapel" value="{{ old('mapel', $guru->mapel) }}" placeholder="Contoh: Matematika, Bahasa Indonesia, IPA, dll" class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-100 focus:border-indigo-400 outline-none transition-all font-medium text-slate-800" required>
-                    @error('mapel')
-                        <p class="text-rose-500 text-xs mt-1 font-bold">{{ $message }}</p>
-                    @enderror
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- NIP -->
+                    <div class="space-y-2">
+                        <label for="nip" class="block text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Nomor Induk Pegawai (NIP) <span class="text-rose-500">*</span></label>
+                        <input type="text" name="nip" id="nip" value="{{ old('nip', $guru->nip) }}" placeholder="Masukkan NIP guru" 
+                            class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-800 placeholder:text-slate-300" required>
+                        @error('nip') <p class="text-rose-500 text-[10px] font-black uppercase tracking-wider mt-1">{{ $message }}</p> @enderror
+                    </div>
 
-                <!-- Buttons -->
-                <div class="flex gap-3 pt-4 border-t border-slate-100">
-                    <a href="{{ route('guru.show', $guru->id) }}" class="px-6 py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold rounded-xl transition-colors">
-                        Batal
-                    </a>
-                    <button type="submit" class="flex-1 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-colors shadow-md hover:shadow-lg">
-                        Simpan Perubahan
-                    </button>
+                    <!-- Mapel -->
+                    <div class="space-y-2">
+                        <label for="mapel" class="block text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Mata Pelajaran <span class="text-rose-500">*</span></label>
+                        <input type="text" name="mapel" id="mapel" value="{{ old('mapel', $guru->mapel) }}" placeholder="Contoh: Matematika, Bahasa Inggris" 
+                            class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500 transition-all font-bold text-slate-800 placeholder:text-slate-300" required>
+                        @error('mapel') <p class="text-rose-500 text-[10px] font-black uppercase tracking-wider mt-1">{{ $message }}</p> @enderror
+                    </div>
                 </div>
-            </form>
-        </div>
+            </div>
+
+            <!-- Footer Action -->
+            <div class="flex items-center justify-between pt-6">
+                <a href="{{ route('guru.show', $guru->id) }}" class="text-sm font-black text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors">Batal</a>
+                <button type="submit" class="px-10 py-5 bg-indigo-600 hover:bg-indigo-700 text-white font-black rounded-3xl transition-all shadow-xl shadow-indigo-100 flex items-center gap-3 group">
+                    Simpan Perubahan
+                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </div>
+        </form>
     </div>
 </x-app-layout>

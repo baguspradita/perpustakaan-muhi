@@ -41,11 +41,12 @@ class PeminjamanController extends Controller
      */
     public function create()
     {
-        // Ambil siswa yang memiliki jurusan (exclude yang sudah didelete)
+        // Ambil siswa yang memiliki jurusan dan status AKTIF (exclude yang sudah didelete)
         $siswa = User::where('role', 'siswa')
             ->whereNull('deleted_at')
             ->whereHas('siswa', function($query) {
-                $query->whereNotNull('jurusan_id');
+                $query->whereNotNull('jurusan_id')
+                    ->where('status', 'aktif');
             })
             ->with('siswa.jurusan')
             ->orderBy('nama')
@@ -55,11 +56,12 @@ class PeminjamanController extends Controller
                 return $user;
             });
         
-        // Ambil semua guru (exclude yang sudah didelete)
+        // Ambil semua guru yang statusnya AKTIF (exclude yang sudah didelete)
         $guru = User::where('role', 'guru')
             ->whereNull('deleted_at')
             ->whereHas('guru', function($query) {
-                $query->whereNull('deleted_at');
+                $query->whereNull('deleted_at')
+                    ->where('status', 'aktif');
             })
             ->with(['guru' => function($query) {
                 $query->whereNull('deleted_at');
@@ -73,8 +75,12 @@ class PeminjamanController extends Controller
         
         // Get unique book titles with count of available exemplars
         // Ambil data buku, kelompokkan berdasarkan metadata yang sama, ambil ID terkecil sebagai perwakilan
-        $bukuByTitle = Buku::withoutTrashed()
+        $bukuByTitle = Buku::query()
             ->where('jumlah', '>', 0)
+            ->where('status', 'aktif')
+            ->whereHas('subjek', function($query) {
+                $query->where('status', 'aktif');
+            })
             ->groupBy('judul', 'kategori_id', 'nama_penulis', 'penerbit', 'tahun_terbit')
             ->selectRaw('judul, kategori_id, nama_penulis, penerbit, tahun_terbit, MIN(id) as id, MIN(nomor_salinan) as nomor_salinan, SUM(jumlah) as total_exemplar')
             ->with('kategori')
@@ -96,14 +102,33 @@ class PeminjamanController extends Controller
             'tgl_jatuh_tempo' => 'required|date|after_or_equal:tgl_pinjam',
         ]);
 
-        // Cegah peminjaman untuk user yang sudah didelete
-        $user = User::withTrashed()->findOrFail($request->user_id);
-        if ($user->deleted_at !== null) {
-            return back()->with('error', 'Tidak bisa membuat peminjaman! Siswa/Guru ini sudah dihapus dari sistem.');
+        // Cek user exist
+        $user = User::findOrFail($request->user_id);
+
+        // Cek status siswa/guru
+        if ($user->role === 'siswa') {
+            if ($user->siswa->status !== 'aktif') {
+                return back()->with('error', "Peminjaman gagal! Status siswa '{$user->nama}' saat ini adalah '{$user->siswa->status_label}'. Hanya siswa aktif yang boleh meminjam.");
+            }
+        } elseif ($user->role === 'guru') {
+            if ($user->guru->status !== 'aktif') {
+                return back()->with('error', "Peminjaman gagal! Status guru '{$user->nama}' saat ini adalah '{$user->guru->status_label}'. Hanya guru aktif yang boleh meminjam.");
+            }
         }
 
         try {
             DB::beginTransaction();
+
+            // Validasi: Cegah peminjaman buku yang sudah nonaktif
+            foreach ($request->buku_id as $bukuJudulId) {
+                $buku = Buku::find($bukuJudulId);
+                if (!$buku) {
+                    throw new \Exception("Buku dengan ID $bukuJudulId tidak ditemukan");
+                }
+                if ($buku->status === 'nonaktif') {
+                    throw new \Exception("Buku '{$buku->judul}' sudah dinonaktifkan dan tidak bisa dipinjam");
+                }
+            }
 
             $peminjaman = Peminjaman::create([
                 'user_id' => $request->user_id,
@@ -117,8 +142,8 @@ class PeminjamanController extends Controller
                 // Ambil jumlah buku yang dipinjam untuk buku ini, default 1
                 $jumlahPinjam = (int)($request->buku_jumlah[$bukuJudulId] ?? 1);
                 
-                // Cari exemplar pertama yang tersedia dengan judul yang sama (exclude soft deleted)
-                $firstBuku = Buku::withoutTrashed()->find($bukuJudulId);
+                // Cari exemplar pertama yang tersedia dengan judul yang sama
+                $firstBuku = Buku::find($bukuJudulId);
                 
                 if (!$firstBuku) {
                     throw new \Exception("Buku dengan ID $bukuJudulId tidak ditemukan");
@@ -132,7 +157,7 @@ class PeminjamanController extends Controller
                         $availableExemplar = $firstBuku;
                     } else {
                         // Jika tidak, cari exemplar lain dari spesifikasi yang sama (judul, kategori, penulis, dll)
-                        $query = Buku::withoutTrashed()
+                        $query = Buku::query()
                             ->where('judul', $firstBuku->judul)
                             ->where('kategori_id', $firstBuku->kategori_id)
                             ->where('jumlah', '>', 0);

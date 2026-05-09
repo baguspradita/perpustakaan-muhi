@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('kode_ddc', 10)->unique(); // e.g., "510", "810", etc
             $table->string('nama_subjek', 150);
             $table->text('deskripsi')->nullable();
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
             $table->timestamps();
         });
     }

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Siswa;
+use App\Models\Jurusan;
+use Illuminate\Support\Facades\DB;
 
 class SiswaController extends Controller
 {
@@ -22,7 +25,7 @@ class SiswaController extends Controller
 
         // Jika ada filter jurusan dari request (dropdown)
         if ($request->has('jurusan_id') && $request->jurusan_id != '') {
-            $query->whereHas('siswa', function($q) use ($request) {
+            $query->whereHas('siswa', function ($q) use ($request) {
                 $q->where('jurusan_id', $request->jurusan_id);
             });
         }
@@ -32,14 +35,29 @@ class SiswaController extends Controller
             $query->where('nama', 'like', '%' . $request->cari . '%');
         }
 
+        // Jika ada filter status dari request
+        if ($request->has('status') && $request->status != '') {
+            $query->whereHas('siswa', function ($q) use ($request) {
+                $q->where('status', $request->status);
+            });
+        }
+
         // Ambil data siswa dengan pagination
-        $siswa = $query->latest()->paginate(12);
+        $siswa = $query->latest()->paginate(12)->withQueryString();
 
         // Ambil semua jurusan untuk dropdown filter
-        $jurusan = \App\Models\Jurusan::all();
+        $jurusan = Jurusan::where('status', 'aktif')->get();
 
-        // Tampilkan view 'siswa.index' dengan data siswa dan jurusan
-        return view('siswa.index', compact('siswa', 'jurusan'));
+        // Hitung statistik untuk dashboard atas
+        $stats = [
+            'total'       => Siswa::count(),
+            'aktif'       => Siswa::where('status', 'aktif')->count(),
+            'lulus'       => Siswa::where('status', 'lulus')->count(),
+            'dikeluarkan' => Siswa::where('status', 'dikeluarkan')->count() + Siswa::where('status', 'pindah')->count(),
+        ];
+
+        // Tampilkan view 'siswa.index' dengan data siswa, jurusan, dan statistik
+        return view('siswa.index', compact('siswa', 'jurusan', 'stats'));
     }
 
     /**
@@ -67,7 +85,7 @@ class SiswaController extends Controller
         }
 
         $siswa = User::with(['siswa', 'jurusan'])->where('role', 'siswa')->findOrFail($id);
-        $jurusan = \App\Models\Jurusan::all();
+        $jurusan = Jurusan::where('status', 'aktif')->get();
 
         return view('siswa.edit', compact('siswa', 'jurusan'));
     }
@@ -92,6 +110,7 @@ class SiswaController extends Controller
             'alamat'     => 'nullable|string|max:500',
             'jurusan_id' => 'nullable|exists:jurusan,id',
             'kelas'      => 'nullable|string|max:50',
+            'status'     => 'nullable|in:aktif,lulus,dikeluarkan,pindah',
         ], [
             'nama.required'  => 'Nama wajib diisi.',
             'email.required' => 'Email wajib diisi.',
@@ -108,10 +127,16 @@ class SiswaController extends Controller
         ]);
 
         // Simpan perubahan ke tabel siswa (detail profil)
-        $siswa->siswa()->update([
+        $siswaData = [
             'jurusan_id' => $validated['jurusan_id'],
             'kelas'      => $validated['kelas'],
-        ]);
+        ];
+
+        if (isset($validated['status'])) {
+            $siswaData['status'] = $validated['status'];
+        }
+
+        $siswa->siswa()->update($siswaData);
 
         return redirect()->route('siswa.show', $id)
             ->with('success', 'Data siswa berhasil diperbarui.');
@@ -144,5 +169,88 @@ class SiswaController extends Controller
 
         return redirect()->route('siswa.index')
             ->with('success', 'Data siswa berhasil dihapus.');
+    }
+
+    public function editStatus($id)
+    {
+        $siswa = Siswa::findOrFail($id);
+        return view('siswa.edit-status', compact('siswa'));
+    }
+
+    /**
+     * Update status siswa
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        // $id di sini adalah user_id
+        $user = User::where('role', 'siswa')->findOrFail($id);
+        $siswa = $user->siswa;
+
+        if (!$siswa) {
+            return back()->with('error', 'Data profil siswa tidak ditemukan.');
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|in:aktif,lulus,dikeluarkan,pindah',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $siswa->update($validated);
+
+            DB::commit();
+
+            $statusText = match ($validated['status']) {
+                'aktif' => 'Aktif',
+                'lulus' => 'Lulus',
+                'dikeluarkan' => 'Dikeluarkan',
+                'pindah' => 'Pindah',
+            };
+
+            return redirect()->route('siswa.index')
+                ->with('success', "Status siswa '{$user->nama}' berhasil diubah menjadi '{$statusText}'.");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Toggle/Quick change status siswa
+     */
+    public function quickChangeStatus(Request $request, $id)
+    {
+        // $id di sini adalah user_id
+        $user = User::where('role', 'siswa')->findOrFail($id);
+        $siswa = $user->siswa;
+
+        if (!$siswa) {
+            return back()->with('error', 'Data profil siswa tidak ditemukan.');
+        }
+
+        $validated = $request->validate([
+            'status' => 'required|in:aktif,lulus,dikeluarkan,pindah',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $siswa->update($validated);
+
+            DB::commit();
+
+            $statusText = match ($validated['status']) {
+                'aktif' => 'Aktif',
+                'lulus' => 'Lulus',
+                'dikeluarkan' => 'Dikeluarkan',
+                'pindah' => 'Pindah',
+            };
+
+            return back()->with('success', "Status siswa '{$user->nama}' berhasil diubah menjadi '{$statusText}'.");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

@@ -80,8 +80,8 @@
                     <!-- Status -->
                     <div>
                         <label class="block text-sm font-semibold text-slate-600 mb-2">Status</label>
-                        <span class="inline-block px-4 py-2 bg-emerald-50 text-emerald-600 font-bold rounded-lg">
-                            Siswa Aktif
+                        <span class="inline-block px-4 py-2 bg-{{ $siswa->siswa->status_color }}-50 text-{{ $siswa->siswa->status_color }}-600 font-bold rounded-lg">
+                            {{ $siswa->siswa->status_label }}
                         </span>
                     </div>
 

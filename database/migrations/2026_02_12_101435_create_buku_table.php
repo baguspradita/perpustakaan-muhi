@@ -15,19 +15,19 @@ return new class extends Migration
             $table->id();
             $table->string('judul', 150);
             $table->string('nama_penulis', 200)->nullable();
-            
+
             $table->char('huruf_judul_awal', 1)->nullable();
             $table->string('nomor_salinan', 10)->nullable();
 
             $table->string('penerbit', 100);
             $table->year('tahun_terbit');
             $table->foreignId('kategori_id')->constrained('kategori_buku');
-            $table->unsignedBigInteger('lokasi_id')->nullable();
+             $table->unsignedBigInteger('lokasi_id')->nullable();
             $table->unsignedBigInteger('subjek_id')->nullable();
             $table->foreign('subjek_id')->references('id')->on('subjek_buku')->onDelete('set null');
             $table->integer('jumlah');
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

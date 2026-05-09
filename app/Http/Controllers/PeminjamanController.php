@@ -41,9 +41,8 @@ class PeminjamanController extends Controller
      */
     public function create()
     {
-        // Ambil siswa yang memiliki jurusan dan status AKTIF (exclude yang sudah didelete)
+        // Ambil siswa yang memiliki jurusan dan status AKTIF
         $siswa = User::where('role', 'siswa')
-            ->whereNull('deleted_at')
             ->whereHas('siswa', function($query) {
                 $query->whereNotNull('jurusan_id')
                     ->where('status', 'aktif');
@@ -56,16 +55,12 @@ class PeminjamanController extends Controller
                 return $user;
             });
         
-        // Ambil semua guru yang statusnya AKTIF (exclude yang sudah didelete)
+        // Ambil semua guru yang statusnya AKTIF
         $guru = User::where('role', 'guru')
-            ->whereNull('deleted_at')
             ->whereHas('guru', function($query) {
-                $query->whereNull('deleted_at')
-                    ->where('status', 'aktif');
+                $query->where('status', 'aktif');
             })
-            ->with(['guru' => function($query) {
-                $query->whereNull('deleted_at');
-            }])
+            ->with('guru')
             ->orderBy('nama')
             ->get()
             ->map(function($user) {

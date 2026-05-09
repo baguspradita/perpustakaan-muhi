@@ -129,32 +129,68 @@
                             <p class="text-xs text-slate-400">{{ $item->no_telp ?? '-' }}</p>
                         </td>
                         <td class="px-8 py-5">
-                            <div class="flex flex-col items-center gap-2">
+                            <div class="flex items-center justify-center">
                                 <span class="px-3 py-1 bg-{{ $item->siswa->status_color }}-100 text-{{ $item->siswa->status_color }}-700 rounded-full text-[10px] font-black uppercase tracking-wider">
                                     {{ $item->siswa->status_label }}
                                 </span>
-
-                                <!-- Modern Quick Status Select -->
-                                <form action="{{ route('siswa.quick-change-status', $item->id) }}" method="POST">
-                                    @csrf
-                                    @method('PATCH')
-                                    <select name="status" onchange="this.form.submit()" class="text-[9px] px-2 py-0.5 rounded-lg border-none bg-slate-100 text-slate-400 hover:text-indigo-600 focus:ring-0 cursor-pointer transition-colors font-bold uppercase tracking-tight">
-                                        <option value="aktif" {{ $item->siswa->status == 'aktif' ? 'selected' : '' }}>Set Aktif</option>
-                                        <option value="lulus" {{ $item->siswa->status == 'lulus' ? 'selected' : '' }}>Set Lulus</option>
-                                        <option value="dikeluarkan" {{ $item->siswa->status == 'dikeluarkan' ? 'selected' : '' }}>Set Dikeluarkan</option>
-                                        <option value="pindah" {{ $item->siswa->status == 'pindah' ? 'selected' : '' }}>Set Pindah</option>
-                                    </select>
-                                </form>
                             </div>
                         </td>
                         <td class="px-8 py-5">
-                            <div class="flex items-center justify-center gap-2">
+                            <div class="flex items-center justify-center gap-2 flex-wrap">
+                                <!-- View & Edit Buttons -->
                                 <a href="{{ route('siswa.show', $item->id) }}" class="w-8 h-8 flex items-center justify-center bg-slate-50 text-slate-400 rounded-lg hover:bg-indigo-600 hover:text-white transition-all shadow-sm" title="Lihat Detail">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                                 </a>
                                 <a href="{{ route('siswa.edit', $item->id) }}" class="w-8 h-8 flex items-center justify-center bg-slate-50 text-slate-400 rounded-lg hover:bg-amber-500 hover:text-white transition-all shadow-sm" title="Edit Data">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 </a>
+
+                                <!-- Status Buttons -->
+                                <div class="flex gap-1 flex-wrap justify-center border-l border-slate-100 pl-2">
+                                    <!-- Aktif Button -->
+                                    <form action="{{ route('siswa.quick-change-status', $item->id) }}" method="POST" class="inline group">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="aktif">
+                                        <button type="submit" class="flex items-center gap-1 px-3 py-1.5 {{ $item->siswa->status == 'aktif' ? 'bg-emerald-600 text-white cursor-default' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white cursor-pointer' }} rounded-lg transition-all font-semibold text-[9px] uppercase tracking-tight shadow-sm hover:shadow-md group-hover:scale-105" {{ $item->siswa->status == 'aktif' ? 'disabled' : '' }} title="Ubah status siswa menjadi Aktif">
+                                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                                            Aktif
+                                        </button>
+                                    </form>
+
+                                    <!-- Lulus Button -->
+                                    <form action="{{ route('siswa.quick-change-status', $item->id) }}" method="POST" class="inline group">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="lulus">
+                                        <button type="submit" class="flex items-center gap-1 px-3 py-1.5 {{ $item->siswa->status == 'lulus' ? 'bg-blue-600 text-white cursor-default' : 'bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white cursor-pointer' }} rounded-lg transition-all font-semibold text-[9px] uppercase tracking-tight shadow-sm hover:shadow-md group-hover:scale-105" {{ $item->siswa->status == 'lulus' ? 'disabled' : '' }} title="Ubah status siswa menjadi Lulus">
+                                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M6 5a1 1 0 011-1h6a1 1 0 011 1v12a1 1 0 11-2 0v-3H8v3a1 1 0 11-2 0V5zm3 4a1 1 0 000 2h.01a1 1 0 000-2H9zm3 0a1 1 0 000 2h.01a1 1 0 000-2h-.01z"/></svg>
+                                            Lulus
+                                        </button>
+                                    </form>
+
+                                    <!-- Dikeluarkan Button -->
+                                    <form action="{{ route('siswa.quick-change-status', $item->id) }}" method="POST" class="inline group">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="dikeluarkan">
+                                        <button type="submit" class="flex items-center gap-1 px-3 py-1.5 {{ $item->siswa->status == 'dikeluarkan' ? 'bg-rose-600 text-white cursor-default' : 'bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white cursor-pointer' }} rounded-lg transition-all font-semibold text-[9px] uppercase tracking-tight shadow-sm hover:shadow-md group-hover:scale-105" {{ $item->siswa->status == 'dikeluarkan' ? 'disabled' : '' }} title="Ubah status siswa menjadi Dikeluarkan">
+                                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+                                            Keluar
+                                        </button>
+                                    </form>
+
+                                    <!-- Pindah Button -->
+                                    <form action="{{ route('siswa.quick-change-status', $item->id) }}" method="POST" class="inline group">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="pindah">
+                                        <button type="submit" class="flex items-center gap-1 px-3 py-1.5 {{ $item->siswa->status == 'pindah' ? 'bg-amber-600 text-white cursor-default' : 'bg-amber-50 text-amber-600 hover:bg-amber-600 hover:text-white cursor-pointer' }} rounded-lg transition-all font-semibold text-[9px] uppercase tracking-tight shadow-sm hover:shadow-md group-hover:scale-105" {{ $item->siswa->status == 'pindah' ? 'disabled' : '' }} title="Ubah status siswa menjadi Pindah">
+                                            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                                            Pindah
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </td>
                     </tr>

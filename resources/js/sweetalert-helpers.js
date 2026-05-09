@@ -25,14 +25,14 @@ window.confirmDelete = function(formId, itemName = '') {
 // Helper function untuk konfirmasi return buku
 window.confirmReturn = function(formId, itemName = 'buku') {
     Swal.fire({
-        title: '✓ Kembalikan Buku?',
+        title: 'Kembalikan Buku',
         html: `<p>Apakah Anda yakin ${itemName} sudah dikembalikan?</p>
                <p class="text-sm text-gray-600 mt-2">Harap pastikan semua item benar-benar sudah diterima.</p>`,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#10b981',
         cancelButtonColor: '#6b7280',
-        confirmButtonText: '✓ Ya, Kembalikan!',
+        confirmButtonText: 'Ya, Kembalikan',
         cancelButtonText: 'Batal',
         reverseButtons: true,
         allowOutsideClick: false,

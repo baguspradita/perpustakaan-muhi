@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Http\Middleware\CheckUserStatus;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+
+        // Middleware global - akan dijalankan di setiap request yang authenticated
+        app('router')->pushMiddlewareToGroup('web', CheckUserStatus::class);
     }
 }

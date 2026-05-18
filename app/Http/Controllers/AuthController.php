@@ -10,9 +10,11 @@ use App\Models\Guru;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Traits\ChecksUserStatus;
 
 class AuthController extends Controller
 {
+    use ChecksUserStatus;
     /**
      * Menampilkan halaman login
      * Kita menggunakan middleware 'guest' di routes agar user yang sudah login tidak bisa ke sini
@@ -141,10 +143,17 @@ class AuthController extends Controller
 
         // Cek apakah credentials (email & pass) cocok dengan data di database
         if (\Illuminate\Support\Facades\Auth::attempt($credentials)) {
-            // Jika sukses, buat session baru
-            $request->session()->regenerate();
+            $user = Auth::user();
 
-            // Redirect ke halaman dashboard
+            // Validasi status user, Menggunakan method dari trait
+            if (!$this->isUserActive($user)) {
+                \Illuminate\Support\Facades\Auth::logout();
+               return back()->withErrors([
+                    'email' => $this->getInactiveMessage($user)
+                ])->onlyInput('email');
+            }
+
+            $request->session()->regenerate();
             return redirect()->intended('/');
         }
 

@@ -3,7 +3,7 @@
 
     <!-- Header Halaman -->
     <div class="mb-8">
-        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Manajemen Guru</h2>
+        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Daftar Guru</h2>
         <p class="text-slate-500 font-medium">Kelola dan pantau status keanggotaan guru perpustakaan.</p>
     </div>
 

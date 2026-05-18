@@ -1,7 +1,7 @@
 <x-app-layout>
     <!-- Header Halaman Master Jurusan -->
     <div class="mb-8">
-        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Master Jurusan</h2>
+        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Jurusan</h2>
         <p class="text-slate-500 font-medium">Kelola data jurusan yang tersedia di sekolah.</p>
     </div>
 

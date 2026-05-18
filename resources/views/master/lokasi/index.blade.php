@@ -1,7 +1,7 @@
 <x-app-layout>
     <!-- Header Halaman Master Lokasi -->
     <div class="mb-8">
-        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Master Lokasi</h2>
+        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Lokasi Buku</h2>
         <p class="text-slate-500 font-medium">Kelola data rak dan lemari penyimpanan buku.</p>
     </div>
 

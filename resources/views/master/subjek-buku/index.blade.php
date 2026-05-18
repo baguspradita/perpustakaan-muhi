@@ -1,7 +1,7 @@
 <x-app-layout>
     <!-- Header Halaman Master Subjek Buku -->
     <div class="mb-8">
-        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Master Subjek Buku (DDC)</h2>
+        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Kelola Subjek Buku (DDC)</h2>
         <p class="text-slate-500 font-medium">Kelola data subjek/DDC buku yang tersedia di perpustakaan.</p>
     </div>
 

@@ -1,7 +1,7 @@
 <x-app-layout>
     <!-- Header Halaman -->
     <div class="mb-8">
-        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Master Kategori Buku</h2>
+        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">Kategori Buku</h2>
         <p class="text-slate-500 font-medium">Kelola kategori buku yang tersedia di perpustakaan.</p>
     </div>
 

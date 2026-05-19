@@ -1,8 +1,8 @@
-# 📚 Perpustakaan Muhi
+# Perpustakaan Muhi
 
 Sistem manajemen perpustakaan sekolah modern dengan fitur lengkap untuk mengelola buku, peminjaman, dan pengembalian.
 
-## ✨ Fitur
+## itur
 
 - ✅ Manajemen data siswa, guru, dan petugas
 - ✅ Katalog buku dengan kategori dan subjek
@@ -12,14 +12,14 @@ Sistem manajemen perpustakaan sekolah modern dengan fitur lengkap untuk mengelol
 - ✅ Laporan peminjaman dan statistik
 - ✅ Role-based access control
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend:** Laravel 11
 - **Frontend:** Blade + Vite
 - **Database:** MySQL
 - **PHP:** 8.2+
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Install
 
